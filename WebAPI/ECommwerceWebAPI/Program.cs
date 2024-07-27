@@ -1,6 +1,7 @@
 
 using ECommerceDataAccess.DatabaseContextConfiguration;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 
@@ -11,7 +12,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 
-
+var connectionString = builder.Configuration.GetConnectionString("ECommerceConnection");
+builder.Services.AddECommerceDataAccess(connectionString);
 
 // Add services to the container.
 
@@ -22,8 +24,10 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-builder.Services.AddDbContext<ECommerceDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("ECommerceConnection")));
+//builder.Services.AddDbContext<ECommerceDbContext>(options =>
+//    options.UseSqlServer(builder.Configuration.GetConnectionString("ECommerceConnection")));
+
+
 
 
 // Configure the HTTP request pipeline.
