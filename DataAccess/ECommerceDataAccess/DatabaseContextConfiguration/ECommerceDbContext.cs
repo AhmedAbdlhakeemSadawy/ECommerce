@@ -1,5 +1,7 @@
 ﻿using ECommerceDataAccess.DataEntities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,22 +11,33 @@ using System.Threading.Tasks;
 
 namespace ECommerceDataAccess.DatabaseContextConfiguration
 {
-    internal class ECommerceDbContext : DbContext
+    public class ECommerceDbContext : DbContext
     {
-        public DbSet<Product> Products { get; set; }
+        public virtual DbSet<Product> Products { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+   
+        public ECommerceDbContext(DbContextOptions<ECommerceDbContext> options)
+     : base(options)
         {
-            base.OnModelCreating(modelBuilder);
+        }
+
+
+        public class ECommerceDbContextFactory : IDesignTimeDbContextFactory<ECommerceDbContext>
+        {
+            public ECommerceDbContext CreateDbContext(string[] args)
+            {
+                var optionsBuilder = new DbContextOptionsBuilder<ECommerceDbContext>();
+                optionsBuilder.UseSqlServer("Server=.;Initial Catalog=ECommerce;Trusted_Connection=True;Integrated Security=true;Encrypt=False");
+
+                return new ECommerceDbContext(optionsBuilder.Options);
+            }
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (!optionsBuilder.IsConfigured)
-            {
-                // Here you would configure your database connection, for example:
-                optionsBuilder.UseSqlServer("YourConnectionString");
-            }
+            optionsBuilder.UseSqlServer("Server=.;Initial Catalog=ECommerce;Trusted_Connection=True;Integrated Security=true;Encrypt=False");
         }
+
+
     }
 }
