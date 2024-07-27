@@ -8,25 +8,23 @@ using System.Threading.Tasks;
 
 namespace ECommerceDataAccess.DataEntities
 {
-    internal class Product
+    //[Table("Products")]
+    public class Product
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        private int Id;
+        public int Id { get; set; }
 
         [Required]
-        private string name;
-        private string description { get; set; }
+        public string name { get; set; }
+        public string description { get; set; }
 
         [Required]
+        [Column(TypeName = "money")]
         [Range(1.0, double.MaxValue, ErrorMessage = "Price must be greater than 1.")]
-        private decimal price { get; set; }
+        public decimal price { get; set; }
 
-        public Product(string name,string description, decimal price)
-        {
-            this.name = name;
-            this.description = description;
-            this.price = price;
-        }
+
+
     }
 }
