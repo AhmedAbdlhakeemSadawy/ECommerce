@@ -3,7 +3,25 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33815.320
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerceDataAccess", "DataAccess\ECommerceDataAccess\ECommerceDataAccess.csproj", "{4A563515-EF0D-4677-84E3-9564B0AA688B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECommwerceWebAPI", "WebAPI\ECommwerceWebAPI\ECommwerceWebAPI.csproj", "{6EC5F583-BA84-4964-8EFE-808444C89D8C}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4A563515-EF0D-4677-84E3-9564B0AA688B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A563515-EF0D-4677-84E3-9564B0AA688B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A563515-EF0D-4677-84E3-9564B0AA688B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A563515-EF0D-4677-84E3-9564B0AA688B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6EC5F583-BA84-4964-8EFE-808444C89D8C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6EC5F583-BA84-4964-8EFE-808444C89D8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6EC5F583-BA84-4964-8EFE-808444C89D8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6EC5F583-BA84-4964-8EFE-808444C89D8C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
