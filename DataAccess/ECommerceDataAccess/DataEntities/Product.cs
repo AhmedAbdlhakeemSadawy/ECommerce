@@ -25,6 +25,10 @@ namespace ECommerceDataAccess.DataEntities
         public decimal price { get; set; }
 
 
+        [Required]
+        public int StockQuantity { get; set; }
+
+
 
     }
 }

@@ -25,6 +25,5 @@ namespace ECommerceDataAccess.DataEntities
         public Order Order { get; set; }
 
 
-        public int Quantity { get; set; }
     }
 }

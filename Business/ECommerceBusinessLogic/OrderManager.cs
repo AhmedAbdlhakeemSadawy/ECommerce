@@ -11,7 +11,12 @@ namespace ECommerceBusinessLogic
             {
                 throw new Exception("Order Should contain al least one prodcut");
             }
-            
+
+            for (int i = 0; i < createOrderDto.products.Count; i++)
+            {
+                createOrderDto.products[i].q
+            }
+    
         }
     }
 }
