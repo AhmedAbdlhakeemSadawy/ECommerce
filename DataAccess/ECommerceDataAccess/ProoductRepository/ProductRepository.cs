@@ -1,6 +1,7 @@
 ﻿using ECommerceDataAccess.Abstractions;
 using ECommerceDataAccess.DatabaseContextConfiguration;
 using ECommerceDataAccess.DataEntities;
+using ECommerceDataAccessDTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,9 +38,27 @@ namespace ECommerceDataAccess.ProoductRepository
             throw new NotImplementedException();
         }
 
-        public int GetProductStockQuantity(int id)
+        public IEnumerable<Product> GetListProductsById(List<int> ids)
         {
-            return context.Products.Where(p => p.Id == id).FirstOrDefault().StockQuantity;
+            return context.Products.Where(p => ids.Contains(p.Id)).ToList();
+        }
+
+        public IEnumerable<productStockDTO> GetProductStockQuantity(List<int> ids)
+        {
+            var products = context.Products.Where(p => ids.Contains(p.Id)).Select(p => new { p.Id, p.StockQuantity }).ToList();
+            List<productStockDTO> productStockDTOs = new List<productStockDTO>();
+
+            for (var i = 0; i < products.Count; i++)
+            {
+                productStockDTO productStockDTO = new productStockDTO();
+                productStockDTO.Id = products[i].Id;
+                productStockDTO.StockQuantity = products[i].StockQuantity;
+
+                productStockDTOs.Add(productStockDTO);
+            }
+
+            return productStockDTOs;
+           
         }
 
         public Task UpdateAsync(Product entity)

@@ -1,4 +1,5 @@
 ﻿using ECommerceDataAccess.DataEntities;
+using ECommerceDataAccessDTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,8 @@ namespace ECommerceDataAccess.Abstractions
 {
     public interface IProductRepository : IRepository<Product>
     {
-        int GetProductStockQuantity(int id);
+        int GetProductStockQuantity(List<int> ids);
+
+        IEnumerable<productStockDTO> GetListProductsById(List<int> ids);
     }
 }
