@@ -1,10 +1,16 @@
 ﻿using ECommerceBuinessDTO;
 using ECommerceBusinessAbstractions;
+using ECommerceDataAccess.Abstractions;
 
 namespace ECommerceBusinessLogic
 {
     public class OrderManager : IOrderManager
     {
+        private IProductRepository productRepository;
+        public OrderManager(IProductRepository productRepository)
+        {
+                this.productRepository = productRepository;
+        }
         public OrderDTO CreateOrder(CreateOrderDto createOrderDto)
         {
             if (createOrderDto.products.Count == 0)
@@ -12,11 +18,17 @@ namespace ECommerceBusinessLogic
                 throw new Exception("Order Should contain al least one prodcut");
             }
 
-            for (int i = 0; i < createOrderDto.products.Count; i++)
-            {
-                createOrderDto.products[i].q
-            }
+         
     
+        }
+
+        private bool CheckAvailability(List<ProductDTO> productsDto)
+        {
+            List<int> ids = productsDto.Select(p => p.Id).ToList();
+            var prodcutsWithStock = productRepository.GetListProductsById(ids).ToList();
+
+            var notAvailableProducts = productsDto.Where()
+         
         }
     }
 }
