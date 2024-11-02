@@ -13,7 +13,7 @@ namespace ECommerceBusinessLogic
         }
         public OrderDTO CreateOrder(CreateOrderDto createOrderDto)
         {
-            if (createOrderDto.products.Count == 0)
+            if (createOrderDto.products == null || createOrderDto.products.Count == 0)
             {
                 throw new Exception("Order Should contain al least one prodcut");
             }
@@ -22,7 +22,8 @@ namespace ECommerceBusinessLogic
             {
                 throw new Exception("Some of your products are not available");
             }
-         
+
+            return new OrderDTO();
     
         }
 

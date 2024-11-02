@@ -40,7 +40,7 @@ namespace ECommerceDataAccess.ProoductRepository
 
         public IEnumerable<Product> GetListProductsById(List<int> ids)
         {
-            return context.Products.Where(p => ids.Contains(p.Id)).ToList();
+            throw new NotImplementedException();
         }
 
         public IEnumerable<productStockDTO> GetProductStockQuantity(List<int> ids)
