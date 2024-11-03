@@ -15,7 +15,7 @@ namespace ECommerceBusinessLogic
         {
             if (createOrderDto.products == null || createOrderDto.products.Count == 0)
             {
-                throw new Exception("Order Should contain al least one prodcut");
+                throw new Exception("Order Should contain at least one product");
             }
 
             if (! CheckAvailability(createOrderDto.products))
@@ -23,14 +23,17 @@ namespace ECommerceBusinessLogic
                 throw new Exception("Some of your products are not available");
             }
 
-            return new OrderDTO();
+            OrderDTO orderDto = new OrderDTO();
+            orderDto.products = createOrderDto.products;
+            
+            return orderDto;
     
         }
 
         private bool CheckAvailability(List<ProductDTO> productsDto)
         {
             List<int> ids = productsDto.Select(p => p.Id).ToList();
-            var prodcutsWithStock = productRepository.GetListProductsById(ids).ToList();
+            var prodcutsWithStock = productRepository.GetProductStockQuantity(ids).ToList();
 
             var notAvailableProducts = productsDto
                                        .Where(p1 => prodcutsWithStock.Any(p2 => p2.Id == p1.Id && p1.Quantiy > p2.StockQuantity))
