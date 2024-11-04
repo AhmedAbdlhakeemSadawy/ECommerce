@@ -38,9 +38,24 @@ namespace ECommerceDataAccess.ProoductRepository
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Product> GetListProductsById(List<int> ids)
+        public IEnumerable<ProductDto> GetListProductsById(List<int> ids)
         {
-            throw new NotImplementedException();
+            var products = context.Products.Where(p => ids.Contains(p.Id)).ToList();
+            List<ProductDto> productDTOs = new List<ProductDto>();
+
+            for (var i = 0; i < products.Count; i++)
+            {
+                ProductDto productDto = new ProductDto();
+                productDto.Id = products[i].Id;
+                productDto.Name = products[i].name;
+                productDto.Description = products[i].description;
+                productDto.Price = products[i].price;
+                productDto.StockQuantity = products[i].StockQuantity;
+
+                productDTOs.Add(productDto);
+            }
+
+            return productDTOs;
         }
 
         public IEnumerable<productStockDTO> GetProductStockQuantity(List<int> ids)

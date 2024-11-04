@@ -12,6 +12,6 @@ namespace ECommerceDataAccess.Abstractions
     {
         IEnumerable<productStockDTO> GetProductStockQuantity(List<int> ids);
 
-        IEnumerable<Product> GetListProductsById(List<int> ids);
+        IEnumerable<ProductDto> GetListProductsById(List<int> ids);
     }
 }
