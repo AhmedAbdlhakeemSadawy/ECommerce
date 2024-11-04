@@ -23,13 +23,16 @@ namespace ECommerceBusinessLogic
                 throw new Exception("Some of your products are not available");
             }
 
+
             OrderDTO orderDto = new OrderDTO();
             orderDto.products = createOrderDto.products;
+            orderDto.TotalPrice = CalculateOrderTotalPrice(createOrderDto.products);
             
             return orderDto;
     
         }
 
+     
         private bool CheckAvailability(List<ProductDTO> productsDto)
         {
             List<int> ids = productsDto.Select(p => p.Id).ToList();
@@ -48,6 +51,21 @@ namespace ECommerceBusinessLogic
                 return false;
             }
 
+        }
+
+        private decimal CalculateOrderTotalPrice(List<ProductDTO> productsDto)
+        {
+            decimal totalPrice = 0;
+            List<int> ids = productsDto.Select(p => p.Id).ToList();
+
+            var prodcuts = productRepository.GetListProductsById(ids).ToList();
+
+            for (int i = 0; i < prodcuts.Count; i++)
+            {
+                totalPrice += prodcuts[i].Price; 
+            }
+
+            return totalPrice;
         }
     }
 }
