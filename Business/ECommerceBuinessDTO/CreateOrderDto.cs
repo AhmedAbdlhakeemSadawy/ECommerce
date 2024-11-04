@@ -9,7 +9,6 @@ namespace ECommerceBuinessDTO
     public class CreateOrderDto
     {
         public int Id { get; set; }
-        public decimal TotalPrice { get; set; }
         public List<ProductDTO> products { get; set; } = new List<ProductDTO>();
     }
 }
