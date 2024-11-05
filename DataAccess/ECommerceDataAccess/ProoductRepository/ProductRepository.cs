@@ -2,6 +2,7 @@
 using ECommerceDataAccess.DatabaseContextConfiguration;
 using ECommerceDataAccess.DataEntities;
 using ECommerceDataAccessDTO;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -79,6 +80,22 @@ namespace ECommerceDataAccess.ProoductRepository
         public Task UpdateAsync(Product entity)
         {
             throw new NotImplementedException();
+        }
+
+        public IEnumerable<productStockDTO> UpdateProductsStockQuantity(List<productStockDTO> productStockDTOs)
+        {
+            List<int> ids = productStockDTOs.Select(p => p.Id).ToList();
+            var products = context.Products.Where(p => ids.Contains(p.Id)).Select(p => new { p.Id, p.StockQuantity }).ToList();
+            
+
+           for(var i = 0;i < products.Count;i++)
+            {
+                productStockDTOs[i].StockQuantity -= productStockDTOs.Where(p => p.Id == productStockDTOs[i].Id).FirstOrDefault().StockQuantity;
+            }
+
+           context.SaveChanges();
+
+            return productStockDTOs;
         }
     }
 }
