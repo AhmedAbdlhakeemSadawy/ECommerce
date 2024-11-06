@@ -7,15 +7,18 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerceDataAccess", "Data
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommwerceWebAPI", "WebAPI\ECommwerceWebAPI\ECommwerceWebAPI.csproj", "{6EC5F583-BA84-4964-8EFE-808444C89D8C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECommerceBusinessLogic", "Business\ECommerceBusinessLogic\ECommerceBusinessLogic.csproj", "{8627EE44-ED24-48A9-B135-BA50BCB4983C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerceBusinessLogic", "Business\ECommerceBusinessLogic\ECommerceBusinessLogic.csproj", "{8627EE44-ED24-48A9-B135-BA50BCB4983C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{510AEE61-1236-41A1-A2FE-DAA0254380C5} = {510AEE61-1236-41A1-A2FE-DAA0254380C5}
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECommerceBusinessAbstractions", "Business\ECommerceBusinessAbstractions\ECommerceBusinessAbstractions.csproj", "{E2AD698C-FC19-4604-AF94-33F654948D21}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerceBusinessAbstractions", "Business\ECommerceBusinessAbstractions\ECommerceBusinessAbstractions.csproj", "{E2AD698C-FC19-4604-AF94-33F654948D21}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECommerceDataAccessDTO", "DataAccess\ECommerceDataAccess\ECommerceDataAccessDTO\ECommerceDataAccessDTO.csproj", "{510AEE61-1236-41A1-A2FE-DAA0254380C5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerceDataAccessDTO", "DataAccess\ECommerceDataAccessDTO\ECommerceDataAccessDTO.csproj", "{510AEE61-1236-41A1-A2FE-DAA0254380C5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECommerceBuinessDTO", "Business\ECommerceBuinessDTO\ECommerceBuinessDTO.csproj", "{F27FB2E7-E3B4-42F4-8CB6-7BAECE78E7B4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerceBuinessDTO", "Business\ECommerceBuinessDTO\ECommerceBuinessDTO.csproj", "{F27FB2E7-E3B4-42F4-8CB6-7BAECE78E7B4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECommerceBusinessTests", "Business\ECommerceBusinessTests\ECommerceBusinessTests.csproj", "{BE635C00-B628-4CCA-8C8B-9521CD7003EB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerceBusinessTests", "Business\ECommerceBusinessTests\ECommerceBusinessTests.csproj", "{BE635C00-B628-4CCA-8C8B-9521CD7003EB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

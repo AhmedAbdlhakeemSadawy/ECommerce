@@ -10,9 +10,9 @@ namespace ECommerceDataAccess.Abstractions
 {
     public interface IProductRepository : IRepository<Product>
     {
-        IEnumerable<productStockDTO> GetProductStockQuantity(List<int> ids);
+       // IEnumerable<productStockDTO> GetProductStockQuantity(List<int> ids);
 
-        IEnumerable<ProductDto> GetListProductsById(List<int> ids);
-        IEnumerable<productStockDTO> UpdateProductsStockQuantity(List<productStockDTO> productStockDTOs);
+        IEnumerable<ProductDataDto> GetListProductsById(List<int> ids);
+        IEnumerable<ProductDataDto> UpdateProductsStockQuantity(List<UpdateProductDataStockDto> productStockDTOs);
     }
 }

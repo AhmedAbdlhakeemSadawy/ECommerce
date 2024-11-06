@@ -39,21 +39,19 @@ namespace ECommerceDataAccess.ProoductRepository
             throw new NotImplementedException();
         }
 
-        public IEnumerable<ProductDto> GetListProductsById(List<int> ids)
+        public IEnumerable<ProductDataDto> GetListProductsById(List<int> ids)
         {
             var products = context.Products.Where(p => ids.Contains(p.Id)).ToList();
-            List<ProductDto> productDTOs = new List<ProductDto>();
+            List<ProductDataDto> productDTOs = new List<ProductDataDto>();
 
             for (var i = 0; i < products.Count; i++)
             {
-                ProductDto productDto = new ProductDto();
-                productDto.Id = products[i].Id;
-                productDto.Name = products[i].name;
-                productDto.Description = products[i].description;
-                productDto.Price = products[i].price;
-                productDto.StockQuantity = products[i].StockQuantity;
+                ProductDataDto productDataDto = new ProductDataDto();
+                productDataDto.Id = products[i].Id;
+                productDataDto.Price = products[i].price;
+                productDataDto.StockQuantity = products[i].StockQuantity;
 
-                productDTOs.Add(productDto);
+                productDTOs.Add(productDataDto);
             }
 
             return productDTOs;
@@ -82,20 +80,26 @@ namespace ECommerceDataAccess.ProoductRepository
             throw new NotImplementedException();
         }
 
-        public IEnumerable<productStockDTO> UpdateProductsStockQuantity(List<productStockDTO> productStockDTOs)
+        public IEnumerable<ProductDataDto> UpdateProductsStockQuantity(List<UpdateProductDataStockDto> updateProductDataStockDto)
         {
-            List<int> ids = productStockDTOs.Select(p => p.Id).ToList();
-            var products = context.Products.Where(p => ids.Contains(p.Id)).Select(p => new { p.Id, p.StockQuantity }).ToList();
-            
+            // List<ProductDataDto> productDataDtos = new List<ProductDataDto>();
+            // List<int> ids = updateProductDataStockDto.Select(p => p.Id).ToList();
+            // var products = context.Products.Where(p => ids.Contains(p.Id)).Select(p => new { p.Id, p.StockQuantity }).ToList();
 
-           for(var i = 0;i < products.Count;i++)
-            {
-                productStockDTOs[i].StockQuantity -= productStockDTOs.Where(p => p.Id == productStockDTOs[i].Id).FirstOrDefault().StockQuantity;
-            }
 
-           context.SaveChanges();
+            //for(var i = 0;i < products.Count;i++)
+            // {
+            //     ProductDataDto productDataDto = new ProductDataDto();
+            //     productDataDto.Id = products[i].Id;
+            //     products[i].StockQuantity -= updateProductDataStockDto.Where(p => p.Id == updateProductDataStockDto[i].Id).FirstOrDefault().StockQuantity;
+            // }
 
-            return productStockDTOs;
+            //context.SaveChanges();
+
+            // return updateProductDataStockDto;
+
+            throw new NotImplementedException();
+
         }
     }
 }

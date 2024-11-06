@@ -1,6 +1,7 @@
 ﻿using ECommerceBuinessDTO;
 using ECommerceBusinessAbstractions;
 using ECommerceDataAccess.Abstractions;
+using ECommerceDataAccessDTO;
 
 namespace ECommerceBusinessLogic
 {
@@ -17,6 +18,10 @@ namespace ECommerceBusinessLogic
             {
                 throw new Exception("Order Should contain at least one product");
             }
+            List<int> ids = createOrderDto.products.Select(p => p.Id).ToList();
+            var prodcutsWithStock = productRepository.GetListProductsById(ids).ToList();
+
+
 
             if (! CheckAvailability(createOrderDto.products))
             {
@@ -33,10 +38,10 @@ namespace ECommerceBusinessLogic
         }
 
      
-        private bool CheckAvailability(List<ProductDTO> productsDto)
+        private bool CheckAvailability(List<ProductDTO> productsDto, List<ProductDataDto> productsDataDto)
         {
             List<int> ids = productsDto.Select(p => p.Id).ToList();
-            var prodcutsWithStock = productRepository.GetProductStockQuantity(ids).ToList();
+            var prodcutsWithStock = productRepository.GetListProductsById(ids).ToList();
 
             var notAvailableProducts = productsDto
                                        .Where(p1 => prodcutsWithStock.Any(p2 => p2.Id == p1.Id && p1.Quantiy > p2.StockQuantity))
