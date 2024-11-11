@@ -31,8 +31,8 @@ namespace ECommerceBusinessTests
             createOrderDto.products.Add(new ProductDTO { Id = 1, Name = "Product One", Quantiy = 5 });
             createOrderDto.products.Add(new ProductDTO { Id = 2, Name = "Product Two", Quantiy = 3 });
 
-            mockProductRepository.Setup(repo => repo.GetProductStockQuantity(new List<int> { 1, 2 })).Returns(new List<productStockDTO>
-            { new productStockDTO() { Id = 1 ,StockQuantity = 2} ,new productStockDTO() { Id = 2 ,StockQuantity = 4}});
+            mockProductRepository.Setup(repo => repo.GetListProductsById(new List<int> { 1, 2 })).Returns(new List<ProductDataDto>
+            { new ProductDataDto() { Id = 1 ,StockQuantity = 2} ,new ProductDataDto() { Id = 2 ,StockQuantity = 4}});
 
             OrderManager orderManager = new OrderManager(mockProductRepository.Object);
 
@@ -50,12 +50,9 @@ namespace ECommerceBusinessTests
             createOrderDto.products.Add(new ProductDTO { Id = 1, Name = "Product One", Quantiy = 1 });
             createOrderDto.products.Add(new ProductDTO { Id = 2, Name = "Product Two", Quantiy = 1 });
 
-            mockProductRepository.Setup(repo => repo.GetProductStockQuantity(new List<int> { 1, 2 })).Returns(new List<productStockDTO>
-            { new productStockDTO() { Id = 1 ,StockQuantity = 2} ,new productStockDTO() { Id = 2 ,StockQuantity = 4}});
+            mockProductRepository.Setup(repo => repo.GetListProductsById(new List<int> { 1, 2 })).Returns(new List<ProductDataDto>
+            { new ProductDataDto() { Id = 1 ,StockQuantity = 2, Price = 120} ,new ProductDataDto() { Id = 2 ,StockQuantity = 4 , Price = 80}});
 
-
-            mockProductRepository.Setup(repo => repo.GetListProductsById(new List<int> { 1, 2 })).Returns(new List<ECommerceDataAccessDTO.ProductDto>
-            { new ECommerceDataAccessDTO.ProductDto() { Id = 1 ,Price = 120} ,new ECommerceDataAccessDTO.ProductDto() { Id = 2 ,Price = 80}});
 
             OrderManager orderManager = new OrderManager(mockProductRepository.Object);
 
