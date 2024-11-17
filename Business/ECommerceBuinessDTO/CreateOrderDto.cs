@@ -9,6 +9,6 @@ namespace ECommerceBuinessDTO
     public class CreateOrderDto
     {
         public int Id { get; set; }
-        public List<ProductDTO> products { get; set; } = new List<ProductDTO>();
+        public List<ProductBusinessDTO> products { get; set; } = new List<ProductBusinessDTO>();
     }
 }

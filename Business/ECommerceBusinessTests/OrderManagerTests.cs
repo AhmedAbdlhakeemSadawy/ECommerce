@@ -28,8 +28,8 @@ namespace ECommerceBusinessTests
             var mockProductRepository = new Mock<IProductRepository>();
             CreateOrderDto createOrderDto = new CreateOrderDto();
 
-            createOrderDto.products.Add(new ProductDTO { Id = 1, Name = "Product One", Quantiy = 5 });
-            createOrderDto.products.Add(new ProductDTO { Id = 2, Name = "Product Two", Quantiy = 3 });
+            createOrderDto.products.Add(new ProductBusinessDTO { Id = 1, Name = "Product One", StockQuantiy = 5 });
+            createOrderDto.products.Add(new ProductBusinessDTO { Id = 2, Name = "Product Two", StockQuantiy = 3 });
 
             mockProductRepository.Setup(repo => repo.GetListProductsById(new List<int> { 1, 2 })).Returns(new List<ProductDataDto>
             { new ProductDataDto() { Id = 1 ,StockQuantity = 2} ,new ProductDataDto() { Id = 2 ,StockQuantity = 4}});
@@ -47,8 +47,8 @@ namespace ECommerceBusinessTests
             var mockProductRepository = new Mock<IProductRepository>();
             CreateOrderDto createOrderDto = new CreateOrderDto();
 
-            createOrderDto.products.Add(new ProductDTO { Id = 1, Name = "Product One", Quantiy = 1 });
-            createOrderDto.products.Add(new ProductDTO { Id = 2, Name = "Product Two", Quantiy = 1 });
+            createOrderDto.products.Add(new ProductBusinessDTO { Id = 1, Name = "Product One", StockQuantiy = 1 });
+            createOrderDto.products.Add(new ProductBusinessDTO { Id = 2, Name = "Product Two", StockQuantiy = 1 });
 
             mockProductRepository.Setup(repo => repo.GetListProductsById(new List<int> { 1, 2 })).Returns(new List<ProductDataDto>
             { new ProductDataDto() { Id = 1 ,StockQuantity = 2, Price = 120} ,new ProductDataDto() { Id = 2 ,StockQuantity = 4 , Price = 80}});

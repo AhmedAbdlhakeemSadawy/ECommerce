@@ -5,6 +5,7 @@ using ECommerceDataAccessDTO;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -80,25 +81,27 @@ namespace ECommerceDataAccess.ProoductRepository
             throw new NotImplementedException();
         }
 
-        public IEnumerable<ProductDataDto> UpdateProductsStockQuantity(List<UpdateProductDataStockDto> updateProductDataStockDto)
+        public IEnumerable<ProductDataDto> UpdateProductsStockQuantity(List<ProductDataDto> productDataDtos, List<ProductDataDto> updateProductDataStockDtos)
         {
-            // List<ProductDataDto> productDataDtos = new List<ProductDataDto>();
-            // List<int> ids = updateProductDataStockDto.Select(p => p.Id).ToList();
-            // var products = context.Products.Where(p => ids.Contains(p.Id)).Select(p => new { p.Id, p.StockQuantity }).ToList();
+            List<ProductDataDto> productsUpdated = new List<ProductDataDto>();
 
 
-            //for(var i = 0;i < products.Count;i++)
-            // {
-            //     ProductDataDto productDataDto = new ProductDataDto();
-            //     productDataDto.Id = products[i].Id;
-            //     products[i].StockQuantity -= updateProductDataStockDto.Where(p => p.Id == updateProductDataStockDto[i].Id).FirstOrDefault().StockQuantity;
-            // }
+            for (int i = 0; i < productDataDtos.Count; i++)
+            {
+                Product product = new Product();
+                product.Id = productDataDtos[i].Id;
+                product.StockQuantity = updateProductDataStockDtos.Where(p => p.Id == updateProductDataStockDtos[i].Id).FirstOrDefault().StockQuantity - productDataDtos[i].StockQuantity;
+                context.Entry(product).Property(p=> p.StockQuantity).IsModified = true;
+                context.Products.Attach(product);
+                productsUpdated.Add(new ProductDataDto { Id = productDataDtos[i].Id, StockQuantity = product.StockQuantity });
+            }
 
-            //context.SaveChanges();
 
-            // return updateProductDataStockDto;
+            context.SaveChanges();
 
-            throw new NotImplementedException();
+
+            return productsUpdated;
+
 
         }
     }

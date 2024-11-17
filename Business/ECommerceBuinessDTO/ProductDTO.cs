@@ -6,10 +6,12 @@ using System.Threading.Tasks;
 
 namespace ECommerceBuinessDTO
 {
-    public class ProductDTO
+    public class ProductBusinessDTO
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public int Quantiy { get; set; }
+        public decimal Price { get; set; }
+
+        public int StockQuantiy { get; set; }
     }
 }
