@@ -12,6 +12,6 @@ namespace ECommerceBuinessDTO
         public string Name { get; set; }
         public decimal Price { get; set; }
 
-        public int StockQuantiy { get; set; }
+        public int StockQuantity { get; set; }
     }
 }

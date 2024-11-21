@@ -41,7 +41,7 @@ namespace ECommerceBusinessLogic
                 productBusinessDTO.Id = prodcutsData[i].Id;
                 productBusinessDTO.Name = prodcutsData[i].Name;
                 productBusinessDTO.Price = prodcutsData[i].Price;
-                productBusinessDTO.StockQuantiy = prodcutsData[i].StockQuantity;
+                productBusinessDTO.StockQuantity = prodcutsData[i].StockQuantity;
                 productReterivedBusinessDTOs.Add(productBusinessDTO);
             }
 
@@ -53,7 +53,7 @@ namespace ECommerceBusinessLogic
     
 
             OrderDTO orderDto = new OrderDTO();
-          //  orderDto.products = UpdateProductsStockQuantities( createOrderDto.products, productReterivedBusinessDTOs);
+            orderDto.products = UpdateProductsStockQuantities( createOrderDto.products, productReterivedBusinessDTOs);
             orderDto.TotalPrice = CalculateOrderTotalPrice(productReterivedBusinessDTOs);
             
             return orderDto;
@@ -65,7 +65,7 @@ namespace ECommerceBusinessLogic
         {
 
             var notAvailableProducts = productBusinessDTOs
-                                       .Where(p1 => productBusinessDTOsWithSavedQuantities.Any(p2 => p2.Id == p1.Id && p1.StockQuantiy > p2.StockQuantiy))
+                                       .Where(p1 => productBusinessDTOsWithSavedQuantities.Any(p2 => p2.Id == p1.Id && p1.StockQuantity > p2.StockQuantity))
                                        .ToList();
 
             if (notAvailableProducts.Count == 0)
@@ -91,30 +91,41 @@ namespace ECommerceBusinessLogic
             return totalPrice;
         }
 
-        //private List<ProductBusinessDTO> UpdateProductsStockQuantities(List<ProductBusinessDTO> productsDto, List<ProductBusinessDTO> updateProductDataStockDtos)
-        //{
-        //    List<ProductDataDto> productsDataDtos = new List<ProductDataDto>();
-        //    for (int i = 0; i < productsDto.Count; i++)
-        //    {
-        //        ProductDataDto productDataDto = new ProductDataDto();
-        //        productDataDto.Id = productsDto[i].Id;
-        //        productDataDto.StockQuantity = productsDto[i].StockQuantiy;
-        //        productsDataDtos.Add(productDataDto);
+        private List<ProductBusinessDTO> UpdateProductsStockQuantities(List<ProductBusinessDTO> productsDto, List<ProductBusinessDTO> updateProductDataStockDtos)
+        {
+            List<ProductDataDto> productsDataDtos = new List<ProductDataDto>();
+            for (int i = 0; i < productsDto.Count; i++)
+            {
+                ProductDataDto productDataDto = new ProductDataDto();
+                productDataDto.Id = productsDto[i].Id;
+                productDataDto.StockQuantity = productsDto[i].StockQuantity;
+                productsDataDtos.Add(productDataDto);
 
-        //    }
-        //    List<ProductDataDto> productDataDtosResult = productRepository.UpdateProductsStockQuantity(productsDataDtos, updateProductDataStockDtos).ToList();
+            }
 
-        //    List<ProductDTO> productsDtoResult = new List<ProductDTO>();
+            List<ProductDataDto> productsUpdateStockDataDtos = new List<ProductDataDto>();
+            for (int i = 0; i < updateProductDataStockDtos.Count; i++)
+            {
+                ProductDataDto productDataDto = new ProductDataDto();
+                productDataDto.Id = updateProductDataStockDtos[i].Id;
+                productDataDto.StockQuantity = updateProductDataStockDtos[i].StockQuantity;
+                productsUpdateStockDataDtos.Add(productDataDto);
 
-        //    for (int i = 0; i < productDataDtosResult.Count; i++)
-        //    {
-        //        ProductDTO productDTO = new ProductDTO();
-        //        productDTO.Id = productsDto[i].Id;
-        //        productDTO.Quantiy = productsDto[i].Quantiy;
-        //        productsDtoResult.Add(productDTO);
+            }
 
-        //    }
-        //    return productsDtoResult;
-        //}
+            List<ProductDataDto> productDataDtosResult = productRepository.UpdateProductsStockQuantity(productsDataDtos, productsUpdateStockDataDtos).ToList();
+
+            List<ProductBusinessDTO> productsUpdatedResult = new List<ProductBusinessDTO>();
+
+            for (int i = 0; i < productDataDtosResult.Count; i++)
+            {
+                ProductBusinessDTO productBusinessDTO = new ProductBusinessDTO();
+                productBusinessDTO.Id = productDataDtosResult[i].Id;
+                productBusinessDTO.StockQuantity = productDataDtosResult[i].StockQuantity;
+                productsUpdatedResult.Add(productBusinessDTO);
+
+            }
+            return productsUpdatedResult;
+        }
     }
 }
