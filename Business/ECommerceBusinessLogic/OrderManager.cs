@@ -1,4 +1,5 @@
-﻿using ECommerceBuinessDTO;
+﻿using AutoMapper;
+using ECommerceBuinessDTO;
 using ECommerceBusinessAbstractions;
 using ECommerceDataAccess.Abstractions;
 using ECommerceDataAccessDTO;
@@ -8,12 +9,15 @@ namespace ECommerceBusinessLogic
     public class OrderManager : IOrderManager
     {
         private IProductRepository productRepository;
-        public OrderManager(IProductRepository productRepository)
+        private IMapper mapper;
+        public OrderManager(IProductRepository productRepository, IMapper mapper)
         {
-                this.productRepository = productRepository;
+            this.productRepository = productRepository;
+            this.mapper = mapper;
         }
         public OrderDTO CreateOrder(CreateOrderDto createOrderDto)
         {
+            
             if (createOrderDto.products == null || createOrderDto.products.Count == 0)
             {
                 throw new Exception("Order Should contain at least one product");
@@ -21,36 +25,14 @@ namespace ECommerceBusinessLogic
             List<int> ids = createOrderDto.products.Select(p => p.Id).ToList();
             var prodcutsData = productRepository.GetListProductsById(ids).ToList();
 
-            //List<ProductDataDto> productsDataDto = new List<ProductDataDto>();
 
-            //for (int i = 0; i < prodcutsWithStock.Count; i++)
-            //{
-            //    ProductDataDto productDataDto = new ProductDataDto();
-            //    productDataDto.Id =  prodcutsWithStock[i].Id;
-            //    productDataDto.Price = prodcutsWithStock[i].Price;
-            //    productDataDto.StockQuantity = prodcutsWithStock[i].StockQuantity;
-            //    productsDataDto.Add(productDataDto);
+            List<ProductBusinessDTO> productReterivedBusinessDTOs = mapper.Map<List<ProductBusinessDTO>>(prodcutsData);
 
-            //}
-
-            List<ProductBusinessDTO> productReterivedBusinessDTOs = new List<ProductBusinessDTO>();
-
-            for (int i = 0; i < prodcutsData.Count; i++)
-            {
-                ProductBusinessDTO productBusinessDTO = new ProductBusinessDTO();
-                productBusinessDTO.Id = prodcutsData[i].Id;
-                productBusinessDTO.Name = prodcutsData[i].Name;
-                productBusinessDTO.Price = prodcutsData[i].Price;
-                productBusinessDTO.StockQuantity = prodcutsData[i].StockQuantity;
-                productReterivedBusinessDTOs.Add(productBusinessDTO);
-            }
 
             if (! CheckAvailability(createOrderDto.products, productReterivedBusinessDTOs))
             {
                 throw new Exception("Some of your products are not available");
             }
-
-    
 
             OrderDTO orderDto = new OrderDTO();
             orderDto.products = UpdateProductsStockQuantities( createOrderDto.products, productReterivedBusinessDTOs);
@@ -93,38 +75,13 @@ namespace ECommerceBusinessLogic
 
         private List<ProductBusinessDTO> UpdateProductsStockQuantities(List<ProductBusinessDTO> productsDto, List<ProductBusinessDTO> updateProductDataStockDtos)
         {
-            List<ProductDataDto> productsDataDtos = new List<ProductDataDto>();
-            for (int i = 0; i < productsDto.Count; i++)
-            {
-                ProductDataDto productDataDto = new ProductDataDto();
-                productDataDto.Id = productsDto[i].Id;
-                productDataDto.StockQuantity = productsDto[i].StockQuantity;
-                productsDataDtos.Add(productDataDto);
-
-            }
-
-            List<ProductDataDto> productsUpdateStockDataDtos = new List<ProductDataDto>();
-            for (int i = 0; i < updateProductDataStockDtos.Count; i++)
-            {
-                ProductDataDto productDataDto = new ProductDataDto();
-                productDataDto.Id = updateProductDataStockDtos[i].Id;
-                productDataDto.StockQuantity = updateProductDataStockDtos[i].StockQuantity;
-                productsUpdateStockDataDtos.Add(productDataDto);
-
-            }
+            List<ProductDataDto> productsDataDtos = mapper.Map<List<ProductDataDto>>(productsDto);
+            List<ProductDataDto> productsUpdateStockDataDtos = mapper.Map<List<ProductDataDto>>(updateProductDataStockDtos);
 
             List<ProductDataDto> productDataDtosResult = productRepository.UpdateProductsStockQuantity(productsDataDtos, productsUpdateStockDataDtos).ToList();
 
-            List<ProductBusinessDTO> productsUpdatedResult = new List<ProductBusinessDTO>();
+            List<ProductBusinessDTO> productsUpdatedResult = mapper.Map<List<ProductBusinessDTO>>(productDataDtosResult);
 
-            for (int i = 0; i < productDataDtosResult.Count; i++)
-            {
-                ProductBusinessDTO productBusinessDTO = new ProductBusinessDTO();
-                productBusinessDTO.Id = productDataDtosResult[i].Id;
-                productBusinessDTO.StockQuantity = productDataDtosResult[i].StockQuantity;
-                productsUpdatedResult.Add(productBusinessDTO);
-
-            }
             return productsUpdatedResult;
         }
     }
