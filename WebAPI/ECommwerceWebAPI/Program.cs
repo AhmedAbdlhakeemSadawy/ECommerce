@@ -1,6 +1,9 @@
 
+using AutoMapper;
+using ECommerceBusinessLogic.Mapping_Profiles;
 using ECommerceDataAccess.DatabaseContextConfiguration;
 using Microsoft.EntityFrameworkCore;
+
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -21,7 +24,10 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
+builder.Services.AddSingleton(provider => new MapperConfiguration(cfg =>
+{
+    cfg.AddProfile(new ProductMappingProfile()); // Add your profiles here
+}).CreateMapper());
 var app = builder.Build();
 
 //builder.Services.AddDbContext<ECommerceDbContext>(options =>
