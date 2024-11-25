@@ -170,5 +170,37 @@ namespace ECommerceBusinessTests
 
 
         }
+
+
+        [Fact]
+        public void CreateOrder_WithValidProducts_SetOrderStatusAsCreated()
+        {
+            var mockProductRepository = new Mock<IProductRepository>();
+            var mockMapper = new Mock<IMapper>();
+            CreateOrderDto createOrderDto = new CreateOrderDto();
+
+            List<ProductBusinessDTO> productBusinessDTOs = new List<ProductBusinessDTO>();
+            productBusinessDTOs.Add(new ProductBusinessDTO { Id = 1, Name = "Product One", StockQuantity = 2, Price = 120 });
+            productBusinessDTOs.Add(new ProductBusinessDTO { Id = 2, Name = "Product Two", StockQuantity = 4, Price = 80 });
+
+            createOrderDto.products = productBusinessDTOs;
+
+            List<ProductDataDto> productDataDtos = new List<ProductDataDto>();
+            productDataDtos.Add(new ProductDataDto() { Id = 1, StockQuantity = 2, Price = 120 });
+            productDataDtos.Add(new ProductDataDto() { Id = 2, StockQuantity = 4, Price = 80 });
+
+
+            mockProductRepository.Setup(repo => repo.GetListProductsById(new List<int> { 1, 2 })).Returns(productDataDtos);
+
+            mockMapper.Setup(map => map.Map<List<ProductBusinessDTO>>(productDataDtos)).Returns(productBusinessDTOs);
+
+
+            OrderManager orderManager = new OrderManager(mockProductRepository.Object, mockMapper.Object);
+
+            OrderDTO orderDTO = orderManager.CreateOrder(createOrderDto);
+
+            Assert.Equal(OrderStatus.Created, orderDTO.Status);
+
+        }
     }
 }

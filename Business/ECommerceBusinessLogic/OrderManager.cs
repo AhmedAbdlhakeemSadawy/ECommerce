@@ -37,7 +37,7 @@ namespace ECommerceBusinessLogic
             OrderDTO orderDto = new OrderDTO();
             orderDto.products = UpdateProductsStockQuantities( createOrderDto.products, productReterivedBusinessDTOs);
             orderDto.TotalPrice = CalculateOrderTotalPrice(productReterivedBusinessDTOs);
-            
+            orderDto.Status = OrderStatus.Created;
             return orderDto;
     
         }
