@@ -20,6 +20,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\ECommerceCoreContracts\ECommerceCoreContracts.csproj" />
+    <ProjectReference Include="..\ECommerceDataAccessAbstraction\ECommerceDataAccessAbstraction.csproj" />
     <ProjectReference Include="..\ECommerceDataAccessDTO\ECommerceDataAccessDTO.csproj" />
   </ItemGroup>
 

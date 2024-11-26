@@ -5,11 +5,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ECommerceCoreContracts;
 
 namespace ECommerceDataAccess.DataEntities
 {
     //[Table("Products")]
-    public class Product
+    public class Product : ProductContract
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -27,8 +28,6 @@ namespace ECommerceDataAccess.DataEntities
 
         [Required]
         public int StockQuantity { get; set; }
-
-
 
     }
 }

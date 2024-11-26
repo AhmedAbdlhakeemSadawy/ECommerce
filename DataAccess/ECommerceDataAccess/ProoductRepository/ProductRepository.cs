@@ -1,5 +1,4 @@
-﻿using ECommerceDataAccess.Abstractions;
-using ECommerceDataAccess.DatabaseContextConfiguration;
+﻿using ECommerceDataAccess.DatabaseContextConfiguration;
 using ECommerceDataAccess.DataEntities;
 using ECommerceDataAccessDTO;
 using Microsoft.EntityFrameworkCore;
@@ -9,10 +8,11 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ECommerceDataAccessAbstraction;
 
 namespace ECommerceDataAccess.ProoductRepository
 {
-    public class ProductRepository : IProductRepository
+    public class ProductRepository : IProductRepository<Product>
     {
         private readonly ECommerceDbContext context;
 
