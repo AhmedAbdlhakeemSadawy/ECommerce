@@ -21,5 +21,11 @@ namespace ECommerceDataAccess.DataEntities
 
         ICollection<OrderProduct> orderProducts { get; set; }
 
+        [ForeignKey("Customer")]
+        public int CustomerId { get; set; }
+
+        // Navigation Property (Each Order belongs to one Customer)
+        public Customer Customer { get; set; }
+
     }
 }
