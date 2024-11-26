@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace ECommerceBuinessDTO
 {
-    public class CreateOrderDto
+    public class CustomerDto
     {
         public int Id { get; set; }
-        public CustomerDto CustomerDto { get; set; }
-        public List<ProductBusinessDTO> products { get; set; } = new List<ProductBusinessDTO>();
+        public string Name { get; set; }
+        public string Email { get; set; }
     }
 }
