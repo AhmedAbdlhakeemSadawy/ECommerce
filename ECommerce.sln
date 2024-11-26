@@ -20,6 +20,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerceBuinessDTO", "Busi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerceBusinessTests", "Business\ECommerceBusinessTests\ECommerceBusinessTests.csproj", "{BE635C00-B628-4CCA-8C8B-9521CD7003EB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECommerceDataAccessAbstraction", "DataAccess\ECommerceDataAccessAbstraction\ECommerceDataAccessAbstraction.csproj", "{973D6A7A-957C-4AA4-8480-DCC58DBE7C47}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECommerceCoreContracts", "ECommerceCoreContracts\ECommerceCoreContracts.csproj", "{C27678E8-1875-4D14-B96F-FB0B058F88E8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -54,6 +58,14 @@ Global
 		{BE635C00-B628-4CCA-8C8B-9521CD7003EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BE635C00-B628-4CCA-8C8B-9521CD7003EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BE635C00-B628-4CCA-8C8B-9521CD7003EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{973D6A7A-957C-4AA4-8480-DCC58DBE7C47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{973D6A7A-957C-4AA4-8480-DCC58DBE7C47}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{973D6A7A-957C-4AA4-8480-DCC58DBE7C47}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{973D6A7A-957C-4AA4-8480-DCC58DBE7C47}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C27678E8-1875-4D14-B96F-FB0B058F88E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C27678E8-1875-4D14-B96F-FB0B058F88E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C27678E8-1875-4D14-B96F-FB0B058F88E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C27678E8-1875-4D14-B96F-FB0B058F88E8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
