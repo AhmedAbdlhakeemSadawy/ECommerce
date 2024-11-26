@@ -1,5 +1,4 @@
-﻿using ECommerceCoreContracts;
-using ECommerceDataAccessDTO;
+﻿using ECommerceDataAccessDTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ECommerceDataAccessAbstraction
 {
-    public interface IProductRepository<TProduct> : IRepository<TProduct> where TProduct : ProductContract
+    public interface IProductRepository<TProductDto> : IRepository<TProductDto> where TProductDto : ProductDataDto
     {
         IEnumerable<ProductDataDto> GetListProductsById(List<int> ids);
         IEnumerable<ProductDataDto> UpdateProductsStockQuantity(List<ProductDataDto> productDataDtos, List<ProductDataDto> productsDataDtosStockUpdated);

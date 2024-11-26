@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\ECommerceCoreContracts\ECommerceCoreContracts.csproj" />
     <ProjectReference Include="..\ECommerceDataAccessDTO\ECommerceDataAccessDTO.csproj" />
   </ItemGroup>
 

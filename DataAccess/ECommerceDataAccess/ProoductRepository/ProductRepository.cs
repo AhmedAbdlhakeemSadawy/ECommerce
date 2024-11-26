@@ -1,18 +1,11 @@
 ﻿using ECommerceDataAccess.DatabaseContextConfiguration;
 using ECommerceDataAccess.DataEntities;
 using ECommerceDataAccessDTO;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ECommerceDataAccessAbstraction;
 
 namespace ECommerceDataAccess.ProoductRepository
 {
-    public class ProductRepository : IProductRepository<Product>
+    public class ProductRepository : IProductRepository<ProductDataDto>
     {
         private readonly ECommerceDbContext context;
 
@@ -20,22 +13,22 @@ namespace ECommerceDataAccess.ProoductRepository
         {
             this.context = context;
         }
-        public Task AddAsync(Product entity)
+        public Task AddAsync(ProductDataDto entity)
         {
             throw new NotImplementedException();
         }
 
-        public Task DeleteAsync(Product entity)
+        public Task DeleteAsync(ProductDataDto entity)
         {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Product>> GetAllAsync()
+        public Task<IEnumerable<ProductDataDto>> GetAllAsync()
         {
             throw new NotImplementedException();
         }
 
-        public Task<Product> GetByIdAsync(int id)
+        public Task<ProductDataDto> GetByIdAsync(int id)
         {
             throw new NotImplementedException();
         }
@@ -58,51 +51,28 @@ namespace ECommerceDataAccess.ProoductRepository
             return productDTOs;
         }
 
-        public IEnumerable<productStockDTO> GetProductStockQuantity(List<int> ids)
-        {
-            var products = context.Products.Where(p => ids.Contains(p.Id)).Select(p => new { p.Id, p.StockQuantity }).ToList();
-            List<productStockDTO> productStockDTOs = new List<productStockDTO>();
-
-            for (var i = 0; i < products.Count; i++)
-            {
-                productStockDTO productStockDTO = new productStockDTO();
-                productStockDTO.Id = products[i].Id;
-                productStockDTO.StockQuantity = products[i].StockQuantity;
-
-                productStockDTOs.Add(productStockDTO);
-            }
-
-            return productStockDTOs;
-           
-        }
-
-        public Task UpdateAsync(Product entity)
+        public Task UpdateAsync(ProductDataDto entity)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<ProductDataDto> UpdateProductsStockQuantity(List<ProductDataDto> productDataDtos, List<ProductDataDto> updateProductDataStockDtos)
+        public IEnumerable<ProductDataDto> UpdateProductsStockQuantity(List<ProductDataDto> productDataDtos, List<ProductDataDto> productsDataDtosStockUpdated)
         {
             List<ProductDataDto> productsUpdated = new List<ProductDataDto>();
-
 
             for (int i = 0; i < productDataDtos.Count; i++)
             {
                 Product product = new Product();
                 product.Id = productDataDtos[i].Id;
-                product.StockQuantity = updateProductDataStockDtos.Where(p => p.Id == updateProductDataStockDtos[i].Id).FirstOrDefault().StockQuantity - productDataDtos[i].StockQuantity;
-                context.Entry(product).Property(p=> p.StockQuantity).IsModified = true;
+                product.StockQuantity = productsDataDtosStockUpdated.Where(p => p.Id == productsDataDtosStockUpdated[i].Id).FirstOrDefault().StockQuantity - productDataDtos[i].StockQuantity;
+                context.Entry(product).Property(p => p.StockQuantity).IsModified = true;
                 context.Products.Attach(product);
                 productsUpdated.Add(new ProductDataDto { Id = productDataDtos[i].Id, StockQuantity = product.StockQuantity });
             }
 
-
             context.SaveChanges();
 
-
             return productsUpdated;
-
-
         }
     }
 }

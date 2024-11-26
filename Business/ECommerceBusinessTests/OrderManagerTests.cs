@@ -1,7 +1,6 @@
 using AutoMapper;
 using ECommerceBuinessDTO;
 using ECommerceBusinessLogic;
-using ECommerceCoreContracts;
 using ECommerceDataAccessAbstraction;
 using ECommerceDataAccessDTO;
 using Moq;
@@ -14,7 +13,7 @@ namespace ECommerceBusinessTests
         [Fact]
         public void CreateOrder_WithEmptyProducts_ReturnSHouldHaveOneProductException()
         {
-            var mockProductRepository = new Mock<IProductRepository<ProductContract>>();
+            var mockProductRepository = new Mock<IProductRepository<ProductDataDto>>();
             var mockMapper = new Mock<IMapper>();
 
             CreateOrderDto createOrderDto = new CreateOrderDto();
@@ -28,7 +27,7 @@ namespace ECommerceBusinessTests
         [Fact]
         public void CreateOrder_WithNotAvailableProductQuantity_ReturnNotAvailableProductsException()
         {
-            var mockProductRepository = new Mock<IProductRepository<ProductContract>>();
+            var mockProductRepository = new Mock<IProductRepository<ProductDataDto>>();
             var mockMapper = new Mock<IMapper>();
 
             CreateOrderDto createOrderDto = new CreateOrderDto();
@@ -62,7 +61,7 @@ namespace ECommerceBusinessTests
         [Fact]
         public void CreateOrder_WithAvailableProductQuantity_CalculateTotalPrice()
         {
-            var mockProductRepository = new Mock<IProductRepository<ProductContract>>();
+            var mockProductRepository = new Mock<IProductRepository<ProductDataDto>>();
             var mockMapper = new Mock<IMapper>();
             CreateOrderDto createOrderDto = new CreateOrderDto();
 
@@ -92,7 +91,7 @@ namespace ECommerceBusinessTests
         [Fact]
         public void CreateOrder_WithAvailableProductQuantity_UpdateProductStock()
         {
-            var mockProductRepository = new Mock<IProductRepository<ProductContract>>();
+            var mockProductRepository = new Mock<IProductRepository<ProductDataDto>>();
             var mockMapper = new Mock<IMapper>();
 
 
@@ -175,7 +174,7 @@ namespace ECommerceBusinessTests
         [Fact]
         public void CreateOrder_WithValidProducts_SetOrderStatusAsCreated()
         {
-            var mockProductRepository = new Mock<IProductRepository<ProductContract>>();
+            var mockProductRepository = new Mock<IProductRepository<ProductDataDto>>();
             var mockMapper = new Mock<IMapper>();
             CreateOrderDto createOrderDto = new CreateOrderDto();
 

@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using ECommerceBuinessDTO;
 using ECommerceBusinessAbstractions;
-using ECommerceCoreContracts;
 using ECommerceDataAccessAbstraction;
 using ECommerceDataAccessDTO;
 
@@ -9,9 +8,9 @@ namespace ECommerceBusinessLogic
 {
     public class OrderManager : IOrderManager
     {
-        private IProductRepository<ProductContract> productRepository;
+        private IProductRepository<ProductDataDto> productRepository;
         private IMapper mapper;
-        public OrderManager(IProductRepository<ProductContract> productRepository, IMapper mapper)
+        public OrderManager(IProductRepository<ProductDataDto> productRepository, IMapper mapper)
         {
             this.productRepository = productRepository;
             this.mapper = mapper;
