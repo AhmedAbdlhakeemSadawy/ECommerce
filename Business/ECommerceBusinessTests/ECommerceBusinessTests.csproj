@@ -25,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\DataAccess\ECommerceDataAccess\ECommerceDataAccess.csproj" />
+    <ProjectReference Include="..\..\DataAccess\ECommerceDataAccessAbstraction\ECommerceDataAccessAbstraction.csproj" />
     <ProjectReference Include="..\ECommerceBuinessDTO\ECommerceBuinessDTO.csproj" />
     <ProjectReference Include="..\ECommerceBusinessLogic\ECommerceBusinessLogic.csproj" />
   </ItemGroup>
