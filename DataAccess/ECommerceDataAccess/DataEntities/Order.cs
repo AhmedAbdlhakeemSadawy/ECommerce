@@ -15,7 +15,7 @@ namespace ECommerceDataAccess.DataEntities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
-        public int orderNumber { get; set; }
+        public int Status { get; set; }
 
         public DateTime CreatedDate { get; set; } = DateTime.Now;
 
