@@ -16,10 +16,10 @@ namespace ECommerceDataAccess.DataEntities
         public int Id { get; set; }
 
         public int Status { get; set; }
-
+        public decimal TotalPrice { get; set; }
         public DateTime CreatedDate { get; set; } = DateTime.Now;
 
-        ICollection<OrderProduct> orderProducts { get; set; }
+         public ICollection<OrderProduct> orderProducts { get; set; }
 
         [ForeignKey("Customer")]
         public int CustomerId { get; set; }
