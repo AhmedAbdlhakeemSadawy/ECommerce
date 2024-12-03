@@ -13,8 +13,10 @@ namespace ECommerceDataAccess.Mapping_Profiles
     {
         public OrderDataMappingProfile()
         {
-            CreateMap<OrderDataDto, Order>();
-            CreateMap<Order, OrderDataDto>();
+            CreateMap<OrderDataDto, Order>()
+                .ForMember(dest => dest.orderProducts, opt => opt.MapFrom(src => src.products));
+            CreateMap<Order, OrderDataDto>()
+                .ForMember(dest => dest.products, opt => opt.MapFrom(src => src.orderProducts));
         }
     }
 }
