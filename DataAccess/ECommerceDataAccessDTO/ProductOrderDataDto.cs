@@ -8,11 +8,10 @@ using System.Threading.Tasks;
 
 namespace ECommerceDataAccessDTO
 {
-    public class ProductDataDto
+    public class ProductOrderDataDto
     {
-        public int Id { get; set; }
+        public int ProductId { get; set; }
         public string Name { get; set; }
-        public decimal Price { get; set; }
-        public int StockQuantity { get; set; }
+        public int Quantity { get; set; }
     }
 }
