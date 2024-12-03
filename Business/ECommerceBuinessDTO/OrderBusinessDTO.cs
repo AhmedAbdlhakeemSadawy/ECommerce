@@ -1,6 +1,6 @@
 ﻿namespace ECommerceBuinessDTO
 {
-    public class OrderDTO
+    public class OrderBusinessDTO
     {
         public int Id { get; set; }
         public decimal TotalPrice { get; set; }

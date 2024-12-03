@@ -4,6 +4,6 @@ namespace ECommerceBusinessAbstractions
 {
     public interface IOrderManager
     {
-        public OrderDTO CreateOrder(CreateOrderDto createOrderDto);
+        public OrderBusinessDTO CreateOrder(CreateOrderDto createOrderDto);
     }
 }
