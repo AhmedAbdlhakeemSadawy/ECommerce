@@ -13,15 +13,17 @@ namespace ECommerceBusinessLogic.Mapping_Profiles
     {
         public OrderMappingProfile()
         {
-            //CreateMap<OrderBusinessDTO, OrderDataDto>()
-            //    .ForMember(dest => dest.products, opt => opt.MapFrom(src => src.products));
-            //CreateMap<OrderDataDto, OrderBusinessDTO>();
+            CreateMap<OrderBusinessDTO, OrderDataDto>()
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => (int) src.Status));
 
 
-            //CreateMap<ProductOrderDataDto, ProductBusinessDTO>()
-            //.ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.ProductId))  // Map Id to ProductId
-            //.ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))  // Map Name to ProductName
-            //.ForMember(dest => dest.quq, opt => opt.MapFrom(src => src.Price));
+            // CreateMap<OrderDataDto, OrderBusinessDTO>();
+
+
+            CreateMap<ProductOrderDataDto, ProductBusinessDTO>()
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.ProductId))  // Map Id to ProductId
+            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))  // Map Name to ProductName
+            .ForMember(dest => dest.Quantity, opt => opt.MapFrom(src => src.Quantity));
         }
     }
 }
