@@ -28,21 +28,19 @@ namespace ECommerceBusinessLogic
             var reterivedProdcutsData = productRepository.GetListProductsById(ids).ToList();
 
 
-           // List<ProductBusinessDTO> productReterivedBusinessDTOs = mapper.Map<List<ProductBusinessDTO>>(prodcutsData);
-
-
             if (! CheckAvailability(createOrderDto.products, reterivedProdcutsData))
             {
                 throw new Exception("Some of your products are not available");
             }
 
-            OrderBusinessDTO orderDto = new OrderBusinessDTO();
-            orderDto.products = UpdateProductsStockQuantities( createOrderDto.products, reterivedProdcutsData);
-            orderDto.TotalPrice = CalculateOrderTotalPrice(createOrderDto.products);
-            orderDto.Status = OrderStatus.Created;
+            OrderBusinessDTO orderBusinessDto = new OrderBusinessDTO();
+            orderBusinessDto.products = UpdateProductsStockQuantities( createOrderDto.products, reterivedProdcutsData);
+            orderBusinessDto.TotalPrice = CalculateOrderTotalPrice(createOrderDto.products);
+            orderBusinessDto.Status = OrderStatus.Created;
 
-          //  orderRepository.AddAsync()
-            return orderDto;
+            OrderDataDto orderDataDto = mapper.Map<OrderDataDto>(orderBusinessDto);
+            var order =   orderRepository.AddAsync(orderDataDto);
+            return orderBusinessDto;
     
         }
 
