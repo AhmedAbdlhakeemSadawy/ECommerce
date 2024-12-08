@@ -6,5 +6,6 @@
         public decimal TotalPrice { get; set; }
         public OrderStatus Status { get; set; }
         public List<ProductBusinessDTO> products { get; set; } = new List<ProductBusinessDTO>();
+        public int CustomerId { get; set; }
     }
 }
