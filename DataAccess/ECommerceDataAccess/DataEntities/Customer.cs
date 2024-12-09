@@ -18,5 +18,7 @@ namespace ECommerceDataAccess.DataEntities
 
         [Required]
         public string email { get; set; }
+
+        public ICollection<Order> Orders { get; set; }
     }
 }

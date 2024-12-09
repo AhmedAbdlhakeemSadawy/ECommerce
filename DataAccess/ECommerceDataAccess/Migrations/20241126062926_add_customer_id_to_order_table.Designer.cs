@@ -4,6 +4,7 @@ using ECommerceDataAccess.DatabaseContextConfiguration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ECommerceDataAccess.Migrations
 {
     [DbContext(typeof(ECommerceDbContext))]
-    partial class ECommerceDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241126062926_add_customer_id_to_order_table")]
+    partial class addcustomeridtoordertable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -57,11 +60,8 @@ namespace ECommerceDataAccess.Migrations
                     b.Property<int>("CustomerId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Status")
+                    b.Property<int>("orderNumber")
                         .HasColumnType("int");
-
-                    b.Property<decimal>("TotalPrice")
-                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -82,9 +82,6 @@ namespace ECommerceDataAccess.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductQuantity")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -137,7 +134,7 @@ namespace ECommerceDataAccess.Migrations
             modelBuilder.Entity("ECommerceDataAccess.DataEntities.OrderProduct", b =>
                 {
                     b.HasOne("ECommerceDataAccess.DataEntities.Order", "Order")
-                        .WithMany("orderProducts")
+                        .WithMany()
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -156,11 +153,6 @@ namespace ECommerceDataAccess.Migrations
             modelBuilder.Entity("ECommerceDataAccess.DataEntities.Customer", b =>
                 {
                     b.Navigation("Orders");
-                });
-
-            modelBuilder.Entity("ECommerceDataAccess.DataEntities.Order", b =>
-                {
-                    b.Navigation("orderProducts");
                 });
 #pragma warning restore 612, 618
         }

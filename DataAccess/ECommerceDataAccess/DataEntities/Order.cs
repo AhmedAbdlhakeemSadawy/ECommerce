@@ -15,11 +15,17 @@ namespace ECommerceDataAccess.DataEntities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
-        public int orderNumber { get; set; }
-
+        public int Status { get; set; }
+        public decimal TotalPrice { get; set; }
         public DateTime CreatedDate { get; set; } = DateTime.Now;
 
-        ICollection<OrderProduct> orderProducts { get; set; }
+         public ICollection<OrderProduct> orderProducts { get; set; }
+
+        [ForeignKey("Customer")]
+        public int CustomerId { get; set; }
+
+        // Navigation Property (Each Order belongs to one Customer)
+        public Customer Customer { get; set; }
 
     }
 }

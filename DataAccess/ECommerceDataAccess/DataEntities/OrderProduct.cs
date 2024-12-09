@@ -16,6 +16,7 @@ namespace ECommerceDataAccess.DataEntities
 
         public int ProductId { get; set; }
 
+        public int ProductQuantity { get; set; }
         public int OrderId { get; set; }
 
         [ForeignKey("ProductId")]
@@ -25,6 +26,5 @@ namespace ECommerceDataAccess.DataEntities
         public Order Order { get; set; }
 
 
-        public int Quantity { get; set; }
     }
 }
