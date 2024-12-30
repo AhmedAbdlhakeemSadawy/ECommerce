@@ -17,7 +17,7 @@ namespace ECommerceBusinessLogic
             this.orderRepository = orderRepository;
             this.mapper = mapper;
         }
-        public OrderBusinessDTO CreateOrder(CreateOrderDto createOrderDto)
+        public OrderBusinessDTO CreateOrder(OrderBusinessDTO createOrderDto)
         {
             
             if (createOrderDto.products == null || createOrderDto.products.Count == 0)
