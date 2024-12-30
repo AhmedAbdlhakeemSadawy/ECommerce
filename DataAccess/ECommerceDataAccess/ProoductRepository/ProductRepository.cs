@@ -42,7 +42,7 @@ namespace ECommerceDataAccess.ProoductRepository
             {
                 ProductDataDto productDataDto = new ProductDataDto();
                 productDataDto.Id = products[i].Id;
-                productDataDto.Price = products[i].price;
+                productDataDto.price = products[i].price;
                 productDataDto.StockQuantity = products[i].StockQuantity;
 
                 productDTOs.Add(productDataDto);

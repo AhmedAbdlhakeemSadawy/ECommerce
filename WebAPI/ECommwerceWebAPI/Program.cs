@@ -2,6 +2,8 @@
 using AutoMapper;
 using ECommerceBusinessLogic.Mapping_Profiles;
 using ECommerceDataAccess.DatabaseContextConfiguration;
+using ECommerceDataAccess.DataSeeder;
+using ECommerceDataAccessAbstraction;
 using Microsoft.EntityFrameworkCore;
 
 using Microsoft.Extensions.Configuration;
@@ -28,10 +30,8 @@ builder.Services.AddSingleton(provider => new MapperConfiguration(cfg =>
 {
     cfg.AddProfile(new ProductMappingProfile()); // Add your profiles here
 }).CreateMapper());
+builder.Services.AddScoped<IDataSeeder, DataSeeder>();
 var app = builder.Build();
-
-//builder.Services.AddDbContext<ECommerceDbContext>(options =>
-//    options.UseSqlServer(builder.Configuration.GetConnectionString("ECommerceConnection")));
 
 
 
@@ -46,5 +46,11 @@ if (app.Environment.IsDevelopment())
 app.UseAuthorization();
 
 app.MapControllers();
+
+using (var scope = app.Services.CreateScope())
+{
+    var dataSeeder = scope.ServiceProvider.GetRequiredService<IDataSeeder>();
+    dataSeeder.SeedData();
+}
 
 app.Run();
