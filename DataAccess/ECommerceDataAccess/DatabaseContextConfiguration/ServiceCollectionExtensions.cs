@@ -1,4 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using ECommerceDataAccess.OrderRepository;
+using ECommerceDataAccess.ProoductRepository;
+using ECommerceDataAccessAbstraction;
+using ECommerceDataAccessDTO;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -14,7 +18,8 @@ namespace ECommerceDataAccess.DatabaseContextConfiguration
         {
             services.AddDbContext<ECommerceDbContext>(options =>
                 options.UseSqlServer(connectionString));
-
+            services.AddScoped(typeof(IProductRepository<ProductDataDto>), typeof(ProductRepository));
+            services.AddScoped(typeof(IOrderRepository<OrderDataDto>), typeof(OrderRepository.OrderRepository));
             return services;
         }
     }
