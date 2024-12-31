@@ -1,9 +1,11 @@
 
 using AutoMapper;
+using ECommerceBusinessLogic.ECommerceBusinessServiceRegisteration;
 using ECommerceBusinessLogic.Mapping_Profiles;
 using ECommerceDataAccess.DatabaseContextConfiguration;
 using ECommerceDataAccess.DataSeeder;
 using ECommerceDataAccessAbstraction;
+using ECommwerceWebAPI.Mapping_Profiles;
 using Microsoft.EntityFrameworkCore;
 
 using Microsoft.Extensions.Configuration;
@@ -19,6 +21,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("ECommerceConnection");
 builder.Services.AddECommerceDataAccess(connectionString);
+builder.Services.RegisterBusinessServices();
 
 // Add services to the container.
 
@@ -29,6 +32,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton(provider => new MapperConfiguration(cfg =>
 {
     cfg.AddProfile(new ProductMappingProfile()); // Add your profiles here
+    cfg.AddProfile(new OrderAPIMappingProfile()); // Add your profiles here
 }).CreateMapper());
 builder.Services.AddScoped<IDataSeeder, DataSeeder>();
 var app = builder.Build();
