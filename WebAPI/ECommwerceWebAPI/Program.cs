@@ -4,6 +4,7 @@ using ECommerceBusinessLogic.ECommerceBusinessServiceRegisteration;
 using ECommerceBusinessLogic.Mapping_Profiles;
 using ECommerceDataAccess.DatabaseContextConfiguration;
 using ECommerceDataAccess.DataSeeder;
+using ECommerceDataAccess.Mapping_Profiles;
 using ECommerceDataAccessAbstraction;
 using ECommwerceWebAPI.Mapping_Profiles;
 using Microsoft.EntityFrameworkCore;
@@ -33,6 +34,8 @@ builder.Services.AddSingleton(provider => new MapperConfiguration(cfg =>
 {
     cfg.AddProfile(new ProductMappingProfile()); // Add your profiles here
     cfg.AddProfile(new OrderAPIMappingProfile()); // Add your profiles here
+    cfg.AddProfile(new OrderDataMappingProfile()); // Add your profiles here
+    cfg.AddProfile(new ProductDataMappingProfile()); // Add your profiles here
 }).CreateMapper());
 builder.Services.AddScoped<IDataSeeder, DataSeeder>();
 var app = builder.Build();
