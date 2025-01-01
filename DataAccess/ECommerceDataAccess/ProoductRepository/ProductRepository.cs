@@ -2,6 +2,7 @@
 using ECommerceDataAccess.DataEntities;
 using ECommerceDataAccessDTO;
 using ECommerceDataAccessAbstraction;
+using Microsoft.EntityFrameworkCore;
 
 namespace ECommerceDataAccess.ProoductRepository
 {
@@ -35,7 +36,7 @@ namespace ECommerceDataAccess.ProoductRepository
 
         public IEnumerable<ProductDataDto> GetListProductsById(List<int> ids)
         {
-            var products = context.Products.Where(p => ids.Contains(p.Id)).ToList();
+            var products = context.Products.AsNoTracking().Where(p => ids.Contains(p.Id)).ToList();
             List<ProductDataDto> productDTOs = new List<ProductDataDto>();
 
             for (var i = 0; i < products.Count; i++)
