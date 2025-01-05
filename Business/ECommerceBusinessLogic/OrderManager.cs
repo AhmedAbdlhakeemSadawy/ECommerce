@@ -17,29 +17,30 @@ namespace ECommerceBusinessLogic
             this.orderRepository = orderRepository;
             this.mapper = mapper;
         }
-        public OrderBusinessDTO CreateOrder(OrderBusinessDTO createOrderDto)
+        public OrderBusinessDTO CreateOrder(OrderBusinessDTO orderBusinessDto)
         {
             
-            if (createOrderDto.products == null || createOrderDto.products.Count == 0)
+            if (orderBusinessDto.products == null || orderBusinessDto.products.Count == 0)
             {
                 throw new Exception("Order Should contain at least one product");
             }
-            List<int> ids = createOrderDto.products.Select(p => p.Id).ToList();
+            List<int> ids = orderBusinessDto.products.Select(p => p.Id).ToList();
             var reterivedProdcutsData = productRepository.GetListProductsById(ids).ToList();
 
 
-            if (! CheckAvailability(createOrderDto.products, reterivedProdcutsData))
+            if (! CheckAvailability(orderBusinessDto.products, reterivedProdcutsData))
             {
                 throw new Exception("Some of your products are not available");
             }
 
-            OrderBusinessDTO orderBusinessDto = new OrderBusinessDTO();
-            orderBusinessDto.products = UpdateProductsStockQuantities( createOrderDto.products, reterivedProdcutsData);
-            orderBusinessDto.TotalPrice = CalculateOrderTotalPrice(createOrderDto.products);
+           // OrderBusinessDTO orderBusinessDto = new OrderBusinessDTO();
+            orderBusinessDto.TotalPrice = CalculateOrderTotalPrice(orderBusinessDto.products);
             orderBusinessDto.Status = OrderStatus.Created;
+            orderBusinessDto.products = UpdateProductsStockQuantities(orderBusinessDto.products, reterivedProdcutsData);
 
             OrderDataDto orderDataDto = mapper.Map<OrderDataDto>(orderBusinessDto);
             var order =   orderRepository.AddAsync(orderDataDto);
+
             return orderBusinessDto;
     
         }
