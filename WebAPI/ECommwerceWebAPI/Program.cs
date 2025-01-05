@@ -35,6 +35,7 @@ builder.Services.AddSingleton(provider => new MapperConfiguration(cfg =>
     cfg.AddProfile(new ProductMappingProfile()); // Add your profiles here
     cfg.AddProfile(new OrderAPIMappingProfile()); // Add your profiles here
     cfg.AddProfile(new OrderDataMappingProfile()); // Add your profiles here
+    cfg.AddProfile(new OrderMappingProfile()); // Add your profiles here
     cfg.AddProfile(new ProductDataMappingProfile()); // Add your profiles here
 }).CreateMapper());
 builder.Services.AddScoped<IDataSeeder, DataSeeder>();
