@@ -37,6 +37,7 @@ namespace ECommerceDataAccess.ProoductRepository
         public IEnumerable<ProductDataDto> GetListProductsById(List<int> ids)
         {
             var products = context.Products.AsNoTracking().Where(p => ids.Contains(p.Id)).ToList();
+
             List<ProductDataDto> productDTOs = new List<ProductDataDto>();
 
             for (var i = 0; i < products.Count; i++)
@@ -66,8 +67,8 @@ namespace ECommerceDataAccess.ProoductRepository
                 Product product = new Product();
                 product.Id = productDataDtos[i].Id;
                 product.StockQuantity = productsDataDtosStockUpdated.Where(p => p.Id == productsDataDtosStockUpdated[i].Id).FirstOrDefault().StockQuantity - productDataDtos[i].StockQuantity;
-                context.Entry(product).Property(p => p.StockQuantity).IsModified = true;
                 context.Products.Attach(product);
+                context.Entry(product).Property(p => p.StockQuantity).IsModified = true;
                 productsUpdated.Add(new ProductDataDto { Id = productDataDtos[i].Id, StockQuantity = product.StockQuantity });
             }
 
