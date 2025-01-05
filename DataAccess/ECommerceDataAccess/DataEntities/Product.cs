@@ -10,7 +10,7 @@ using ECommerceCoreContracts;
 namespace ECommerceDataAccess.DataEntities
 {
     //[Table("Products")]
-    public class Product : ProductContract
+    public class Product
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
