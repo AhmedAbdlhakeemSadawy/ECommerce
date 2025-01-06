@@ -6,7 +6,10 @@ using ECommerceDataAccess.DatabaseContextConfiguration;
 using ECommerceDataAccess.DataSeeder;
 using ECommerceDataAccess.Mapping_Profiles;
 using ECommerceDataAccessAbstraction;
+using ECommerceWebApiDto.Validators;
 using ECommwerceWebAPI.Mapping_Profiles;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 
 using Microsoft.Extensions.Configuration;
@@ -27,6 +30,9 @@ builder.Services.RegisterBusinessServices();
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
+builder.Services.AddValidatorsFromAssemblyContaining<OrderRequestDtoValidator>();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
