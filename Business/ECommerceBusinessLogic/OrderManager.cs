@@ -36,10 +36,10 @@ namespace ECommerceBusinessLogic
            // OrderBusinessDTO orderBusinessDto = new OrderBusinessDTO();
             orderBusinessDto.TotalPrice = CalculateOrderTotalPrice(orderBusinessDto.products);
             orderBusinessDto.Status = OrderStatus.Created;
-            orderBusinessDto.products = UpdateProductsStockQuantities(orderBusinessDto.products, reterivedProdcutsData);
 
             OrderDataDto orderDataDto = mapper.Map<OrderDataDto>(orderBusinessDto);
-            var order =   orderRepository.AddAsync(orderDataDto);
+            var order =   orderRepository.AddOrder(orderDataDto);
+            orderBusinessDto.products = UpdateProductsStockQuantities(orderBusinessDto.products, reterivedProdcutsData);
 
             return orderBusinessDto;
     
