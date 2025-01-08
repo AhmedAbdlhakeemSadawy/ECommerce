@@ -72,8 +72,6 @@ namespace ECommerceDataAccess.ProoductRepository
                 productsUpdated.Add(new ProductDataDto { Id = productDataDtos[i].Id, StockQuantity = product.StockQuantity });
             }
 
-            context.SaveChanges();
-
             return productsUpdated;
         }
     }
