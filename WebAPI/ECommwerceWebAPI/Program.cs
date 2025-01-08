@@ -1,9 +1,15 @@
 
 using AutoMapper;
+using ECommerceBusinessLogic.ECommerceBusinessServiceRegisteration;
 using ECommerceBusinessLogic.Mapping_Profiles;
 using ECommerceDataAccess.DatabaseContextConfiguration;
 using ECommerceDataAccess.DataSeeder;
+using ECommerceDataAccess.Mapping_Profiles;
 using ECommerceDataAccessAbstraction;
+using ECommerceWebApiDto.Validators;
+using ECommwerceWebAPI.Mapping_Profiles;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 
 using Microsoft.Extensions.Configuration;
@@ -19,16 +25,24 @@ var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("ECommerceConnection");
 builder.Services.AddECommerceDataAccess(connectionString);
+builder.Services.RegisterBusinessServices();
 
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
+builder.Services.AddValidatorsFromAssemblyContaining<OrderRequestDtoValidator>();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton(provider => new MapperConfiguration(cfg =>
 {
     cfg.AddProfile(new ProductMappingProfile()); // Add your profiles here
+    cfg.AddProfile(new OrderAPIMappingProfile()); // Add your profiles here
+    cfg.AddProfile(new OrderDataMappingProfile()); // Add your profiles here
+    cfg.AddProfile(new OrderMappingProfile()); // Add your profiles here
+    cfg.AddProfile(new ProductDataMappingProfile()); // Add your profiles here
 }).CreateMapper());
 builder.Services.AddScoped<IDataSeeder, DataSeeder>();
 var app = builder.Build();

@@ -21,11 +21,17 @@ namespace ECommerceDataAccess.OrderRepository
             this.context = context;
             this.mapper = mapper;
         }
+
         public Task AddAsync(OrderDataDto entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int AddOrder(OrderDataDto entity)
         {
             Order order  = mapper.Map<Order>(entity);
             context.Add(order);
-            return context.SaveChangesAsync();
+            return context.SaveChanges();
         }
 
         public Task DeleteAsync(OrderDataDto entity)

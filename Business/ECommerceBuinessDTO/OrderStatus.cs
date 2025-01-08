@@ -8,8 +8,8 @@ namespace ECommerceBuinessDTO
 {
     public enum OrderStatus
     {
-        Created,
-        Completed,
-        Cancelled
+        Created = 1 ,
+        Completed = 2 ,
+        Cancelled = 3
     }
 }

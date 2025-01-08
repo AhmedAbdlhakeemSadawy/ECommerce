@@ -17,7 +17,7 @@ namespace ECommerceBusinessTests
             var mockOrderRepository = new Mock<IOrderRepository<OrderDataDto>>();
             var mockMapper = new Mock<IMapper>();
 
-            CreateOrderDto createOrderDto = new CreateOrderDto();
+            OrderBusinessDTO createOrderDto = new OrderBusinessDTO();
 
             OrderManager orderManager = new OrderManager(mockProductRepository.Object, mockOrderRepository.Object,mockMapper.Object);
 
@@ -33,7 +33,7 @@ namespace ECommerceBusinessTests
 
             var mockMapper = new Mock<IMapper>();
 
-            CreateOrderDto createOrderDto = new CreateOrderDto();
+            OrderBusinessDTO createOrderDto = new OrderBusinessDTO();
 
             List<ProductBusinessDTO> productBusinessDTOs = new List<ProductBusinessDTO>();
             productBusinessDTOs.Add(new ProductBusinessDTO { Id = 1, Name = "Product One", Quantity = 5, Price = 120 });
@@ -63,7 +63,7 @@ namespace ECommerceBusinessTests
             var mockOrderRepository = new Mock<IOrderRepository<OrderDataDto>>();
 
             var mockMapper = new Mock<IMapper>();
-            CreateOrderDto createOrderDto = new CreateOrderDto();
+            OrderBusinessDTO createOrderDto = new OrderBusinessDTO();
 
             List<ProductBusinessDTO> productBusinessDTOs = new List<ProductBusinessDTO>();
             productBusinessDTOs.Add(new ProductBusinessDTO { Id = 1, Name = "Product One", Quantity = 2, Price = 120 });
@@ -101,7 +101,7 @@ namespace ECommerceBusinessTests
             mappedProductsDatasNeeedToBeUpdated.Add(new ProductDataDto { Id = 2, StockQuantity = 1 });
 
 
-            CreateOrderDto createOrderDto = new CreateOrderDto();
+            OrderBusinessDTO createOrderDto = new OrderBusinessDTO();
 
             createOrderDto.products = productsbusinessNeeedToBeUpdated;
 
@@ -174,7 +174,7 @@ namespace ECommerceBusinessTests
             mappedProductsDatasNeeedToBeUpdated.Add(new ProductDataDto { Id = 2, StockQuantity = 1 });
 
 
-            CreateOrderDto createOrderDto = new CreateOrderDto();
+            OrderBusinessDTO createOrderDto = new OrderBusinessDTO();
 
             createOrderDto.products = productsbusinessNeeedToBeUpdated;
 

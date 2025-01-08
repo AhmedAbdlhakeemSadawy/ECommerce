@@ -4,12 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ECommerceBuinessDTO
+namespace ECommerceWebApiDto
 {
-    public class CustomerDto
+    public class ProductRequestDto
     {
         public int Id { get; set; }
-        public string Name { get; set; }
-        public string Email { get; set; }
+        public int Quantity { get; set; }
     }
 }
