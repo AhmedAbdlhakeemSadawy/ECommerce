@@ -141,6 +141,7 @@ namespace ECommerceBusinessTests
 
             mockMapper.Setup(map => map.Map<List<ProductDataDto>>(productsbusinessNeeedToBeUpdated)).Returns(mappedProductsDatasNeeedToBeUpdated);
             mockMapper.Setup(map => map.Map<List<ProductBusinessDTO>>(updatedDataProducts)).Returns(updatedBusninessProducts);
+            mockMapper.Setup(map => map.Map<List<ProductBusinessDTO>>(retrivedDataProducts)).Returns(updatedBusninessProducts);
 
             mockProductRepository.Setup(repo => repo.UpdateProductsStockQuantity(It.IsAny<List<ProductDataDto>>(), It.IsAny<List<ProductDataDto>>())).Returns(updatedDataProducts);
 
@@ -209,6 +210,8 @@ namespace ECommerceBusinessTests
 
             mockMapper.Setup(map => map.Map<List<ProductDataDto>>(productsbusinessNeeedToBeUpdated)).Returns(mappedProductsDatasNeeedToBeUpdated);
             mockMapper.Setup(map => map.Map<List<ProductBusinessDTO>>(updatedDataProducts)).Returns(updatedBusninessProducts);
+            mockMapper.Setup(map => map.Map<List<ProductBusinessDTO>>(retrivedDataProducts)).Returns(updatedBusninessProducts);
+
 
             mockProductRepository.Setup(repo => repo.UpdateProductsStockQuantity(It.IsAny<List<ProductDataDto>>(), It.IsAny<List<ProductDataDto>>())).Returns(updatedDataProducts);
 
