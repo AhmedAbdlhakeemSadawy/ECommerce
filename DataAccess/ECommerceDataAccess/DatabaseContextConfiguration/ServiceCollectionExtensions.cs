@@ -1,5 +1,6 @@
 ﻿using ECommerceDataAccess.OrderRepository;
 using ECommerceDataAccess.ProoductRepository;
+using ECommerceDataAccess.UnitOfWork;
 using ECommerceDataAccessAbstraction;
 using ECommerceDataAccessDTO;
 using Microsoft.EntityFrameworkCore;
@@ -20,6 +21,7 @@ namespace ECommerceDataAccess.DatabaseContextConfiguration
                 options.UseSqlServer(connectionString));
             services.AddScoped(typeof(IProductRepository<ProductDataDto>), typeof(ProductRepository));
             services.AddScoped(typeof(IOrderRepository<OrderDataDto>), typeof(OrderRepository.OrderRepository));
+            services.AddScoped<IUnitOfWork, UnitOfWork.UnitOfWork>();
             return services;
         }
     }

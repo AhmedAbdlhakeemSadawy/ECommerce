@@ -10,16 +10,27 @@ namespace ECommerceBusinessTests
 {
     public class OrderManagerTests
     {
+        private Mock<IProductRepository<ProductDataDto>> mockProductRepository;
+        private Mock<IOrderRepository<OrderDataDto>> mockOrderRepository;
+        private Mock<IUnitOfWork> mockUnitOfWork;
+        private Mock<IMapper> mockMapper;
+        public OrderManagerTests()
+        {
+             mockProductRepository = new Mock<IProductRepository<ProductDataDto>>();
+             mockOrderRepository = new Mock<IOrderRepository<OrderDataDto>>();
+             mockUnitOfWork = new Mock<IUnitOfWork>();
+             mockMapper = new Mock<IMapper>();
+
+
+            mockUnitOfWork.Setup(uow => uow.ProductRepository).Returns(mockProductRepository.Object);
+            mockUnitOfWork.Setup(uow => uow.OrderRepository).Returns(mockOrderRepository.Object);
+        }
         [Fact]
         public void CreateOrder_WithEmptyProducts_ReturnSHouldHaveOneProductException()
         {
-            var mockProductRepository = new Mock<IProductRepository<ProductDataDto>>();
-            var mockOrderRepository = new Mock<IOrderRepository<OrderDataDto>>();
-            var mockMapper = new Mock<IMapper>();
-
             OrderBusinessDTO createOrderDto = new OrderBusinessDTO();
 
-            OrderManager orderManager = new OrderManager(mockProductRepository.Object, mockOrderRepository.Object,mockMapper.Object);
+            OrderManager orderManager = new OrderManager(mockUnitOfWork.Object,mockMapper.Object);
 
             var exception = Assert.Throws<Exception>(() => orderManager.CreateOrder(createOrderDto));
             Assert.Equal("Order Should contain at least one product", exception.Message);
@@ -28,10 +39,6 @@ namespace ECommerceBusinessTests
         [Fact]
         public void CreateOrder_WithNotAvailableProductQuantity_ReturnNotAvailableProductsException()
         {
-            var mockProductRepository = new Mock<IProductRepository<ProductDataDto>>();
-            var mockOrderRepository = new Mock<IOrderRepository<OrderDataDto>>();
-
-            var mockMapper = new Mock<IMapper>();
 
             OrderBusinessDTO createOrderDto = new OrderBusinessDTO();
 
@@ -49,7 +56,7 @@ namespace ECommerceBusinessTests
             mockProductRepository.Setup(repo => repo.GetListProductsById(new List<int> { 1, 2 })).Returns(retrivedProductDataDtos);
 
 
-            OrderManager orderManager = new OrderManager(mockProductRepository.Object,mockOrderRepository.Object, mockMapper.Object);
+            OrderManager orderManager = new OrderManager(mockUnitOfWork.Object, mockMapper.Object);
 
             var exception = Assert.Throws<Exception>(() => orderManager.CreateOrder(createOrderDto));
             Assert.Equal("Some of your products are not available", exception.Message);
@@ -59,10 +66,7 @@ namespace ECommerceBusinessTests
         [Fact]
         public void CreateOrder_WithAvailableProductQuantity_CalculateTotalPrice()
         {
-            var mockProductRepository = new Mock<IProductRepository<ProductDataDto>>();
-            var mockOrderRepository = new Mock<IOrderRepository<OrderDataDto>>();
 
-            var mockMapper = new Mock<IMapper>();
             OrderBusinessDTO createOrderDto = new OrderBusinessDTO();
 
             List<ProductBusinessDTO> productBusinessDTOs = new List<ProductBusinessDTO>();
@@ -71,8 +75,24 @@ namespace ECommerceBusinessTests
 
             createOrderDto.products = productBusinessDTOs;
 
+            List<ProductDataDto> retrivedDataProducts = new List<ProductDataDto>();
+            retrivedDataProducts.Add(new ProductDataDto() { Id = 1, StockQuantity = 2 });
+            retrivedDataProducts.Add(new ProductDataDto() { Id = 2, StockQuantity = 4 });
 
-            OrderManager orderManager = new OrderManager(mockProductRepository.Object, mockOrderRepository.Object, mockMapper.Object);
+
+            mockProductRepository.Setup(repo => repo.GetListProductsById(new List<int> { 1, 2 })).Returns(retrivedDataProducts);
+
+
+
+            List<ProductBusinessDTO> updatedBusninessProducts = new List<ProductBusinessDTO>();
+            updatedBusninessProducts.Add(new ProductBusinessDTO() { Id = 1, Quantity = 1, Price = 120 });
+            updatedBusninessProducts.Add(new ProductBusinessDTO() { Id = 2, Quantity = 3, Price = 80 });
+
+
+
+            mockMapper.Setup(map => map.Map<List<ProductBusinessDTO>>(retrivedDataProducts)).Returns(updatedBusninessProducts);
+
+            OrderManager orderManager = new OrderManager(mockUnitOfWork.Object, mockMapper.Object);
 
             OrderBusinessDTO orderDTO = orderManager.CreateOrder(createOrderDto);
 
@@ -82,12 +102,6 @@ namespace ECommerceBusinessTests
         [Fact]
         public void CreateOrder_WithAvailableProductQuantity_UpdateProductStock()
         {
-            var mockProductRepository = new Mock<IProductRepository<ProductDataDto>>();
-            var mockOrderRepository = new Mock<IOrderRepository<OrderDataDto>>();
-
-            var mockMapper = new Mock<IMapper>();
-
-
             List<ProductBusinessDTO> productsbusinessNeeedToBeUpdated = new List<ProductBusinessDTO>();
 
             productsbusinessNeeedToBeUpdated.Add(new ProductBusinessDTO { Id = 1, Name = "Product One", Quantity = 1 });
@@ -127,13 +141,14 @@ namespace ECommerceBusinessTests
 
             mockMapper.Setup(map => map.Map<List<ProductDataDto>>(productsbusinessNeeedToBeUpdated)).Returns(mappedProductsDatasNeeedToBeUpdated);
             mockMapper.Setup(map => map.Map<List<ProductBusinessDTO>>(updatedDataProducts)).Returns(updatedBusninessProducts);
+            mockMapper.Setup(map => map.Map<List<ProductBusinessDTO>>(retrivedDataProducts)).Returns(updatedBusninessProducts);
 
             mockProductRepository.Setup(repo => repo.UpdateProductsStockQuantity(It.IsAny<List<ProductDataDto>>(), It.IsAny<List<ProductDataDto>>())).Returns(updatedDataProducts);
 
 
 
 
-            OrderManager orderManager = new OrderManager(mockProductRepository.Object, mockOrderRepository.Object, mockMapper.Object);
+            OrderManager orderManager = new OrderManager(mockUnitOfWork.Object, mockMapper.Object);
 
             OrderBusinessDTO orderDTO = orderManager.CreateOrder(createOrderDto);
 
@@ -155,11 +170,6 @@ namespace ECommerceBusinessTests
         [Fact]
         public void CreateOrder_WithValidProducts_SetOrderStatusAsCreated()
         {
-            var mockProductRepository = new Mock<IProductRepository<ProductDataDto>>();
-            var mockOrderRepository = new Mock<IOrderRepository<OrderDataDto>>();
-
-            var mockMapper = new Mock<IMapper>();
-
 
             List<ProductBusinessDTO> productsbusinessNeeedToBeUpdated = new List<ProductBusinessDTO>();
 
@@ -200,13 +210,15 @@ namespace ECommerceBusinessTests
 
             mockMapper.Setup(map => map.Map<List<ProductDataDto>>(productsbusinessNeeedToBeUpdated)).Returns(mappedProductsDatasNeeedToBeUpdated);
             mockMapper.Setup(map => map.Map<List<ProductBusinessDTO>>(updatedDataProducts)).Returns(updatedBusninessProducts);
+            mockMapper.Setup(map => map.Map<List<ProductBusinessDTO>>(retrivedDataProducts)).Returns(updatedBusninessProducts);
+
 
             mockProductRepository.Setup(repo => repo.UpdateProductsStockQuantity(It.IsAny<List<ProductDataDto>>(), It.IsAny<List<ProductDataDto>>())).Returns(updatedDataProducts);
 
 
 
 
-            OrderManager orderManager = new OrderManager(mockProductRepository.Object, mockOrderRepository.Object, mockMapper.Object);
+            OrderManager orderManager = new OrderManager(mockUnitOfWork.Object, mockMapper.Object);
 
             OrderBusinessDTO orderDTO = orderManager.CreateOrder(createOrderDto);
 

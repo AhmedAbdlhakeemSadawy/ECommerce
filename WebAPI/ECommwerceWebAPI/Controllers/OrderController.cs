@@ -40,9 +40,6 @@ namespace ECommwerceWebAPI.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
-        //public IActionResult Index()
-        //{
-        //    return View();
-        //}
+
     }
 }

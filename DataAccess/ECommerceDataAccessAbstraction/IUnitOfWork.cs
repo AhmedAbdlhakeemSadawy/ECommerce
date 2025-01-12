@@ -7,8 +7,12 @@ using System.Threading.Tasks;
 
 namespace ECommerceDataAccessAbstraction
 {
-    public interface IOrderRepository<TOrderDataDto> : IRepository<TOrderDataDto> where TOrderDataDto : OrderDataDto
+    public interface IUnitOfWork
     {
-        public void AddOrder(OrderDataDto orderDataDto);
+        IProductRepository<ProductDataDto> ProductRepository { get; }
+        IOrderRepository<OrderDataDto>  OrderRepository { get; }
+
+        public int Complete();
+
     }
 }

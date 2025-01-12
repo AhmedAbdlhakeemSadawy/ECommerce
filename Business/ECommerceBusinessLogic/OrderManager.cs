@@ -8,13 +8,11 @@ namespace ECommerceBusinessLogic
 {
     public class OrderManager : IOrderManager
     {
-        private IProductRepository<ProductDataDto> productRepository;
-        private IOrderRepository<OrderDataDto> orderRepository;
         private IMapper mapper;
-        public OrderManager(IProductRepository<ProductDataDto> productRepository, IOrderRepository<OrderDataDto> orderRepository,IMapper mapper)
+        private IUnitOfWork unitOfWork;
+        public OrderManager(IUnitOfWork unitOfWork,IMapper mapper)
         {
-            this.productRepository = productRepository;
-            this.orderRepository = orderRepository;
+            this.unitOfWork = unitOfWork;
             this.mapper = mapper;
         }
         public OrderBusinessDTO CreateOrder(OrderBusinessDTO orderBusinessDto)
@@ -25,7 +23,7 @@ namespace ECommerceBusinessLogic
                 throw new Exception("Order Should contain at least one product");
             }
             List<int> ids = orderBusinessDto.products.Select(p => p.Id).ToList();
-            var reterivedProdcutsData = productRepository.GetListProductsById(ids).ToList();
+            var reterivedProdcutsData = unitOfWork.ProductRepository.GetListProductsById(ids).ToList();
             List<ProductBusinessDTO> reterivedProdcutsBusinessDto = mapper.Map<List<ProductBusinessDTO>>(reterivedProdcutsData);
 
 
@@ -39,9 +37,10 @@ namespace ECommerceBusinessLogic
             orderBusinessDto.Status = OrderStatus.Created;
 
             OrderDataDto orderDataDto = mapper.Map<OrderDataDto>(orderBusinessDto);
-            var order =   orderRepository.AddOrder(orderDataDto);
+            unitOfWork.OrderRepository.AddOrder(orderDataDto);
             orderBusinessDto.products = UpdateProductsStockQuantities(orderBusinessDto.products, reterivedProdcutsBusinessDto);
 
+            unitOfWork.Complete();
             return orderBusinessDto;
     
         }
@@ -82,7 +81,7 @@ namespace ECommerceBusinessLogic
             List<ProductDataDto> productsDataNeedToUpdateStockDto = mapper.Map<List<ProductDataDto>>(productsBusinessNeedToUpdateStockDto);
             List<ProductDataDto> retreviedProductsDataStock = mapper.Map<List<ProductDataDto>>(retreviedProductsBusinessStock);
 
-            List<ProductDataDto> productDataDtosResult = productRepository.UpdateProductsStockQuantity(productsDataNeedToUpdateStockDto, retreviedProductsDataStock).ToList();
+            List<ProductDataDto> productDataDtosResult = unitOfWork.ProductRepository.UpdateProductsStockQuantity(productsDataNeedToUpdateStockDto, retreviedProductsDataStock).ToList();
 
             List<ProductBusinessDTO> productsUpdatedResult = mapper.Map<List<ProductBusinessDTO>>(productDataDtosResult);
 
