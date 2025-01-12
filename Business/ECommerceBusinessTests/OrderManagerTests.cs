@@ -26,18 +26,19 @@ namespace ECommerceBusinessTests
             mockUnitOfWork.Setup(uow => uow.OrderRepository).Returns(mockOrderRepository.Object);
         }
         [Fact]
-        public void CreateOrder_WithEmptyProducts_ReturnSHouldHaveOneProductException()
+        public async Task CreateOrder_WithEmptyProducts_ReturnSHouldHaveOneProductException()
         {
             OrderBusinessDTO createOrderDto = new OrderBusinessDTO();
 
             OrderManager orderManager = new OrderManager(mockUnitOfWork.Object,mockMapper.Object);
 
-            var exception = Assert.Throws<Exception>(() => orderManager.CreateOrder(createOrderDto));
+
+            var exception = await Assert.ThrowsAsync<Exception>(async () => await orderManager.CreateOrder(createOrderDto));
             Assert.Equal("Order Should contain at least one product", exception.Message);
         }
 
         [Fact]
-        public void CreateOrder_WithNotAvailableProductQuantity_ReturnNotAvailableProductsException()
+        public async Task CreateOrder_WithNotAvailableProductQuantity_ReturnNotAvailableProductsException()
         {
 
             OrderBusinessDTO createOrderDto = new OrderBusinessDTO();
@@ -58,13 +59,13 @@ namespace ECommerceBusinessTests
 
             OrderManager orderManager = new OrderManager(mockUnitOfWork.Object, mockMapper.Object);
 
-            var exception = Assert.Throws<Exception>(() => orderManager.CreateOrder(createOrderDto));
+            var exception = await Assert.ThrowsAsync<Exception>(async () => await orderManager.CreateOrder(createOrderDto));
             Assert.Equal("Some of your products are not available", exception.Message);
         }
 
 
         [Fact]
-        public void CreateOrder_WithAvailableProductQuantity_CalculateTotalPrice()
+        public async Task CreateOrder_WithAvailableProductQuantity_CalculateTotalPrice()
         {
 
             OrderBusinessDTO createOrderDto = new OrderBusinessDTO();
@@ -94,13 +95,13 @@ namespace ECommerceBusinessTests
 
             OrderManager orderManager = new OrderManager(mockUnitOfWork.Object, mockMapper.Object);
 
-            OrderBusinessDTO orderDTO = orderManager.CreateOrder(createOrderDto);
+            OrderBusinessDTO orderDTO = await orderManager.CreateOrder(createOrderDto);
 
             Assert.Equal(200, orderDTO.TotalPrice);
         }
 
         [Fact]
-        public void CreateOrder_WithAvailableProductQuantity_UpdateProductStock()
+        public async Task CreateOrder_WithAvailableProductQuantity_UpdateProductStock()
         {
             List<ProductBusinessDTO> productsbusinessNeeedToBeUpdated = new List<ProductBusinessDTO>();
 
@@ -150,7 +151,7 @@ namespace ECommerceBusinessTests
 
             OrderManager orderManager = new OrderManager(mockUnitOfWork.Object, mockMapper.Object);
 
-            OrderBusinessDTO orderDTO = orderManager.CreateOrder(createOrderDto);
+            OrderBusinessDTO orderDTO = await orderManager.CreateOrder(createOrderDto);
 
             mockProductRepository.Verify(repo => repo.UpdateProductsStockQuantity(It.IsAny<List<ProductDataDto>>(), It.IsAny<List<ProductDataDto>>()), Times.Once);
 
@@ -168,7 +169,7 @@ namespace ECommerceBusinessTests
 
 
         [Fact]
-        public void CreateOrder_WithValidProducts_SetOrderStatusAsCreated()
+        public async Task CreateOrder_WithValidProducts_SetOrderStatusAsCreated()
         {
 
             List<ProductBusinessDTO> productsbusinessNeeedToBeUpdated = new List<ProductBusinessDTO>();
@@ -220,7 +221,7 @@ namespace ECommerceBusinessTests
 
             OrderManager orderManager = new OrderManager(mockUnitOfWork.Object, mockMapper.Object);
 
-            OrderBusinessDTO orderDTO = orderManager.CreateOrder(createOrderDto);
+            OrderBusinessDTO orderDTO = await orderManager.CreateOrder(createOrderDto);
 
 
             Assert.Equal(OrderStatus.Created, orderDTO.Status);
