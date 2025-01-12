@@ -9,6 +9,6 @@ namespace ECommerceDataAccessAbstraction
 {
     public interface IOrderRepository<TOrderDataDto> : IRepository<TOrderDataDto> where TOrderDataDto : OrderDataDto
     {
-        public void AddOrder(OrderDataDto orderDataDto);
+        public  Task AddOrder(OrderDataDto orderDataDto);
     }
 }

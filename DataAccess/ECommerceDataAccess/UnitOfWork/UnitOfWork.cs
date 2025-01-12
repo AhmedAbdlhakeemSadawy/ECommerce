@@ -26,9 +26,9 @@ namespace ECommerceDataAccess.UnitOfWork
             this.ProductRepository = productRepository;
             this.OrderRepository = orderRepository;
         }
-        public int Complete()
+        public async Task<int> Complete()
         {
-            return context.SaveChanges();
+            return await context.SaveChangesAsync();
         }
     }
 }
