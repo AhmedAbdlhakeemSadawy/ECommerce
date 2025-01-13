@@ -12,7 +12,7 @@ namespace ECommerceDataAccessAbstraction
         IProductRepository<ProductDataDto> ProductRepository { get; }
         IOrderRepository<OrderDataDto>  OrderRepository { get; }
 
-        public int Complete();
+        public Task<int> Complete();
 
     }
 }

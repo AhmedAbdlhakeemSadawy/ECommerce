@@ -15,7 +15,7 @@ namespace ECommerceBusinessLogic
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
         }
-        public OrderBusinessDTO CreateOrder(OrderBusinessDTO orderBusinessDto)
+        public async  Task<OrderBusinessDTO> CreateOrder(OrderBusinessDTO orderBusinessDto)
         {
             
             if (orderBusinessDto.products == null || orderBusinessDto.products.Count == 0)
@@ -37,10 +37,10 @@ namespace ECommerceBusinessLogic
             orderBusinessDto.Status = OrderStatus.Created;
 
             OrderDataDto orderDataDto = mapper.Map<OrderDataDto>(orderBusinessDto);
-            unitOfWork.OrderRepository.AddOrder(orderDataDto);
+            await unitOfWork.OrderRepository.AddOrder(orderDataDto);
             orderBusinessDto.products = UpdateProductsStockQuantities(orderBusinessDto.products, reterivedProdcutsBusinessDto);
 
-            unitOfWork.Complete();
+            await unitOfWork.Complete();
             return orderBusinessDto;
     
         }

@@ -27,10 +27,10 @@ namespace ECommerceDataAccess.OrderRepository
             throw new NotImplementedException();
         }
 
-        public void AddOrder(OrderDataDto entity)
+        public async Task AddOrder(OrderDataDto entity)
         {
             Order order  = mapper.Map<Order>(entity);
-            context.Add(order);
+            await context.AddAsync(order);
         }
 
         public Task DeleteAsync(OrderDataDto entity)

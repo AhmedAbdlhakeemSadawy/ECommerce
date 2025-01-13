@@ -30,7 +30,7 @@ namespace ECommwerceWebAPI.Controllers
             {
                 OrderBusinessDTO orderBusinessDTO = mapper.Map<OrderBusinessDTO>(orderRequestDto);
 
-                var result = orderManager.CreateOrder(orderBusinessDTO);
+                var result = await orderManager.CreateOrder(orderBusinessDTO);
                 // return CreatedAtAction(nameof(GetOrder), new { id = result.OrderId }, result);
 
                 return Ok(result);
