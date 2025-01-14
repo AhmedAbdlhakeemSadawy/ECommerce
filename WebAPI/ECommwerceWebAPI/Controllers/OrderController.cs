@@ -3,6 +3,7 @@ using ECommerceBuinessDTO;
 using ECommerceBusinessAbstractions;
 using ECommerceDataAccessDTO;
 using ECommerceWebApiDto;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ECommwerceWebAPI.Controllers
@@ -21,6 +22,7 @@ namespace ECommwerceWebAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> AddOrder([FromBody] OrderRequestDto orderRequestDto)
         {
             if (!ModelState.IsValid)
@@ -41,5 +43,12 @@ namespace ECommwerceWebAPI.Controllers
             }
         }
 
+        [HttpGet("data")]
+        [Authorize]
+
+        public IActionResult GetSecureData()
+        {
+            return Ok("This is protected data.");
+        }
     }
 }
