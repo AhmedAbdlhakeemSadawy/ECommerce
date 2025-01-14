@@ -1,4 +1,5 @@
 ﻿using ECommerceDataAccess.DataEntities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace ECommerceDataAccess.DatabaseContextConfiguration
 {
-    public class ECommerceDbContext : DbContext
+    public class ECommerceDbContext : IdentityDbContext
     {
 
         public ECommerceDbContext(DbContextOptions<ECommerceDbContext> options)
