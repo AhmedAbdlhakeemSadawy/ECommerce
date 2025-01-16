@@ -44,7 +44,7 @@ namespace ECommwerceWebAPI.Controllers
         }
 
         [HttpGet("data")]
-        [Authorize]
+        [Authorize(Roles ="User")]
 
         public IActionResult GetSecureData()
         {
