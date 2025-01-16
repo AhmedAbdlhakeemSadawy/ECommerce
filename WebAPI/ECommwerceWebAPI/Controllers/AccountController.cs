@@ -1,4 +1,5 @@
 ﻿using ECommwerceWebAPI.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -25,7 +26,10 @@ namespace ECommwerceWebAPI.Controllers
             var result = await userManager.CreateAsync(user, model.Password);
 
             if (result.Succeeded)
+            {
+                await userManager.AddToRoleAsync(user, "User");
                 return Ok("User registered successfully.");
+            }
 
             return BadRequest(result.Errors);
         }
@@ -33,7 +37,7 @@ namespace ECommwerceWebAPI.Controllers
         [HttpGet("accessdenied")]
         public IActionResult AccessDenied()
         {
-            return Forbid("You do not have access to this resource.");
+            return Unauthorized("You do not have access to this resource.");
         }
 
 
@@ -46,6 +50,15 @@ namespace ECommwerceWebAPI.Controllers
                 return Ok("Login successful.");
 
             return Unauthorized("Invalid login attempt.");
+        }
+
+
+        [HttpPost("logout")]
+        [Authorize] // Ensure the user is authenticated
+        public async Task<IActionResult> Logout()
+        {
+            await signInManager.SignOutAsync(); // Signs the user out
+            return Ok(new { message = "Successfully logged out." });
         }
     }
 }
