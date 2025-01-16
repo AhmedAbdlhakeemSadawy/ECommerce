@@ -1,12 +1,14 @@
 ﻿using ECommerceDataAccess.DatabaseContextConfiguration;
 using ECommerceDataAccess.DataEntities;
 using ECommerceDataAccessAbstraction;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace ECommerceDataAccess.DataSeeder
 {
@@ -18,15 +20,16 @@ namespace ECommerceDataAccess.DataSeeder
         {
             this.serviceProvider = serviceProvider;
         }
-        public void SeedData()
+        public async Task SeedData()
         {
             using var scope = serviceProvider.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<ECommerceDbContext>();
-
+            var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
             context.Database.EnsureCreated();
             SeedCustomers(context);
             SeedProducts(context);
+            await SeedRolesAsync(roleManager);
 
         }
 
@@ -52,6 +55,19 @@ namespace ECommerceDataAccess.DataSeeder
                                            new Product { name = "Product Three", description = "Description For Product Three", price = 50, StockQuantity = 4 });
 
                 context.SaveChanges();
+            }
+        }
+
+        private async Task SeedRolesAsync(RoleManager<IdentityRole> roleManager)
+        {
+            var roles = new[] { "Admin", "User" };
+
+            foreach (var role in roles)
+            {
+                if (!await roleManager.RoleExistsAsync(role))
+                {
+                    await roleManager.CreateAsync(new IdentityRole(role));
+                }
             }
         }
     }

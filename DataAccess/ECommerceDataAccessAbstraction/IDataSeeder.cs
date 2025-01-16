@@ -8,6 +8,6 @@ namespace ECommerceDataAccessAbstraction
 {
     public interface IDataSeeder
     {
-        public void SeedData();
+        public Task SeedData();
     }
 }

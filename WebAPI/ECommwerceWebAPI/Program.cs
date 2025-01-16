@@ -89,7 +89,7 @@ app.MapControllers();
 using (var scope = app.Services.CreateScope())
 {
     var dataSeeder = scope.ServiceProvider.GetRequiredService<IDataSeeder>();
-    dataSeeder.SeedData();
+    await dataSeeder.SeedData();
 }
 
 app.Run();
