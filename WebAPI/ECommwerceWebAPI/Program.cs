@@ -48,7 +48,17 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.Events.OnRedirectToLogin = context =>
     {
         context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-        return Task.CompletedTask;
+
+        // Set the response content type to JSON
+        context.Response.ContentType = "application/json";
+
+        // Write a custom JSON message to the response body
+        var responseMessage = new
+        {
+            message = "You are not authorized to access this resource. Please log in."
+        };
+
+        return context.Response.WriteAsJsonAsync(responseMessage);
     };
     //options.LogoutPath = "/Account/Logout"; // Redirect path for logout
     options.AccessDeniedPath = "/api/Account/accessdenied"; // Redirect for unauthorized access
