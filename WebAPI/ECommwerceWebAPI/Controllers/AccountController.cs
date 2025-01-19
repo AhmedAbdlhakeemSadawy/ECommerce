@@ -1,8 +1,12 @@
 ﻿using ECommwerceWebAPI.Models;
+using ECommwerceWebAPI.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using WebApiAbstraction;
 
 namespace ECommwerceWebAPI.Controllers
 {
@@ -12,11 +16,13 @@ namespace ECommwerceWebAPI.Controllers
     {
         private readonly UserManager<IdentityUser> userManager;
         private readonly SignInManager<IdentityUser> signInManager;
+        private readonly ITokenService tokenService;
 
-        public AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
+        public AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager,ITokenService tokenService)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
+            this.tokenService = tokenService;
         }
 
         [HttpPost("register")]
@@ -40,18 +46,49 @@ namespace ECommwerceWebAPI.Controllers
             return Unauthorized("You do not have access to this resource.");
         }
 
+        #region login using cookie based authentication
+        //[HttpPost("login")]
+        //public async Task<IActionResult> Login([FromBody] LoginModel model)
+        //{
+        //    var result = await signInManager.PasswordSignInAsync(model.Email, model.Password, isPersistent: false, lockoutOnFailure: false);
+
+        //    if (result.Succeeded)
+        //        return Ok("Login successful.");
+
+        //    return Unauthorized("Invalid login attempt.");
+        //}
+        #endregion
+
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginModel model)
         {
+            var user = await userManager.FindByEmailAsync(model.Email);
+            
+            if (user == null)
+                return Unauthorized(new { Message = "Invalid email or password." });
+
             var result = await signInManager.PasswordSignInAsync(model.Email, model.Password, isPersistent: false, lockoutOnFailure: false);
 
-            if (result.Succeeded)
-                return Ok("Login successful.");
-
+            if (!result.Succeeded)
+               // return Ok("Login successful.");
             return Unauthorized("Invalid login attempt.");
-        }
 
+            var roles = await userManager.GetRolesAsync(user);
+
+            var claims = new List<Claim>
+            {
+                new Claim(JwtRegisteredClaimNames.Sid, user.Id),
+                new Claim(JwtRegisteredClaimNames.Email, user.Email)
+                // Add roles or custom claims as needed
+            };
+            claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
+
+            var token = tokenService.GenerateToken(claims);
+
+            return Ok(new { Token = token });
+
+        }
 
         [HttpPost("logout")]
         [Authorize] // Ensure the user is authenticated
