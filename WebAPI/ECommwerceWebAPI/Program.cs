@@ -107,6 +107,7 @@ builder.Services.AddSingleton(provider => new MapperConfiguration(cfg =>
     cfg.AddProfile(new ProductDataMappingProfile()); // Add your profiles here
 }).CreateMapper());
 builder.Services.AddScoped<IDataSeeder, DataSeeder>();
+
 var app = builder.Build();
 
 
@@ -118,6 +119,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
