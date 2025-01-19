@@ -74,7 +74,6 @@ namespace ECommwerceWebAPI.Controllers
                // return Ok("Login successful.");
             return Unauthorized("Invalid login attempt.");
 
-            var roles = await userManager.GetRolesAsync(user);
 
             var claims = new List<Claim>
             {
@@ -82,7 +81,7 @@ namespace ECommwerceWebAPI.Controllers
                 new Claim(JwtRegisteredClaimNames.Email, user.Email)
                 // Add roles or custom claims as needed
             };
-            claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
+
 
             var token = tokenService.GenerateToken(claims);
 
