@@ -8,13 +8,18 @@ using ECommerceDataAccess.Mapping_Profiles;
 using ECommerceDataAccessAbstraction;
 using ECommerceWebApiDto.Validators;
 using ECommwerceWebAPI.Mapping_Profiles;
+using ECommwerceWebAPI.Services;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using WebApiAbstraction;
 
 
 
@@ -27,6 +32,7 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("ECommerceConnection");
 builder.Services.AddECommerceDataAccess(connectionString);
 builder.Services.RegisterBusinessServices();
+builder.Services.AddScoped<ITokenService, TokenService>();
 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 {
@@ -39,31 +45,52 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 .AddDefaultTokenProviders();
 // Add services to the container.
 
-builder.Services.ConfigureApplicationCookie(options =>
-{
-    options.Cookie.HttpOnly = true;
-    options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // Enforce HTTPS
-    options.Cookie.SameSite = SameSiteMode.Lax; // Protect against CSRF
-    options.LoginPath = "/api/Account/login"; // Redirect path for login
-    options.Events.OnRedirectToLogin = context =>
+#region Cookie based athentication configration
+//builder.Services.ConfigureApplicationCookie(options =>
+//{
+//    options.Cookie.HttpOnly = true;
+//    options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // Enforce HTTPS
+//    options.Cookie.SameSite = SameSiteMode.Lax; // Protect against CSRF
+//    options.LoginPath = "/api/Account/login"; // Redirect path for login
+//    options.Events.OnRedirectToLogin = context =>
+//    {
+//        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+
+//        // Set the response content type to JSON
+//        context.Response.ContentType = "application/json";
+
+//        // Write a custom JSON message to the response body
+//        var responseMessage = new
+//        {
+//            message = "You are not authorized to access this resource. Please log in."
+//        };
+
+//        return context.Response.WriteAsJsonAsync(responseMessage);
+//    };
+//    //options.LogoutPath = "/Account/Logout"; // Redirect path for logout
+//    options.AccessDeniedPath = "/api/Account/accessdenied"; // Redirect for unauthorized access
+//});
+#endregion
+
+var jwtSettings = builder.Configuration.GetSection("JwtSettings");
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
     {
-        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-
-        // Set the response content type to JSON
-        context.Response.ContentType = "application/json";
-
-        // Write a custom JSON message to the response body
-        var responseMessage = new
+        options.TokenValidationParameters = new TokenValidationParameters
         {
-            message = "You are not authorized to access this resource. Please log in."
+            ValidateIssuer = true,
+            ValidIssuer = jwtSettings["Issuer"],  // E.g., "https://yourapi.com"
+
+            ValidateAudience = true,
+            ValidAudience = jwtSettings["Audience"],  // E.g., "https://yourapi.com"
+
+            ValidateLifetime = true,  // Ensure token is not expired
+            ClockSkew = TimeSpan.Zero,  // Adjust for clock skew
+
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Key"]))  // The signing key
         };
-
-        return context.Response.WriteAsJsonAsync(responseMessage);
-    };
-    //options.LogoutPath = "/Account/Logout"; // Redirect path for logout
-    options.AccessDeniedPath = "/api/Account/accessdenied"; // Redirect for unauthorized access
-});
-
+    });
 builder.Services.AddControllers();
 builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
 builder.Services.AddValidatorsFromAssemblyContaining<OrderRequestDtoValidator>();
