@@ -46,7 +46,7 @@ namespace ECommwerceWebAPI.Controllers
             return Unauthorized("You do not have access to this resource.");
         }
 
-        #region login using cookie based authentication
+        //#region login using cookie based authentication
         //[HttpPost("login")]
         //public async Task<IActionResult> Login([FromBody] LoginModel model)
         //{
@@ -57,22 +57,23 @@ namespace ECommwerceWebAPI.Controllers
 
         //    return Unauthorized("Invalid login attempt.");
         //}
-        #endregion
+        //#endregion
 
 
+        #region Login using jwt token
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginModel model)
         {
             var user = await userManager.FindByEmailAsync(model.Email);
-            
+
             if (user == null)
                 return Unauthorized(new { Message = "Invalid email or password." });
 
             var result = await signInManager.PasswordSignInAsync(model.Email, model.Password, isPersistent: false, lockoutOnFailure: false);
 
             if (!result.Succeeded)
-               // return Ok("Login successful.");
-            return Unauthorized("Invalid login attempt.");
+                // return Ok("Login successful.");
+                return Unauthorized("Invalid login attempt.");
 
 
             var claims = new List<Claim>
@@ -89,6 +90,7 @@ namespace ECommwerceWebAPI.Controllers
 
         }
 
+        #endregion
         [HttpPost("logout")]
         [Authorize] // Ensure the user is authenticated
         public async Task<IActionResult> Logout()
