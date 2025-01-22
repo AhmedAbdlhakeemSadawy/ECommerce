@@ -44,9 +44,14 @@ namespace ECommwerceWebAPI.Controllers
         }
 
         [HttpGet("data")]
-        [Authorize(Roles ="User")]
-
+        [Authorize(Policy = "UserPolicy")]
         public IActionResult GetSecureData()
+        {
+            return Ok("This is protected data.");
+        }
+
+        [HttpGet("tesr_data")]
+        public IActionResult GetSecureDataWithoutAuthenticate()
         {
             return Ok("This is protected data.");
         }

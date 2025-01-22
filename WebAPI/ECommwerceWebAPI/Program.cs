@@ -8,10 +8,12 @@ using ECommerceDataAccess.Mapping_Profiles;
 using ECommerceDataAccessAbstraction;
 using ECommerceWebApiDto.Validators;
 using ECommwerceWebAPI.Mapping_Profiles;
+using ECommwerceWebAPI.Role_Requirements_Authorization;
 using ECommwerceWebAPI.Services;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,6 +23,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 using WebApiAbstraction;
+using WebApiAbstraction.Role_Authuntication;
 
 
 
@@ -34,7 +37,7 @@ var connectionString = builder.Configuration.GetConnectionString("ECommerceConne
 builder.Services.AddECommerceDataAccess(connectionString);
 builder.Services.RegisterBusinessServices();
 builder.Services.AddScoped<ITokenService, TokenService>();
-
+builder.Services.AddScoped<IUserRoleService, UserRoleService>();
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 {
     options.Password.RequiredLength = 6;
@@ -114,6 +117,17 @@ builder.Services.AddSingleton(provider => new MapperConfiguration(cfg =>
     cfg.AddProfile(new ProductDataMappingProfile()); // Add your profiles here
 }).CreateMapper());
 builder.Services.AddScoped<IDataSeeder, DataSeeder>();
+
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("UserPolicy", policy =>
+        policy.Requirements.Add(new RoleRequirement("User")));
+
+});
+
+builder.Services.AddScoped<IAuthorizationHandler, RoleRequirementHandler>();
+
 
 builder.Services.AddSwaggerGen(options =>
 {
