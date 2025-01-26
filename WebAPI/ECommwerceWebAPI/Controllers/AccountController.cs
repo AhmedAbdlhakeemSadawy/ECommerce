@@ -84,9 +84,13 @@ namespace ECommwerceWebAPI.Controllers
             };
 
 
-            var token = tokenService.GenerateToken(claims);
-
-            return Ok(new { Token = token });
+            var accessToken = tokenService.GenerateToken(claims);
+            var refreshToken = tokenService.RefreshToken(user.Id);
+            return Ok(new
+            {
+                AccessToken = accessToken,
+                RefreshToken = refreshToken
+            });
 
         }
 
