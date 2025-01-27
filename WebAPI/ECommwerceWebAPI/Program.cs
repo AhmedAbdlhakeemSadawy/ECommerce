@@ -36,7 +36,8 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("ECommerceConnection");
 builder.Services.AddECommerceDataAccess(connectionString);
 builder.Services.RegisterBusinessServices();
-builder.Services.AddScoped<ITokenService, TokenService>();
+//builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<ITokenService, TokenServiceInMemoryCache>();
 builder.Services.AddScoped<IUserRoleService, UserRoleService>();
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 {
@@ -102,10 +103,12 @@ builder.Services.AddAuthentication(options =>
     });
 #endregion
 
-builder.Services.AddStackExchangeRedisCache(options =>
-{
-    options.Configuration = "localhost:6379"; // Your Redis connection string
-});
+//builder.Services.AddStackExchangeRedisCache(options =>
+//{
+//    options.Configuration = "localhost:6379"; // Your Redis connection string
+//});
+
+builder.Services.AddMemoryCache();
 builder.Services.AddControllers();
 builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
 builder.Services.AddValidatorsFromAssemblyContaining<OrderRequestDtoValidator>();
