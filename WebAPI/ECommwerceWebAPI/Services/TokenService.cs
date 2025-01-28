@@ -64,5 +64,10 @@ namespace ECommwerceWebAPI.Services
 
             return Task.FromResult(new JwtSecurityTokenHandler().WriteToken(token));
         }
+
+        public ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
