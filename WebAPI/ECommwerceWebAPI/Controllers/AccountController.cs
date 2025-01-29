@@ -1,4 +1,6 @@
-﻿using ECommwerceWebAPI.Models;
+﻿using Azure.Core;
+using ECommerceWebApiDto;
+using ECommwerceWebAPI.Models;
 using ECommwerceWebAPI.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -101,6 +103,31 @@ namespace ECommwerceWebAPI.Controllers
         {
             await signInManager.SignOutAsync(); // Signs the user out
             return Ok(new { message = "Successfully logged out." });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RefreshToken([FromBody] TokenRequestDto tokenRequestDto)
+        {
+            var principal = tokenService.GetPrincipalFromExpiredToken(tokenRequestDto.AccessToken);
+            if (principal == null)
+                return Unauthorized("Invalid token");
+
+            var userId = principal.FindFirst(ClaimTypes.Sid)?.Value;
+            if (userId == null)
+                return Unauthorized("Invalid token");
+
+            bool validRefreshToken = await tokenService.ValidateRefreshToken(userId, tokenRequestDto.RefreshToken);
+            if (!validRefreshToken)
+                return Unauthorized("Invalid refresh token");
+
+
+            var accessToken = tokenService.GenerateToken(principal.Claims);
+            var refreshToken = tokenService.RefreshToken(userId);
+            return Ok(new
+            {
+                AccessToken = accessToken,
+                RefreshToken = refreshToken
+            });
         }
     }
 }
