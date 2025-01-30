@@ -80,8 +80,8 @@ namespace ECommwerceWebAPI.Controllers
 
             var claims = new List<Claim>
             {
-                new Claim(JwtRegisteredClaimNames.Sid, user.Id),
-                new Claim(JwtRegisteredClaimNames.Email, user.Email)
+                new Claim(ClaimTypes.NameIdentifier, user.Id),
+                new Claim(ClaimTypes.Email, user.Email)
                 // Add roles or custom claims as needed
             };
 
@@ -105,14 +105,14 @@ namespace ECommwerceWebAPI.Controllers
             return Ok(new { message = "Successfully logged out." });
         }
 
-        [HttpPost]
+        [HttpPost("refresh_token")]
         public async Task<IActionResult> RefreshToken([FromBody] TokenRequestDto tokenRequestDto)
         {
             var principal = tokenService.GetPrincipalFromExpiredToken(tokenRequestDto.AccessToken);
             if (principal == null)
                 return Unauthorized("Invalid token");
 
-            var userId = principal.FindFirst(ClaimTypes.Sid)?.Value;
+            var userId = principal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userId == null)
                 return Unauthorized("Invalid token");
 

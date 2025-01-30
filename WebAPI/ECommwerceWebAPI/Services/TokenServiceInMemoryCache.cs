@@ -79,7 +79,7 @@ namespace ECommwerceWebAPI.Services
         public Task<bool> ValidateRefreshToken(string userId, string refreshToken)
         {
             var cachedToken = memoryCache.Get(userId);
-            return Task.FromResult(cachedToken == refreshToken);
+            return Task.FromResult(cachedToken.ToString() == refreshToken);
         }
     }
 }

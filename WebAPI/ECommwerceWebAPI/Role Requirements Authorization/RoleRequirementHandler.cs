@@ -29,7 +29,8 @@ namespace ECommwerceWebAPI.Role_Requirements_Authorization
                 return;
             }
 
-            var userId = context.User.FindFirst(JwtRegisteredClaimNames.Sid)?.Value;
+
+            var userId = context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userId != null)
             {
                 var roles = await userRoleService.GetRolesForUserAsync(userId);
