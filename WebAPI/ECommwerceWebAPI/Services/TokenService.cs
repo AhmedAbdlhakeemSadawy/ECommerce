@@ -70,5 +70,9 @@ namespace ECommwerceWebAPI.Services
             throw new NotImplementedException();
         }
 
+        public Task<bool> ValidateAccessToken(string userId, string refreshToken)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

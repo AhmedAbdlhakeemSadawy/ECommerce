@@ -81,6 +81,11 @@ namespace ECommwerceWebAPI.Services
             return Task.CompletedTask;
         }
 
+        public Task<bool> ValidateAccessToken(string userId, string refreshToken)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<bool> ValidateRefreshToken(string userId, string refreshToken)
         {
             var cachedToken = memoryCache.Get(userId + "_RefreshToken");
