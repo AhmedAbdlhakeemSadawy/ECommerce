@@ -8,6 +8,7 @@ using ECommerceDataAccess.Mapping_Profiles;
 using ECommerceDataAccessAbstraction;
 using ECommerceWebApiDto.Validators;
 using ECommwerceWebAPI.Mapping_Profiles;
+using ECommwerceWebAPI.Middlewares;
 using ECommwerceWebAPI.Role_Requirements_Authorization;
 using ECommwerceWebAPI.Services;
 using FluentValidation;
@@ -173,15 +174,13 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-
-
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
-
+app.UseMiddleware<AccessTokenValidationMiddleware>();
 app.MapControllers();
 
 using (var scope = app.Services.CreateScope())
