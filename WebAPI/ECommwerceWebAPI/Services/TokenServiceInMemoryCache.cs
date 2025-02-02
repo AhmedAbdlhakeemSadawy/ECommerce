@@ -67,13 +67,13 @@ namespace ECommwerceWebAPI.Services
         public async Task<string> RefreshToken(string userId)
         {
             var refreshToken = Guid.NewGuid().ToString();
-            await  Task.FromResult(memoryCache.Set(userId, refreshToken, TimeSpan.FromDays(7)));
+            await  Task.FromResult(memoryCache.Set(userId + "_RefreshToken", refreshToken, TimeSpan.FromDays(7)));
             return refreshToken;
         }
 
         public Task RevokeRefreshToken(string userId)
         {
-            memoryCache.Remove(userId);
+            memoryCache.Remove(userId + "_RefreshToken");
             return Task.CompletedTask;
         }
 
@@ -87,7 +87,7 @@ namespace ECommwerceWebAPI.Services
 
         public Task<bool> ValidateRefreshToken(string userId, string refreshToken)
         {
-            var cachedToken = memoryCache.Get(userId);
+            var cachedToken = memoryCache.Get(userId + "_RefreshToken");
             return Task.FromResult(cachedToken.ToString() == refreshToken);
         }
     }
