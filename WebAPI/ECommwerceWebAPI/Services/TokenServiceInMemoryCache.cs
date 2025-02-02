@@ -36,7 +36,7 @@ namespace ECommwerceWebAPI.Services
                 expires: TimeZoneInfo.ConvertTime(DateTime.UtcNow, timeZoneInfo).AddMinutes(int.Parse(jwtSettings["DurationInMinutes"])),
                 signingCredentials: creds);
             var userId = claims.FirstOrDefault(clm => clm.Type == ClaimTypes.NameIdentifier).Value;
-            memoryCache.Set("" + "_AccessToken", token, TimeZoneInfo.ConvertTime(DateTime.UtcNow, timeZoneInfo).AddMinutes(int.Parse(jwtSettings["DurationInMinutes"])));
+            memoryCache.Set(userId + "_AccessToken", token, TimeZoneInfo.ConvertTime(DateTime.UtcNow, timeZoneInfo).AddMinutes(int.Parse(jwtSettings["DurationInMinutes"])));
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
@@ -75,15 +75,22 @@ namespace ECommwerceWebAPI.Services
             return refreshToken;
         }
 
+        public Task RevokeAccessToken(string userId)
+        {
+            memoryCache.Remove(userId + "_AccessToken");
+            return Task.CompletedTask;
+        }
+
         public Task RevokeRefreshToken(string userId)
         {
             memoryCache.Remove(userId + "_RefreshToken");
             return Task.CompletedTask;
         }
 
-        public Task<bool> ValidateAccessToken(string userId, string refreshToken)
+        public Task<bool> ValidateAccessToken(string userId, string accessToken)
         {
-            throw new NotImplementedException();
+            var cachedToken = memoryCache.Get(userId + "_AccessToken");
+            return Task.FromResult(cachedToken.ToString() == accessToken);
         }
 
         public Task<bool> ValidateRefreshToken(string userId, string refreshToken)
