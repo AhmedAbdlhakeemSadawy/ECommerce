@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Caching.Memory;
+﻿using Azure.Core;
+using Microsoft.AspNetCore.SignalR.Protocol;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;
@@ -33,6 +35,8 @@ namespace ECommwerceWebAPI.Services
                 claims: claims,
                 expires: TimeZoneInfo.ConvertTime(DateTime.UtcNow, timeZoneInfo).AddMinutes(int.Parse(jwtSettings["DurationInMinutes"])),
                 signingCredentials: creds);
+            var userId = claims.FirstOrDefault(clm => clm.Type == ClaimTypes.NameIdentifier).Value;
+            memoryCache.Set("" + "_AccessToken", token, TimeZoneInfo.ConvertTime(DateTime.UtcNow, timeZoneInfo).AddMinutes(int.Parse(jwtSettings["DurationInMinutes"])));
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
@@ -75,14 +79,6 @@ namespace ECommwerceWebAPI.Services
         {
             memoryCache.Remove(userId + "_RefreshToken");
             return Task.CompletedTask;
-        }
-
-        public async Task StoreAccessToken(string userId, string accessToken)
-        {
-            var jwtSettings = configuration.GetSection("JwtSettings");
-            TimeZoneInfo timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(jwtSettings["TimeZone"]);
-
-            await Task.FromResult(memoryCache.Set(userId +"_AccessToken", accessToken, TimeZoneInfo.ConvertTime(DateTime.UtcNow, timeZoneInfo).AddMinutes(int.Parse(jwtSettings["DurationInMinutes"]))));
         }
 
         public Task<bool> ValidateRefreshToken(string userId, string refreshToken)
