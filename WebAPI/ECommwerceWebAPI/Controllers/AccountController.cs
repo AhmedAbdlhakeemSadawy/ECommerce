@@ -98,13 +98,30 @@ namespace ECommwerceWebAPI.Controllers
         }
 
         #endregion
+
+        #region LogOut using cookie based authentication
+
+        //[HttpPost("logout")]
+        //[Authorize] // Ensure the user is authenticated
+        //public async Task<IActionResult> Logout()
+        //{
+        //    await signInManager.SignOutAsync(); // Signs the user out
+        //    return Ok(new { message = "Successfully logged out." });
+        //} 
+        #endregion
+
+        #region Logout for jwt authetication
         [HttpPost("logout")]
         [Authorize] // Ensure the user is authenticated
         public async Task<IActionResult> Logout()
         {
-            await signInManager.SignOutAsync(); // Signs the user out
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            await tokenService.RevokeAccessToken(userId);
+            await tokenService.RevokeRefreshToken(userId);
             return Ok(new { message = "Successfully logged out." });
-        }
+        } 
+        #endregion
+
 
         [HttpPost("refresh_token")]
         public async Task<IActionResult> RefreshToken([FromBody] TokenRequestDto tokenRequestDto)
