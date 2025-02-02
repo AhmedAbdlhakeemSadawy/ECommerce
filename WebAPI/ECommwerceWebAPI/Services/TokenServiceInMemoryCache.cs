@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 using Microsoft.IdentityModel.Tokens;
+using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -74,6 +75,14 @@ namespace ECommwerceWebAPI.Services
         {
             memoryCache.Remove(userId);
             return Task.CompletedTask;
+        }
+
+        public async Task StoreAccessToken(string userId, string accessToken)
+        {
+            var jwtSettings = configuration.GetSection("JwtSettings");
+            TimeZoneInfo timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(jwtSettings["TimeZone"]);
+
+            await Task.FromResult(memoryCache.Set(userId +"_AccessToken", accessToken, TimeZoneInfo.ConvertTime(DateTime.UtcNow, timeZoneInfo).AddMinutes(int.Parse(jwtSettings["DurationInMinutes"]))));
         }
 
         public Task<bool> ValidateRefreshToken(string userId, string refreshToken)

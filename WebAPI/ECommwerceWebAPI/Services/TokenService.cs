@@ -69,5 +69,10 @@ namespace ECommwerceWebAPI.Services
         {
             throw new NotImplementedException();
         }
+
+        public Task StoreAccessToken(string userId, string accessToken)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
