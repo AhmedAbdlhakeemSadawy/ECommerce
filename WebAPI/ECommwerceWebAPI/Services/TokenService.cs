@@ -74,5 +74,10 @@ namespace ECommwerceWebAPI.Services
         {
             throw new NotImplementedException();
         }
+
+        public Task RevokeAccessToken(string userId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
