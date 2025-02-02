@@ -9,6 +9,7 @@ namespace WebApiAbstraction
         Task<bool> ValidateRefreshToken(string userId,string refreshToken);
         Task<bool> ValidateAccessToken(string userId,string refreshToken);
         Task RevokeRefreshToken(string userId);
+        Task RevokeAccessToken(string userId);
         ClaimsPrincipal GetPrincipalFromExpiredToken(string token);
     }
 }
