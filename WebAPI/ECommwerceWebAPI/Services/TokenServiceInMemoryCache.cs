@@ -91,13 +91,13 @@ namespace ECommwerceWebAPI.Services
         public Task<bool> ValidateAccessToken(string userId, string accessToken)
         {
             var cachedToken = memoryCache.Get(userId + "_AccessToken");
-            return Task.FromResult(cachedToken.ToString() == accessToken);
+            return Task.FromResult(cachedToken != null && cachedToken.ToString() == accessToken);
         }
 
         public Task<bool> ValidateRefreshToken(string userId, string refreshToken)
         {
             var cachedToken = memoryCache.Get(userId + "_RefreshToken");
-            return Task.FromResult(cachedToken.ToString() == refreshToken);
+            return Task.FromResult(cachedToken != null && cachedToken.ToString() == refreshToken);
         }
     }
 }
