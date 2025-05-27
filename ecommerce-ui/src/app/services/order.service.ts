@@ -23,10 +23,9 @@ export class OrderService {
 
   // Static product list for demonstration
   readonly products: Product[] = [
-    { id: 1, name: 'Laptop', price: 999.99, description: 'High-performance laptop' },
-    { id: 2, name: 'Smartphone', price: 599.99, description: 'Latest smartphone model' },
-    { id: 3, name: 'Headphones', price: 199.99, description: 'Wireless noise-canceling headphones' },
-    { id: 4, name: 'Tablet', price: 399.99, description: '10-inch tablet' }
+    { id: 1, name: 'Product One', price: 20.00, description: 'Description For Product One' },
+    { id: 2, name: 'Product Two', price: 10.00, description: 'Description For Product Two' },
+    { id: 3, name: 'Product Three', price: 50.00, description: 'Description For Product Three' }
   ];
 
   constructor(private http: HttpClient) { }
