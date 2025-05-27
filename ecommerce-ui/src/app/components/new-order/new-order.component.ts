@@ -1,65 +1,21 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormsModule } from '@angular/forms';
 import { OrderService, Product, OrderRequest } from '../../services/order.service';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-new-order',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
-  template: `
-    <div class="container mt-4">
-      <h2>Create New Order</h2>
-      <form [formGroup]="orderForm" (ngSubmit)="onSubmit()" class="mt-4">
-        <div class="mb-3">
-          <label for="product" class="form-label">Select Product</label>
-          <select 
-            id="product" 
-            formControlName="productId" 
-            class="form-select"
-            (change)="onProductChange()">
-            <option value="">Choose a product...</option>
-            <option *ngFor="let product of products" [value]="product.id">
-              {{product.name}} - ${{product.price}}
-            </option>
-          </select>
-        </div>
-
-        <div class="mb-3">
-          <label for="quantity" class="form-label">Quantity</label>
-          <input 
-            type="number" 
-            id="quantity" 
-            formControlName="quantity" 
-            class="form-control"
-            (change)="updateTotalAmount()">
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label">Total Amount</label>
-          <p class="form-control-static">${{totalAmount}}</p>
-        </div>
-
-        <button 
-          type="submit" 
-          class="btn btn-primary"
-          [disabled]="!orderForm.valid">
-          Place Order
-        </button>
-      </form>
-    </div>
-  `,
-  styles: [`
-    .container {
-      max-width: 600px;
-    }
-    .form-control-static {
-      padding: 0.375rem 0;
-      font-weight: bold;
-    }
-  `]
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    FormsModule,
+    RouterModule
+  ],
+  templateUrl: './new-order.component.html',
+  styleUrl: './new-order.component.css'
 })
 export class NewOrderComponent implements OnInit {
   orderForm: FormGroup;
@@ -69,7 +25,7 @@ export class NewOrderComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private orderService: OrderService,
-    private router: Router
+    public router: Router
   ) {
     this.orderForm = this.fb.group({
       productId: ['', Validators.required],
