@@ -22,7 +22,7 @@ namespace ECommwerceWebAPI.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+       // [Authorize]
         public async Task<IActionResult> AddOrder([FromBody] OrderRequestDto orderRequestDto)
         {
             if (!ModelState.IsValid)
