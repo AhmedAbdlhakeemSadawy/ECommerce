@@ -127,6 +127,17 @@ builder.Services.AddSingleton(provider => new MapperConfiguration(cfg =>
 }).CreateMapper());
 builder.Services.AddScoped<IDataSeeder, DataSeeder>();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngularApp", builder =>
+    {
+        builder.WithOrigins("http://localhost:4200") // Your Angular app's URL
+               .AllowAnyHeader()
+               .AllowAnyMethod();
+    });
+
+});
+
 
 builder.Services.AddAuthorization(options =>
 {
@@ -178,9 +189,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 app.UseHttpsRedirection();
-app.UseAuthentication();
-app.UseAuthorization();
-app.UseMiddleware<AccessTokenValidationMiddleware>();
+app.UseCors("AllowAngularApp");
+//app.UseAuthentication();
+//app.UseAuthorization();
+//app.UseMiddleware<AccessTokenValidationMiddleware>();
 app.MapControllers();
 
 using (var scope = app.Services.CreateScope())
