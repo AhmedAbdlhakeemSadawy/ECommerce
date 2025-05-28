@@ -55,19 +55,25 @@ export class NewOrderComponent implements OnInit {
 
   onSubmit(): void {
     if (this.orderForm.valid) {
+      
+      
       const orderRequest: OrderRequest = {
-        productId: Number(this.orderForm.get('productId')?.value),
-        quantity: Number(this.orderForm.get('quantity')?.value),
-        totalAmount: this.totalAmount
+        products: this.products.map(product => ({
+          id: product.id,
+          quantity: product.quantity
+        })),
+        customerId: 1
       };
 
       this.orderService.addOrder(orderRequest).subscribe({
+        
         next: (response) => {
           console.log('Order created successfully:', response);
           // Navigate to orders list or show success message
           this.router.navigate(['/orders']);
         },
         error: (error) => {
+          console.log(orderRequest);
           console.error('Error creating order:', error);
           // Handle error (show error message to user)
         }

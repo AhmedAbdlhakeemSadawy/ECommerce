@@ -7,25 +7,32 @@ export interface Product {
   name: string;
   price: number;
   description: string;
+  quantity: number;
 }
 
-export interface OrderRequest {
-  productId: number;
+
+export interface ProductRequest {
+  id: number;
   quantity: number;
-  totalAmount: number;
+}
+
+
+export interface OrderRequest {
+  customerId: number;
+  products: ProductRequest[];
 }
 
 @Injectable({
   providedIn: 'root'
-})
+}) 
 export class OrderService {
-  private apiUrl = 'http://localhost:5000/api'; // Update this with your actual API URL
+  private apiUrl = 'https://localhost:5001/api'; // Update this with your actual API URL
 
   // Static product list for demonstration
   readonly products: Product[] = [
-    { id: 1, name: 'Product One', price: 20.00, description: 'Description For Product One' },
-    { id: 2, name: 'Product Two', price: 10.00, description: 'Description For Product Two' },
-    { id: 3, name: 'Product Three', price: 50.00, description: 'Description For Product Three' }
+    { id: 1, name: 'Product One', price: 20.00, description: 'Description For Product One' ,quantity: 5},
+    { id: 2, name: 'Product Two', price: 10.00, description: 'Description For Product Two',quantity: 5 },
+    { id: 3, name: 'Product Three', price: 50.00, description: 'Description For Product Three',quantity: 5 }
   ];
 
   constructor(private http: HttpClient) { }
@@ -35,6 +42,7 @@ export class OrderService {
   }
 
   addOrder(order: OrderRequest): Observable<any> {
-    return this.http.post(`${this.apiUrl}/orders`, order);
+    console.log(order);
+    return this.http.post(`${this.apiUrl}/order`, order);
   }
 } 
