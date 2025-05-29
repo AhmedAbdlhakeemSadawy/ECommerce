@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormsModule, FormArray } from '@angular/forms';
 import { OrderService, Product, OrderRequest } from '../../services/order.service';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -28,13 +28,33 @@ export class NewOrderComponent implements OnInit {
     public router: Router
   ) {
     this.orderForm = this.fb.group({
-      productId: ['', Validators.required],
-      quantity: [1, [Validators.required, Validators.min(1)]]
+      items: this.fb.array([])
     });
   }
 
   ngOnInit(): void {
     this.products = this.orderService.getProducts();
+    this.addProductItem(); // Add initial product selection
+  }
+
+  get items() {
+    return this.orderForm.get('items') as FormArray;
+  }
+
+  createProductItem(): FormGroup {
+    return this.fb.group({
+      productId: ['', Validators.required],
+      quantity: [1, [Validators.required, Validators.min(1)]]
+    });
+  }
+
+  addProductItem(): void {
+    this.items.push(this.createProductItem());
+  }
+
+  removeProductItem(index: number): void {
+    this.items.removeAt(index);
+    this.updateTotalAmount();
   }
 
   onProductChange(): void {
@@ -42,40 +62,35 @@ export class NewOrderComponent implements OnInit {
   }
 
   updateTotalAmount(): void {
-    const productId = Number(this.orderForm.get('productId')?.value);
-    const quantity = Number(this.orderForm.get('quantity')?.value);
-    
-    const selectedProduct = this.products.find(p => p.id === productId);
-    if (selectedProduct && quantity > 0) {
-      this.totalAmount = selectedProduct.price * quantity;
-    } else {
-      this.totalAmount = 0;
-    }
+    this.totalAmount = 0;
+    this.items.controls.forEach(item => {
+      const productId = Number(item.get('productId')?.value);
+      const quantity = Number(item.get('quantity')?.value);
+      
+      const selectedProduct = this.products.find(p => p.id === productId);
+      if (selectedProduct && quantity > 0) {
+        this.totalAmount += selectedProduct.price * quantity;
+      }
+    });
   }
 
   onSubmit(): void {
     if (this.orderForm.valid) {
-      
-      
       const orderRequest: OrderRequest = {
-        products: this.products.map(product => ({
-          id: product.id,
-          quantity: product.quantity
+        products: this.items.controls.map(item => ({
+          id: Number(item.get('productId')?.value),
+          quantity: Number(item.get('quantity')?.value)
         })),
         customerId: 1
       };
 
       this.orderService.addOrder(orderRequest).subscribe({
-        
         next: (response) => {
           console.log('Order created successfully:', response);
-          // Navigate to orders list or show success message
           this.router.navigate(['/orders']);
         },
         error: (error) => {
-          console.log(orderRequest);
           console.error('Error creating order:', error);
-          // Handle error (show error message to user)
         }
       });
     }

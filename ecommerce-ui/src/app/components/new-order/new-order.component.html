@@ -1,36 +1,60 @@
 <div class="container mt-4">
   <h2>Create New Order</h2>
   <form [formGroup]="orderForm" (ngSubmit)="onSubmit()" class="mt-4">
-    <div class="mb-3">
-      <label for="product" class="form-label">Select Product</label>
-      <select 
-        id="product" 
-        formControlName="productId" 
-        class="form-select"
-        (change)="onProductChange()">
-        <option value="">Choose a product...</option>
-        <option *ngFor="let product of products" [value]="product.id">
-          {{product.name}} - ${{product.price}}
-        </option>
-      </select>
-      <div *ngIf="orderForm.get('productId')?.invalid && orderForm.get('productId')?.touched" class="text-danger">
-        Please select a product
+    <div formArrayName="items">
+      <div *ngFor="let item of items.controls; let i = index" [formGroupName]="i" class="product-item mb-4 p-3 border rounded">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h4 class="mb-0">Product {{i + 1}}</h4>
+          <button 
+            type="button" 
+            class="btn btn-danger btn-sm"
+            (click)="removeProductItem(i)"
+            *ngIf="items.length > 1">
+            Remove
+          </button>
+        </div>
+
+        <div class="mb-3">
+          <label [for]="'product' + i" class="form-label">Select Product</label>
+          <select 
+            [id]="'product' + i" 
+            formControlName="productId" 
+            class="form-select"
+            (change)="onProductChange()">
+            <option value="">Choose a product...</option>
+            <option *ngFor="let product of products" [value]="product.id">
+              {{product.name}} - ${{product.price}}
+            </option>
+          </select>
+          <div *ngIf="item.get('productId')?.invalid && item.get('productId')?.touched" class="text-danger">
+            Please select a product
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label [for]="'quantity' + i" class="form-label">Quantity</label>
+          <input 
+            type="number" 
+            [id]="'quantity' + i" 
+            formControlName="quantity" 
+            class="form-control"
+            min="1"
+            (change)="updateTotalAmount()">
+          <div *ngIf="item.get('quantity')?.invalid && item.get('quantity')?.touched" class="text-danger">
+            <div *ngIf="item.get('quantity')?.errors?.['required']">Quantity is required</div>
+            <div *ngIf="item.get('quantity')?.errors?.['min']">Quantity must be at least 1</div>
+          </div>
+        </div>
       </div>
     </div>
 
     <div class="mb-3">
-      <label for="quantity" class="form-label">Quantity</label>
-      <input 
-        type="number" 
-        id="quantity" 
-        formControlName="quantity" 
-        class="form-control"
-        min="1"
-        (change)="updateTotalAmount()">
-      <div *ngIf="orderForm.get('quantity')?.invalid && orderForm.get('quantity')?.touched" class="text-danger">
-        <div *ngIf="orderForm.get('quantity')?.errors?.['required']">Quantity is required</div>
-        <div *ngIf="orderForm.get('quantity')?.errors?.['min']">Quantity must be at least 1</div>
-      </div>
+      <button 
+        type="button" 
+        class="btn btn-secondary"
+        (click)="addProductItem()">
+        Add Another Product
+      </button>
     </div>
 
     <div class="mb-3">
@@ -53,4 +77,4 @@
       </button>
     </div>
   </form>
-</div> 
+</div>
