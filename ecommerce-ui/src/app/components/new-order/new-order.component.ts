@@ -21,6 +21,8 @@ export class NewOrderComponent implements OnInit {
   orderForm: FormGroup;
   products: Product[] = [];
   totalAmount: number = 0;
+  message: string = '';
+  isSuccess: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -86,10 +88,17 @@ export class NewOrderComponent implements OnInit {
 
       this.orderService.addOrder(orderRequest).subscribe({
         next: (response) => {
+          this.message = response.message;
+          this.isSuccess = true;
           console.log('Order created successfully:', response);
-          this.router.navigate(['/orders']);
+          // Navigate to orders list after a short delay
+          setTimeout(() => {
+            this.router.navigate(['/orders']);
+          }, 2000);
         },
         error: (error) => {
+          this.message = 'Error creating order: ' + (error.error?.message || 'Unknown error');
+          this.isSuccess = false;
           console.error('Error creating order:', error);
         }
       });
