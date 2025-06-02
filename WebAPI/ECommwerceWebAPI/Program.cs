@@ -190,9 +190,9 @@ if (app.Environment.IsDevelopment())
 }
 app.UseHttpsRedirection();
 app.UseCors("AllowAngularApp");
-//app.UseAuthentication();
-//app.UseAuthorization();
-//app.UseMiddleware<AccessTokenValidationMiddleware>();
+app.UseAuthentication();
+app.UseAuthorization();
+app.UseMiddleware<AccessTokenValidationMiddleware>();
 app.MapControllers();
 
 using (var scope = app.Services.CreateScope())
