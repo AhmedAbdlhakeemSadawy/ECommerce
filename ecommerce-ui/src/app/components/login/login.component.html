@@ -3,15 +3,15 @@
     <h2>Login</h2>
     
     <div class="form-group">
-      <label for="username">Username</label>
+      <label for="email">email</label>
       <input 
         type="text" 
-        id="username" 
-        formControlName="username" 
+        id="email" 
+        formControlName="email" 
         class="form-control"
-        placeholder="Enter your username">
-      <div *ngIf="loginForm.get('username')?.invalid && loginForm.get('username')?.touched" class="error-message">
-        Username is required
+        placeholder="Enter your email">
+      <div *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" class="error-message">
+        email is required
       </div>
     </div>
 

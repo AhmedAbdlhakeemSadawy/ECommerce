@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface LoginRequest {
-  username: string;
+  email: string;
   password: string;
 }
 
@@ -15,13 +15,13 @@ export interface LoginResponse {
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService {
+export class AuthService { 
   private apiUrl = 'https://localhost:5001/api';
 
   constructor(private http: HttpClient) { }
 
   login(credentials: LoginRequest): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${this.apiUrl}/auth/login`, credentials);
+    return this.http.post<LoginResponse>(`${this.apiUrl}/Account/login`, credentials);
   }
 
   setToken(token: string): void {
