@@ -8,7 +8,8 @@ export interface LoginRequest {
 }
 
 export interface LoginResponse {
-  token: string;
+  accessToken: string;
+  refreshToken: string;
   message: string;
 }
 
@@ -28,8 +29,20 @@ export class AuthService {
     localStorage.setItem('token', token);
   }
 
+  setRefreshToken(refreshToken: string): void {
+    localStorage.setItem('refreshToken', refreshToken);
+  }
+
   getToken(): string | null {
     return localStorage.getItem('token');
+  }
+
+  getRefreshToken(): string | null {
+    return localStorage.getItem('refreshToken');
+  }
+
+  removeRefreshToken(): void {
+    localStorage.removeItem('refreshToken');
   }
 
   isLoggedIn(): boolean {
@@ -38,5 +51,6 @@ export class AuthService {
 
   logout(): void {
     localStorage.removeItem('token');
+    this.removeRefreshToken();
   }
 }
