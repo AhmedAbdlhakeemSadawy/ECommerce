@@ -39,12 +39,14 @@ export class LoginComponent {
       
       this.authService.login(credentials).subscribe({
         next: (response) => {
-          this.authService.setToken(response.token);
-          this.message = response.message;
+          console.log(response);
+          this.authService.setToken(response.accessToken);
+          this.authService.setRefreshToken(response.refreshToken);
+         // this.message = response.message;
           this.isSuccess = true;
           // Navigate to orders page after successful login
           setTimeout(() => {
-            this.router.navigate(['/orders']);
+            this.router.navigate(['/orders/new']);
           }, 1000);
         },
         error: (error) => {
