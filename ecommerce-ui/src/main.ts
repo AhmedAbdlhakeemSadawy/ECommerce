@@ -1,29 +1,17 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { appConfig } from './app/app.config';
 import { AppComponent } from './app/app.component';
-import { TokenInterceptor} from './app/services/token.interceptor';
+import { TokenInterceptor } from './app/services/token.interceptor';
 import { AuthService } from './app/services/auth.service';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 
-import { provideHttpClient, withInterceptorsFromDi  } from '@angular/common/http';
-
-const updatedAppConfig = {
+bootstrapApplication(AppComponent, {
+...appConfig,
   providers: [
     ...(appConfig.providers || []),
-      AuthService,
-      TokenInterceptor,
-      provideHttpClient(withInterceptorsFromDi())
-    ]
-};
-
-// bootstrapApplication(AppComponent, {
-//   providers: [
-//     AuthService,
-//     TokenInterceptor,
-//     provideHttpClient(
-//       withInterceptorsFromDi() // Must use this to enable DI
-//     )
-//   ]
-// }).catch((err) => console.error(err));
-
-bootstrapApplication(AppComponent, updatedAppConfig)
-  .catch((err) => console.error(err));
+    provideHttpClient(),
+    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
+   // AuthService // Optional if providedIn: 'root'
+  ]
+}).catch(err => console.error(err));
