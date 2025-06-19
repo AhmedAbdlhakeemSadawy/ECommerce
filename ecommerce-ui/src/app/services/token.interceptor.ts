@@ -15,9 +15,14 @@ export class TokenInterceptor implements HttpInterceptor {
   private isRefreshing = false;
   private refreshTokenSubject: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
 
+  private excludedUrls = ['/Account/login'];
   constructor(private authService: AuthService) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    const isExcluded = this.excludedUrls.some(url => req.url.includes(url));
+    if (isExcluded) {
+      return next.handle(req);
+    }
     let authReq = req;
     console.log('TokenInterceptor fired for:', req.url);
     const token = this.authService.getToken();
