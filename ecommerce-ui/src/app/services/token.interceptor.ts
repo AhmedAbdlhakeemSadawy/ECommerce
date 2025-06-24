@@ -8,7 +8,7 @@ import {
 } from '@angular/common/http';
 import { Observable, throwError, BehaviorSubject } from 'rxjs';
 import { catchError, filter, switchMap, take } from 'rxjs/operators';
-import { AuthService } from './auth.service';
+import { AuthService,RefreshTokenRequest } from './auth.service';
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
@@ -53,14 +53,29 @@ export class TokenInterceptor implements HttpInterceptor {
       this.isRefreshing = true;
       this.refreshTokenSubject.next(null);
       const refreshToken = this.authService.getRefreshToken();
+      const accessToken = this.authService.getRefreshToken();
       if (refreshToken) {
         // Replace with your actual refresh endpoint
         // Example: return this.authService.refreshToken(refreshToken)
         // .pipe(...)
         // For now, just logout
-        this.isRefreshing = false;
-        this.authService.logout();
-        return throwError(() => new Error('Session expired'));
+        // this.isRefreshing = false;
+        // this.authService.logout();
+        // return throwError(() => new Error('Session expired'));
+        const refreshTokenRequest: RefreshTokenRequest= { accessToken:accessToken , refreshToken: refreshToken};
+        
+        this.authService.refreshToken(refreshTokenRequest).subscribe({
+          next: (response) => {
+            console.log(response);
+            this.authService.setToken(response.accessToken);
+            this.authService.setRefreshToken(response.refreshToken);
+          },
+          error: (error) => {
+            // this.message = 'Login failed: ' + (error.error?.message || 'Invalid credentials');
+            // this.isSuccess = false;
+          }
+        });
+
       }
     }
     return this.refreshTokenSubject.pipe(

@@ -7,11 +7,24 @@ export interface LoginRequest {
   password: string;
 }
 
+
 export interface LoginResponse {
   accessToken: string;
   refreshToken: string;
   message: string;
 }
+
+export interface RefreshTokenRequest {
+  accessToken: string | null;
+  refreshToken: string | null;
+}
+
+
+export interface RefreshTokenResponse {
+  accessToken: string;
+  refreshToken: string;
+}
+
 
 @Injectable({
   providedIn: 'root'
@@ -23,6 +36,10 @@ export class AuthService {
 
   login(credentials: LoginRequest): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(`${this.apiUrl}/Account/login`, credentials);
+  }
+
+  refreshToken(refreshTokenRequest: RefreshTokenRequest): Observable<RefreshTokenResponse> {
+    return this.http.post<RefreshTokenResponse>(`${this.apiUrl}/Account/refresh_token`, refreshTokenRequest);
   }
 
   setToken(token: string): void {
