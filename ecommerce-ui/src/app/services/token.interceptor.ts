@@ -53,7 +53,7 @@ export class TokenInterceptor implements HttpInterceptor {
       this.isRefreshing = true;
       this.refreshTokenSubject.next(null);
       const refreshToken = this.authService.getRefreshToken();
-      const accessToken = this.authService.getRefreshToken();
+      const accessToken = this.authService.getToken();
       if (refreshToken) {
         // Replace with your actual refresh endpoint
         // Example: return this.authService.refreshToken(refreshToken)
@@ -69,6 +69,8 @@ export class TokenInterceptor implements HttpInterceptor {
             console.log(response);
             this.authService.setToken(response.accessToken);
             this.authService.setRefreshToken(response.refreshToken);
+
+
           },
           error: (error) => {
             // this.message = 'Login failed: ' + (error.error?.message || 'Invalid credentials');
