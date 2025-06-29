@@ -48,42 +48,94 @@ export class TokenInterceptor implements HttpInterceptor {
     });
   }
 
-  private handle401Error(request: HttpRequest<any>, next: HttpHandler) {
+  // private handle401Error(request: HttpRequest<any>, next: HttpHandler) {
+  //   if (!this.isRefreshing) {
+  //     this.isRefreshing = true;
+  //     this.refreshTokenSubject.next(null);
+  //     const refreshToken = this.authService.getRefreshToken();
+  //     const accessToken = this.authService.getToken();
+  //     if (refreshToken) {
+  //       // Replace with your actual refresh endpoint
+  //       // Example: return this.authService.refreshToken(refreshToken)
+  //       // .pipe(...)
+  //       // For now, just logout
+  //       // this.isRefreshing = false;
+  //       // this.authService.logout();
+  //       // return throwError(() => new Error('Session expired'));
+  //       const refreshTokenRequest: RefreshTokenRequest= { accessToken:accessToken , refreshToken: refreshToken};
+        
+  //       this.authService.refreshToken(refreshTokenRequest).subscribe({
+  //         next: (response) => {
+  //           console.log(response);
+  //           this.authService.setToken(response.accessToken);
+  //           this.authService.setRefreshToken(response.refreshToken);
+
+
+  //         },
+  //         error: (error) => {
+  //           // this.message = 'Login failed: ' + (error.error?.message || 'Invalid credentials');
+  //           // this.isSuccess = false;
+  //         }
+  //       });
+
+  //     }
+  //   }
+  //   return this.refreshTokenSubject.pipe(
+  //     filter(token => token != null),
+  //     take(1),
+  //     switchMap(token => next.handle(this.addTokenHeader(request, token!)))
+  //   );
+  // }
+
+
+  private handle401Error(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     if (!this.isRefreshing) {
       this.isRefreshing = true;
-      this.refreshTokenSubject.next(null);
+      this.refreshTokenSubject.next(null); // Signal that no token is available yet
+  
       const refreshToken = this.authService.getRefreshToken();
       const accessToken = this.authService.getToken();
-      if (refreshToken) {
-        // Replace with your actual refresh endpoint
-        // Example: return this.authService.refreshToken(refreshToken)
-        // .pipe(...)
-        // For now, just logout
-        // this.isRefreshing = false;
-        // this.authService.logout();
-        // return throwError(() => new Error('Session expired'));
-        const refreshTokenRequest: RefreshTokenRequest= { accessToken:accessToken , refreshToken: refreshToken};
-        
-        this.authService.refreshToken(refreshTokenRequest).subscribe({
-          next: (response) => {
-            console.log(response);
+  
+      if (refreshToken && accessToken) {
+        const refreshTokenRequest: RefreshTokenRequest = { accessToken, refreshToken };
+  
+        return this.authService.refreshToken(refreshTokenRequest).pipe(
+          switchMap((response: { accessToken: string; refreshToken: string }) => {
+            this.isRefreshing = false;
             this.authService.setToken(response.accessToken);
             this.authService.setRefreshToken(response.refreshToken);
-
-
-          },
-          error: (error) => {
-            // this.message = 'Login failed: ' + (error.error?.message || 'Invalid credentials');
-            // this.isSuccess = false;
-          }
-        });
-
+            this.refreshTokenSubject.next(response.accessToken); // Broadcast new token to waiting requests
+            console.log(response.accessToken)
+            return next.handle(this.addTokenHeader(request, response.accessToken)).pipe(
+              catchError((retryError) => {
+                // Handle errors from the retried request (e.g., add order)
+                // Don't logout here unless it's a 401
+                console.log(retryError);
+                if (retryError.status === 401) {
+                  this.authService.logout();
+                  // this.router.navigate(['/login']);
+                  return throwError(() => new Error('Session expired. Please log in again.'));
+                }
+                // For non-401 errors, pass the error through
+                return throwError(() => retryError);
+              })
+            );
+          })
+        );
+      } else {
+        this.isRefreshing = false;
+        this.refreshTokenSubject.next(null);
+        this.authService.logout();
+       // this.router.navigate(['/login']);
+        return throwError(() => new Error('No refresh token available.'));
       }
+    } else {
+      // Wait for the ongoing refresh to complete
+      return this.refreshTokenSubject.pipe(
+        filter((token) => token !== null), // Proceed only when a valid token is emitted
+        take(1), // Complete after one valid token
+        switchMap((token) => next.handle(this.addTokenHeader(request, token!))) // Retry with new token
+      );
     }
-    return this.refreshTokenSubject.pipe(
-      filter(token => token != null),
-      take(1),
-      switchMap(token => next.handle(this.addTokenHeader(request, token!)))
-    );
   }
 } 
