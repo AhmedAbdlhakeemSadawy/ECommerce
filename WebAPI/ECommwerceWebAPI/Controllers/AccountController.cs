@@ -139,8 +139,8 @@ namespace ECommwerceWebAPI.Controllers
                 return Unauthorized("Invalid refresh token");
 
 
-            var accessToken = tokenService.GenerateToken(principal.Claims);
-            var refreshToken = tokenService.RefreshToken(userId);
+            var accessToken = await tokenService.GenerateToken(principal.Claims);
+            var refreshToken = await tokenService.RefreshToken(userId);
             return Ok(new
             {
                 AccessToken = accessToken,
