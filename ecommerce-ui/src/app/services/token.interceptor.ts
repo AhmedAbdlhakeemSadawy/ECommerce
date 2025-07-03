@@ -9,6 +9,8 @@ import {
 import { Observable, throwError, BehaviorSubject } from 'rxjs';
 import { catchError, filter, switchMap, take } from 'rxjs/operators';
 import { AuthService,RefreshTokenRequest } from './auth.service';
+import { Router } from '@angular/router';
+
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
@@ -16,7 +18,7 @@ export class TokenInterceptor implements HttpInterceptor {
   private refreshTokenSubject: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
 
   private excludedUrls = ['/Account/login'];
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService ,private router: Router) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const isExcluded = this.excludedUrls.some(url => req.url.includes(url));
@@ -48,45 +50,6 @@ export class TokenInterceptor implements HttpInterceptor {
     });
   }
 
-  // private handle401Error(request: HttpRequest<any>, next: HttpHandler) {
-  //   if (!this.isRefreshing) {
-  //     this.isRefreshing = true;
-  //     this.refreshTokenSubject.next(null);
-  //     const refreshToken = this.authService.getRefreshToken();
-  //     const accessToken = this.authService.getToken();
-  //     if (refreshToken) {
-  //       // Replace with your actual refresh endpoint
-  //       // Example: return this.authService.refreshToken(refreshToken)
-  //       // .pipe(...)
-  //       // For now, just logout
-  //       // this.isRefreshing = false;
-  //       // this.authService.logout();
-  //       // return throwError(() => new Error('Session expired'));
-  //       const refreshTokenRequest: RefreshTokenRequest= { accessToken:accessToken , refreshToken: refreshToken};
-        
-  //       this.authService.refreshToken(refreshTokenRequest).subscribe({
-  //         next: (response) => {
-  //           console.log(response);
-  //           this.authService.setToken(response.accessToken);
-  //           this.authService.setRefreshToken(response.refreshToken);
-
-
-  //         },
-  //         error: (error) => {
-  //           // this.message = 'Login failed: ' + (error.error?.message || 'Invalid credentials');
-  //           // this.isSuccess = false;
-  //         }
-  //       });
-
-  //     }
-  //   }
-  //   return this.refreshTokenSubject.pipe(
-  //     filter(token => token != null),
-  //     take(1),
-  //     switchMap(token => next.handle(this.addTokenHeader(request, token!)))
-  //   );
-  // }
-
 
   private handle401Error(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     if (!this.isRefreshing) {
@@ -113,7 +76,7 @@ export class TokenInterceptor implements HttpInterceptor {
                 console.log(retryError);
                 if (retryError.status === 401) {
                   this.authService.logout();
-                  // this.router.navigate(['/login']);
+                   this.router.navigate(['/login']);
                   return throwError(() => new Error('Session expired. Please log in again.'));
                 }
                 // For non-401 errors, pass the error through
