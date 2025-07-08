@@ -33,7 +33,6 @@ namespace ECommwerceWebAPI.Controllers
                 OrderBusinessDTO orderBusinessDTO = mapper.Map<OrderBusinessDTO>(orderRequestDto);
 
                 var result = await orderManager.CreateOrder(orderBusinessDTO);
-                // return CreatedAtAction(nameof(GetOrder), new { id = result.OrderId }, result);
 
                 return Ok(result);
             }
@@ -50,10 +49,5 @@ namespace ECommwerceWebAPI.Controllers
             return Ok("This is protected data.");
         }
 
-        [HttpGet("tesr_data")]
-        public IActionResult GetSecureDataWithoutAuthenticate()
-        {
-            return Ok("This is protected data.");
-        }
     }
 }
