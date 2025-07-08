@@ -89,7 +89,7 @@ export class TokenInterceptor implements HttpInterceptor {
         this.isRefreshing = false;
         this.refreshTokenSubject.next(null);
         this.authService.logout();
-       // this.router.navigate(['/login']);
+        this.router.navigate(['/login']);
         return throwError(() => new Error('No refresh token available.'));
       }
     } else {
