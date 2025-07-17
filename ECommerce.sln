@@ -26,6 +26,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerceWebApiDto", "WebAP
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApiAbstraction", "WebAPI\WebApiAbstraction\WebApiAbstraction.csproj", "{D07FAF3C-9EFA-4F42-825A-EA41AE210A90}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECommerceInfrastructureAbstraction", "ECommerceInfrastructureAbstraction\ECommerceInfrastructureAbstraction\ECommerceInfrastructureAbstraction.csproj", "{0D78330A-636E-44AD-AC22-E369DB1579D2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECommerceInfrastructure", "ECommerceInfrastructure\ECommerceInfrastructure.csproj", "{ADAB432E-8194-49A9-A6C6-7F98C09FECD6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -72,6 +76,14 @@ Global
 		{D07FAF3C-9EFA-4F42-825A-EA41AE210A90}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D07FAF3C-9EFA-4F42-825A-EA41AE210A90}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D07FAF3C-9EFA-4F42-825A-EA41AE210A90}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0D78330A-636E-44AD-AC22-E369DB1579D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D78330A-636E-44AD-AC22-E369DB1579D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D78330A-636E-44AD-AC22-E369DB1579D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D78330A-636E-44AD-AC22-E369DB1579D2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ADAB432E-8194-49A9-A6C6-7F98C09FECD6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ADAB432E-8194-49A9-A6C6-7F98C09FECD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ADAB432E-8194-49A9-A6C6-7F98C09FECD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ADAB432E-8194-49A9-A6C6-7F98C09FECD6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
