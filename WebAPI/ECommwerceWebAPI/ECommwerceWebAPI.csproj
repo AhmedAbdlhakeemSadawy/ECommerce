@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
@@ -24,6 +24,8 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Business\ECommerceBusinessLogic\ECommerceBusinessLogic.csproj" />
     <ProjectReference Include="..\..\DataAccess\ECommerceDataAccess\ECommerceDataAccess.csproj" />
+    <ProjectReference Include="..\..\ECommerceInfrastructureAbstraction\ECommerceInfrastructureAbstraction\ECommerceInfrastructureAbstraction.csproj" />
+    <ProjectReference Include="..\..\ECommerceInfrastructure\ECommerceInfrastructure.csproj" />
     <ProjectReference Include="..\ECommerceWebApiDto\ECommerceWebApiDto.csproj" />
     <ProjectReference Include="..\WebApiAbstraction\WebApiAbstraction.csproj" />
   </ItemGroup>
