@@ -6,6 +6,8 @@ using ECommerceDataAccess.DatabaseContextConfiguration;
 using ECommerceDataAccess.DataSeeder;
 using ECommerceDataAccess.Mapping_Profiles;
 using ECommerceDataAccessAbstraction;
+using ECommerceInfrastructure;
+using ECommerceInfrastructureAbstraction;
 using ECommerceWebApiDto.Validators;
 using ECommwerceWebAPI.Mapping_Profiles;
 using ECommwerceWebAPI.Middlewares;
@@ -39,6 +41,7 @@ builder.Services.AddECommerceDataAccess(connectionString);
 builder.Services.RegisterBusinessServices();
 //builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<ITokenService, TokenServiceInMemoryCache>();
+builder.Services.AddScoped<IEmailService, AzureCommunicationEmailService>();
 builder.Services.AddScoped<IUserRoleService, UserRoleService>();
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 {
