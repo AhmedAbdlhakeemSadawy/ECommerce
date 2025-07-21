@@ -21,7 +21,8 @@ namespace ECommerceInfrastructure
             azureEmailCommunicationSettings = options.Value;
         }
 
-        public async Task SendEmailAsync(string toEmail)
+
+        public async Task SendEmailAsync(string fromEmail, string toEmail, string subject, string content)
         {
             var credential = new DefaultAzureCredential(new DefaultAzureCredentialOptions
             {
@@ -34,18 +35,14 @@ namespace ECommerceInfrastructure
                 ExcludeVisualStudioCredential = true,
             });
 
-            
-           // AzureEventSourceListener listener = AzureEventSourceListener.CreateConsoleLogger(EventLevel.Verbose);
-
 
             var emailClient = new EmailClient(new Uri(azureEmailCommunicationSettings.UrI), credential);
 
-            var emailContent = new EmailContent($"Order Confirmation - Order ")
+            var emailContent = new EmailContent(subject)
             {
-                PlainText = $"Thank you for your order! Your order  has been received.",
-                Html = $"<h1>Order Confirmation</h1><pTaking you for your order! Your order  has been received.</p>"
+                Html = content
             };
-            var sendResult = await emailClient.SendAsync(WaitUntil.Completed,new EmailMessage(azureEmailCommunicationSettings.EmailFrom, toEmail, emailContent));
+            var sendResult = await emailClient.SendAsync(WaitUntil.Completed, new EmailMessage(azureEmailCommunicationSettings.EmailFrom, toEmail, emailContent));
         }
     }
 }

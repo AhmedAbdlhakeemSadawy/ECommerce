@@ -33,7 +33,7 @@ namespace ECommwerceWebAPI.Controllers
 
             try
             {
-                 await emailService.SendEmailAsync("");
+               // await emailService.SendEmailAsync("","","Order Confirmation", $"<h1>Order Confirmation</h1><p> Taking you for your order! Your order  has been received.</p>");
                 OrderBusinessDTO orderBusinessDTO = mapper.Map<OrderBusinessDTO>(orderRequestDto);
 
                 var result = await orderManager.CreateOrder(orderBusinessDTO);
