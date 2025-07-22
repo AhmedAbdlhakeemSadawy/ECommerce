@@ -2,6 +2,7 @@
 using ECommerceBuinessDTO;
 using ECommerceBusinessAbstractions;
 using ECommerceDataAccessDTO;
+using ECommerceInfrastructureAbstraction;
 using ECommerceWebApiDto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,11 +15,13 @@ namespace ECommwerceWebAPI.Controllers
     {
         private IOrderManager orderManager;
         private IMapper mapper;
+        private IEmailService emailService;
 
-        public OrderController(IOrderManager orderManager,IMapper mapper)
+        public OrderController(IOrderManager orderManager,IMapper mapper,IEmailService emailService)
         {
             this.orderManager = orderManager;
             this.mapper = mapper;
+            this.emailService = emailService;
         }
 
         [HttpPost]
@@ -30,6 +33,7 @@ namespace ECommwerceWebAPI.Controllers
 
             try
             {
+               // await emailService.SendEmailAsync("","","Order Confirmation", $"<h1>Order Confirmation</h1><p> Taking you for your order! Your order  has been received.</p>");
                 OrderBusinessDTO orderBusinessDTO = mapper.Map<OrderBusinessDTO>(orderRequestDto);
 
                 var result = await orderManager.CreateOrder(orderBusinessDTO);
