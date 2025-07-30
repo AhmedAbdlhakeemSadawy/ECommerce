@@ -7,10 +7,11 @@ namespace ECommerceEvents
         public int Id { get; }
         public decimal TotalPrice { get; }
         public string CustomerEmail { get; }
-        public OrderCreatedEvent(int id, decimal totalPrice)
+        public OrderCreatedEvent(int id, decimal totalPrice,string customerEmail)
         {
             Id = id;
             TotalPrice = totalPrice;
+            CustomerEmail = customerEmail;
         }
     }
 }
