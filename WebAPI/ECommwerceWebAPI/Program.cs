@@ -1,11 +1,13 @@
 
 using AutoMapper;
+using ECommerceBusinessAbstractions;
 using ECommerceBusinessLogic.ECommerceBusinessServiceRegisteration;
 using ECommerceBusinessLogic.Mapping_Profiles;
 using ECommerceDataAccess.DatabaseContextConfiguration;
 using ECommerceDataAccess.DataSeeder;
 using ECommerceDataAccess.Mapping_Profiles;
 using ECommerceDataAccessAbstraction;
+using ECommerceEvents;
 using ECommerceInfrastructure;
 using ECommerceInfrastructureAbstraction;
 using ECommerceWebApiDto.Validators;
@@ -24,6 +26,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System;
 using System.Text;
 using WebApiAbstraction;
 using WebApiAbstraction.Role_Authuntication;
@@ -118,6 +121,10 @@ builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsi
 builder.Services.AddValidatorsFromAssemblyContaining<OrderRequestDtoValidator>();
 builder.Services.AddScoped<AccessTokenValidationMiddleware>();
 builder.Services.Configure<AzureEmailCommunicationSettings>(builder.Configuration.GetSection("AzureEmailCommunicationSettings"));
+builder.Services.AddSingleton<IEventBus, InMemoryEventBus>();
+
+builder.Services.AddScoped<IDomainEventHandler<OrderCreatedEvent>, OrderCreatedEmailSendEventHandler>();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
