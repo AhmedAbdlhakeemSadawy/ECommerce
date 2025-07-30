@@ -12,7 +12,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\DataAccess\ECommerceDataAccessAbstraction\ECommerceDataAccessAbstraction.csproj" />
+    <ProjectReference Include="..\..\ECommerceInfrastructureAbstraction\ECommerceInfrastructureAbstraction\ECommerceInfrastructureAbstraction.csproj" />
     <ProjectReference Include="..\ECommerceBusinessAbstractions\ECommerceBusinessAbstractions.csproj" />
+    <ProjectReference Include="..\ECommerceEvents\ECommerceEvents.csproj" />
   </ItemGroup>
 
 </Project>
