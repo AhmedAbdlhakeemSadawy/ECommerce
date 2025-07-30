@@ -17,10 +17,10 @@ namespace ECommerceInfrastructure
         {
             this.serviceProvider = serviceProvider;
         }
-        public async void Publish(IDomainEvent domainEvent)
+        public async void Publish<T>(T domainEvent) where T : IDomainEvent
         {
             using var scope = serviceProvider.CreateScope();
-            var handlers = scope.ServiceProvider.GetServices<IDomainEventHandler<IDomainEvent>>();
+            var handlers = scope.ServiceProvider.GetServices<IDomainEventHandler<T>>();
             foreach (var handler in handlers)
             {
                 await handler.Handle(domainEvent);

@@ -9,7 +9,7 @@ namespace ECommerceInfrastructureAbstraction
 {
     public interface IEventBus
     {
-        void Publish(IDomainEvent domainEvent);
+        void Publish<T>(T domainEvent) where T : IDomainEvent;
 
         void Subscribe<T, TH>()
         where T : IDomainEvent
