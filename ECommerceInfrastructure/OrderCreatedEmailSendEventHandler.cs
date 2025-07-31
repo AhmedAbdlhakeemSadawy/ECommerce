@@ -18,7 +18,7 @@ namespace ECommerceInfrastructure
         }
         public async Task Handle(OrderCreatedEvent orderCreatedEvent)
         {
-            string content = "$\"<h1>Order Confirmation</h1><p> Kindly note that Your order number {orderCreatedEvent.Id}  has been received.</p>\"";
+            string content = $"<h1>Order Confirmation</h1><p> Kindly note that Your order number {orderCreatedEvent.Id}  has been received.</p>";
             await emailService.SendEmailAsync(orderCreatedEvent.CustomerEmail, "Order Confirmation", content);
 
         }

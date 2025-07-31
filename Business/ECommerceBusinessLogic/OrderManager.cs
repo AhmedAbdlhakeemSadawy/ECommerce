@@ -46,7 +46,7 @@ namespace ECommerceBusinessLogic
 
             await unitOfWork.Complete();
 
-            OrderCreatedEvent orderCreatedEvent = new OrderCreatedEvent(orderBusinessDto.Id, orderBusinessDto.TotalPrice);
+            OrderCreatedEvent orderCreatedEvent = new OrderCreatedEvent(orderBusinessDto.Id, orderBusinessDto.TotalPrice,orderBusinessDto.CustomerEmail);
 
             eventBus.Publish(orderCreatedEvent);
             return orderBusinessDto;
