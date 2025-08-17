@@ -6,6 +6,8 @@ using ECommerceInfrastructureAbstraction;
 using ECommerceWebApiDto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
+using WebApiAbstraction;
 
 namespace ECommwerceWebAPI.Controllers
 {
@@ -33,8 +35,10 @@ namespace ECommwerceWebAPI.Controllers
 
             try
             {
-               // await emailService.SendEmailAsync("","","Order Confirmation", $"<h1>Order Confirmation</h1><p> Taking you for your order! Your order  has been received.</p>");
+                string? customerEmail = HttpContext.User.FindFirst(ClaimTypes.Email)?.Value;
+
                 OrderBusinessDTO orderBusinessDTO = mapper.Map<OrderBusinessDTO>(orderRequestDto);
+                orderBusinessDTO.CustomerEmail = customerEmail;
 
                 var result = await orderManager.CreateOrder(orderBusinessDTO);
 

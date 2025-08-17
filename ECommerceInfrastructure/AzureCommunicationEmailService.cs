@@ -22,7 +22,7 @@ namespace ECommerceInfrastructure
         }
 
 
-        public async Task SendEmailAsync(string fromEmail, string toEmail, string subject, string content)
+        public async Task SendEmailAsync( string toEmail, string subject, string content)
         {
             var credential = new DefaultAzureCredential(new DefaultAzureCredentialOptions
             {

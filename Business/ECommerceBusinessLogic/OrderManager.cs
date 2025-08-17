@@ -3,6 +3,8 @@ using ECommerceBuinessDTO;
 using ECommerceBusinessAbstractions;
 using ECommerceDataAccessAbstraction;
 using ECommerceDataAccessDTO;
+using ECommerceEvents;
+using ECommerceInfrastructureAbstraction;
 
 namespace ECommerceBusinessLogic
 {
@@ -10,10 +12,13 @@ namespace ECommerceBusinessLogic
     {
         private IMapper mapper;
         private IUnitOfWork unitOfWork;
-        public OrderManager(IUnitOfWork unitOfWork,IMapper mapper)
+        private IEventBus eventBus;
+ 
+        public OrderManager(IUnitOfWork unitOfWork,IMapper mapper, IEventBus eventBus)
         {
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
+            this.eventBus = eventBus;
         }
         public async  Task<OrderBusinessDTO> CreateOrder(OrderBusinessDTO orderBusinessDto)
         {
@@ -35,12 +40,17 @@ namespace ECommerceBusinessLogic
 
             orderBusinessDto.TotalPrice = CalculateOrderTotalPrice(reterivedProdcutsBusinessDto);
             orderBusinessDto.Status = OrderStatus.Created;
+            orderBusinessDto.OrderNumber = GenerateOrderNumber();
 
             OrderDataDto orderDataDto = mapper.Map<OrderDataDto>(orderBusinessDto);
             await unitOfWork.OrderRepository.AddOrder(orderDataDto);
             orderBusinessDto.products = UpdateProductsStockQuantities(orderBusinessDto.products, reterivedProdcutsBusinessDto);
 
             await unitOfWork.Complete();
+
+            OrderCreatedEvent orderCreatedEvent = new OrderCreatedEvent(orderBusinessDto.Id,orderBusinessDto.OrderNumber ,orderBusinessDto.TotalPrice,orderBusinessDto.CustomerEmail);
+
+            eventBus.Publish(orderCreatedEvent);
             return orderBusinessDto;
     
         }
@@ -86,6 +96,13 @@ namespace ECommerceBusinessLogic
             List<ProductBusinessDTO> productsUpdatedResult = mapper.Map<List<ProductBusinessDTO>>(productDataDtosResult);
 
             return productsUpdatedResult;
+        }
+
+        private  long GenerateOrderNumber()
+        {
+            long timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+            long random = new Random().Next(1000); // Add small random component
+            return (timestamp + random) % 100000000;
         }
     }
 }

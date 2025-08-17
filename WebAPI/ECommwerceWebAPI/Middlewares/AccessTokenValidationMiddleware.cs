@@ -18,7 +18,9 @@ namespace ECommwerceWebAPI.Middlewares
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
 
-            if (!context.Request.Path.StartsWithSegments("/api/Account/login", StringComparison.OrdinalIgnoreCase) && !context.Request.Path.StartsWithSegments("/api/Account/refresh_token", StringComparison.OrdinalIgnoreCase))
+            if (!context.Request.Path.StartsWithSegments("/api/Account/login", StringComparison.OrdinalIgnoreCase) 
+                && !context.Request.Path.StartsWithSegments("/api/Account/refresh_token", StringComparison.OrdinalIgnoreCase)
+                 && !context.Request.Path.StartsWithSegments("/api/Account/register", StringComparison.OrdinalIgnoreCase))
             {
                 var userId = context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
                 var token = context.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
