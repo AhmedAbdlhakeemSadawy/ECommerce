@@ -27,15 +27,30 @@ namespace ECommerceBusinessLogic
             {
                 throw new Exception("Order Should contain at least one product");
             }
+
+
             List<int> ids = orderBusinessDto.products.Select(p => p.Id).ToList();
             var reterivedProdcutsData = unitOfWork.ProductRepository.GetListProductsById(ids).ToList();
-            List<ProductBusinessDTO> reterivedProdcutsBusinessDto = mapper.Map<List<ProductBusinessDTO>>(reterivedProdcutsData);
+            List<ProductBusinessDTO> reterivedProdcutsBusinessDto = new List<ProductBusinessDTO>();
+
+            foreach (var productDataDto in reterivedProdcutsData)
+            {
+                // Find the matching ProductBusinessDTO by ProductId
+                var targetProduct = orderBusinessDto.products
+                    .FirstOrDefault(p => p.Id == productDataDto.Id);
+
+                if (targetProduct != null)
+                {
+                    mapper.Map(productDataDto, targetProduct);
+                }
+            }
 
 
             if (! CheckAvailability(orderBusinessDto.products, reterivedProdcutsData))
             {
                 throw new Exception("Some of your products are not available");
             }
+  
 
 
             orderBusinessDto.TotalPrice = CalculateOrderTotalPrice(reterivedProdcutsBusinessDto);
