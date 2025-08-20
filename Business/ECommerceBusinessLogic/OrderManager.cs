@@ -53,7 +53,7 @@ namespace ECommerceBusinessLogic
   
 
 
-            orderBusinessDto.TotalPrice = CalculateOrderTotalPrice(reterivedProdcutsBusinessDto);
+            orderBusinessDto.TotalPrice = CalculateOrderTotalPrice(orderBusinessDto.products);
             orderBusinessDto.Status = OrderStatus.Created;
             orderBusinessDto.OrderNumber = GenerateOrderNumber();
 
@@ -95,7 +95,7 @@ namespace ECommerceBusinessLogic
 
             for (int i = 0; i < productsBusinessDto.Count; i++)
             {
-                totalPrice += productsBusinessDto[i].Price; 
+                totalPrice += productsBusinessDto[i].Price * productsBusinessDto[i].Quantity; 
             }
 
             return totalPrice;
