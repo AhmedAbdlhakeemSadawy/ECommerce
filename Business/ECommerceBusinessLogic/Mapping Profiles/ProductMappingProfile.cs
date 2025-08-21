@@ -13,8 +13,7 @@ namespace ECommerceBusinessLogic.Mapping_Profiles
     {
         public ProductMappingProfile()
         {
-            CreateMap<ProductBusinessDTO, ProductDataDto>()
-                 .ForMember(dest => dest.StockQuantity, opt => opt.MapFrom(src => src.StockQuantity));
+            CreateMap<ProductBusinessDTO, ProductDataDto>();
 
             CreateMap<ProductDataDto, ProductBusinessDTO>()
                  .ForMember(dest => dest.StockQuantity, opt => opt.MapFrom(src => src.StockQuantity))
