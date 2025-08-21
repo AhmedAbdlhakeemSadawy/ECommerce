@@ -10,6 +10,6 @@ namespace ECommerceDataAccessAbstraction
     public interface IProductRepository<TProductDto> : IRepository<TProductDto> where TProductDto : ProductDataDto
     {
         IEnumerable<ProductDataDto> GetListProductsById(List<int> ids);
-        IEnumerable<ProductDataDto> UpdateProductsStockQuantity(List<ProductDataDto> productDataDtos, List<ProductDataDto> productsDataDtosStockUpdated);
+        IEnumerable<ProductDataDto> UpdateProductsStockQuantity(List<ProductDataDto> productDataDtos);
     }
 }

@@ -27,24 +27,39 @@ namespace ECommerceBusinessLogic
             {
                 throw new Exception("Order Should contain at least one product");
             }
+
+
             List<int> ids = orderBusinessDto.products.Select(p => p.Id).ToList();
             var reterivedProdcutsData = unitOfWork.ProductRepository.GetListProductsById(ids).ToList();
-            List<ProductBusinessDTO> reterivedProdcutsBusinessDto = mapper.Map<List<ProductBusinessDTO>>(reterivedProdcutsData);
+            List<ProductBusinessDTO> reterivedProdcutsBusinessDto = new List<ProductBusinessDTO>();
+
+            foreach (var productDataDto in reterivedProdcutsData)
+            {
+                // Find the matching ProductBusinessDTO by ProductId
+                var targetProduct = orderBusinessDto.products
+                    .FirstOrDefault(p => p.Id == productDataDto.Id);
+
+                if (targetProduct != null)
+                {
+                    mapper.Map(productDataDto, targetProduct);
+                }
+            }
 
 
             if (! CheckAvailability(orderBusinessDto.products, reterivedProdcutsData))
             {
                 throw new Exception("Some of your products are not available");
             }
+  
 
 
-            orderBusinessDto.TotalPrice = CalculateOrderTotalPrice(reterivedProdcutsBusinessDto);
+            orderBusinessDto.TotalPrice = CalculateOrderTotalPrice(orderBusinessDto.products);
             orderBusinessDto.Status = OrderStatus.Created;
             orderBusinessDto.OrderNumber = GenerateOrderNumber();
 
             OrderDataDto orderDataDto = mapper.Map<OrderDataDto>(orderBusinessDto);
             await unitOfWork.OrderRepository.AddOrder(orderDataDto);
-            orderBusinessDto.products = UpdateProductsStockQuantities(orderBusinessDto.products, reterivedProdcutsBusinessDto);
+            orderBusinessDto.products = UpdateProductsStockQuantities(orderBusinessDto.products);
 
             await unitOfWork.Complete();
 
@@ -80,18 +95,25 @@ namespace ECommerceBusinessLogic
 
             for (int i = 0; i < productsBusinessDto.Count; i++)
             {
-                totalPrice += productsBusinessDto[i].Price; 
+                totalPrice += productsBusinessDto[i].Price * productsBusinessDto[i].Quantity; 
             }
 
             return totalPrice;
         }
 
-        private List<ProductBusinessDTO> UpdateProductsStockQuantities(List<ProductBusinessDTO> productsBusinessNeedToUpdateStockDto, List<ProductBusinessDTO> retreviedProductsBusinessStock)
+        private List<ProductBusinessDTO> UpdateProductsStockQuantities(List<ProductBusinessDTO> productsBusinessNeedToUpdateStockDto)
         {
-            List<ProductDataDto> productsDataNeedToUpdateStockDto = mapper.Map<List<ProductDataDto>>(productsBusinessNeedToUpdateStockDto);
-            List<ProductDataDto> retreviedProductsDataStock = mapper.Map<List<ProductDataDto>>(retreviedProductsBusinessStock);
+            List<ProductDataDto> productDataDtosUpdatedStocks = new List<ProductDataDto>();
 
-            List<ProductDataDto> productDataDtosResult = unitOfWork.ProductRepository.UpdateProductsStockQuantity(productsDataNeedToUpdateStockDto, retreviedProductsDataStock).ToList();
+            mapper.Map(productsBusinessNeedToUpdateStockDto, productDataDtosUpdatedStocks);
+
+            for (int i = 0; i < productsBusinessNeedToUpdateStockDto.Count; i++)
+            {
+                productDataDtosUpdatedStocks.Where(p => p.Id == productsBusinessNeedToUpdateStockDto[i].Id).FirstOrDefault().StockQuantity = productsBusinessNeedToUpdateStockDto[i].StockQuantity - productsBusinessNeedToUpdateStockDto[i].Quantity;
+            }
+
+
+            List<ProductDataDto> productDataDtosResult = unitOfWork.ProductRepository.UpdateProductsStockQuantity(productDataDtosUpdatedStocks).ToList();
 
             List<ProductBusinessDTO> productsUpdatedResult = mapper.Map<List<ProductBusinessDTO>>(productDataDtosResult);
 

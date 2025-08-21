@@ -1,7 +1,8 @@
-﻿using ECommerceDataAccess.DatabaseContextConfiguration;
+﻿using AutoMapper;
+using ECommerceDataAccess.DatabaseContextConfiguration;
 using ECommerceDataAccess.DataEntities;
-using ECommerceDataAccessDTO;
 using ECommerceDataAccessAbstraction;
+using ECommerceDataAccessDTO;
 using Microsoft.EntityFrameworkCore;
 
 namespace ECommerceDataAccess.ProoductRepository
@@ -9,10 +10,12 @@ namespace ECommerceDataAccess.ProoductRepository
     public class ProductRepository : IProductRepository<ProductDataDto>
     {
         private readonly ECommerceDbContext context;
+        private IMapper mapper;
 
-        public ProductRepository(ECommerceDbContext context)
+        public ProductRepository(ECommerceDbContext context,IMapper mapper)
         {
             this.context = context;
+            this.mapper = mapper;
         }
         public Task AddAsync(ProductDataDto entity)
         {
@@ -58,21 +61,20 @@ namespace ECommerceDataAccess.ProoductRepository
             throw new NotImplementedException();
         }
 
-        public IEnumerable<ProductDataDto> UpdateProductsStockQuantity(List<ProductDataDto> productDataDtos, List<ProductDataDto> productsDataDtosStockUpdated)
+        public IEnumerable<ProductDataDto> UpdateProductsStockQuantity(List<ProductDataDto> productDataDtos)
         {
             List<ProductDataDto> productsUpdated = new List<ProductDataDto>();
 
-            for (int i = 0; i < productDataDtos.Count; i++)
+            List<Product> products = mapper.Map<List<Product>>(productDataDtos);
+            context.UpdateRange(products);
+
+            for (int i = 0; i < products.Count; i++)
             {
-                Product product = new Product();
-                product.Id = productDataDtos[i].Id;
-                product.StockQuantity = productsDataDtosStockUpdated.Where(p => p.Id == productsDataDtosStockUpdated[i].Id).FirstOrDefault().StockQuantity - productDataDtos[i].StockQuantity;
-                context.Products.Attach(product);
-                context.Entry(product).Property(p => p.StockQuantity).IsModified = true;
-                productsUpdated.Add(new ProductDataDto { Id = productDataDtos[i].Id, StockQuantity = product.StockQuantity });
+                context.Products.Attach(products[i]);
+                context.Entry(products[i]).Property(p => p.StockQuantity).IsModified = true;
             }
 
-            return productsUpdated;
+            return productDataDtos;
         }
     }
 }
