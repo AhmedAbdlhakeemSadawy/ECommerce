@@ -40,3 +40,14 @@ The project demonstrates clean architecture .
 &emsp;&emsp;|   +---ECommwerceWebAPI <br>
 &emsp;&emsp;|   +---ECommwerceWebAPIDto
 
+---
+
+## ⚙️ Tech Stack
+- **.NET 8** (or your version)
+- **Entity Framework Core**
+- **SQL Server**
+- **ASP.NET Core Identity**
+- **AutoMapper**
+- **Swagger** (API documentation)
+- **Azure Communication Service** (Send Notification)
+
