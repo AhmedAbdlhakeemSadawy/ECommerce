@@ -23,19 +23,20 @@ The project demonstrates clean architecture .
 ## 🏗️ Project Structure
 
 +---Business <br>
-|   +---ECommerceBuinessDTO <br>
-|   +---ECommerceBusinessAbstractions <br>
-|   +---ECommerceBusinessLogic <br>
-|   +---ECommerceBusinessTests <br>
-|   +---ECommerceEvents <br>
+&emsp;&emsp;|   +---ECommerceBuinessDTO <br>
+&emsp;&emsp;|   +---ECommerceBusinessAbstractions <br>
+&emsp;&emsp;|   +---ECommerceBusinessLogic <br>
+&emsp;&emsp;|   +---ECommerceBusinessTests <br>
+&emsp;&emsp;|   +---ECommerceEvents <br>
 +---DataAccess <br>
-|   +---ECommerceDataAccessDTO <br>
-|   +---ECommerceDataAccessAbstractions <br>
-|   +---ECommerceDataAccess <br>
+&emsp;&emsp;|   +---ECommerceDataAccessDTO <br>
+&emsp;&emsp;|   +---ECommerceDataAccessAbstractions <br>
+&emsp;&emsp;|   +---ECommerceDataAccess <br>
 +---Infrastructure <br>
-|   +---ECommerceInfrastructureAbstractions <br>
-|   +---ECommerceInfrastructure <br>
+&emsp;&emsp;|   +---ECommerceInfrastructureAbstractions <br>
+&emsp;&emsp;|   +---ECommerceInfrastructure <br>
 +---WebAPI <br>
-|   +---WebApiAbstraction <br>
-|   +---ECommwerceWebAPI <br>
-|   +---ECommwerceWebAPIDto
+&emsp;&emsp;|   +---WebApiAbstraction <br>
+&emsp;&emsp;|   +---ECommwerceWebAPI <br>
+&emsp;&emsp;|   +---ECommwerceWebAPIDto
+
