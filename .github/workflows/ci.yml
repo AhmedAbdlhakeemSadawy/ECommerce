@@ -1,0 +1,65 @@
+name: CI - Build and Test (.NET + Angular)
+
+# Triggers: Run on pushes to any branch and any pull request
+on:
+  push:
+    branches: [ '**' ]  # Matches all branches (e.g., main, feature/*, dev)
+  pull_request:
+    branches: [ '**' ]  # Matches PRs targeting any branch
+
+# Jobs: Separate backend and frontend for parallel execution
+jobs:
+  backend-build-test:
+    runs-on: ubuntu-latest  # Fast and efficient for .NET Core
+
+    steps:
+      # Step 1: Checkout the repo code
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Step 2: Set up .NET SDK 
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'  # Adjust if exact version differs (e.g., 8.0.100)
+
+      # Step 3: Restore NuGet packages for all projects (Business, DataAccess, etc.)
+      - name: Restore dependencies
+        run: dotnet restore
+
+      # Step 4: Build the .NET solution (Release config for optimization)
+      - name: Build solution
+        run: dotnet build --no-restore --configuration Release
+
+      # Step 5: Run XUnit tests (discovering tests in ECommerceBusinessTests)
+      - name: Run tests
+        run: dotnet test --no-build --verbosity normal --configuration Release
+
+  frontend-angular-build:
+    runs-on: ubuntu-latest  # Efficient for Node.js/Angular
+
+    steps:
+      # Step 1: Checkout the repo code
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Step 2: Set up Node.js (use version compatible with your Angular)
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'  # Check package.json for required Node version; adjust (e.g., '18')
+
+      # Step 3: Install Angular dependencies (npm ci for clean install)
+      - name: Install dependencies
+        run: npm ci  # Or 'npm install' if preferred
+        working-directory: ClientApp  # Adjust if Angular is in a different folder (e.g., frontend)
+
+      # Step 4: Build Angular app (production build)
+      - name: Build Angular
+        run: npm run build -- --configuration production  
+        working-directory: ecommerce-ui  
+
+      # Optional Step 5: Run Angular tests (if set up with Karma/Jasmine)
+      # - name: Run Angular tests
+      #   run: npm run test -- --watch=false --browsers=ChromeHeadless
+      #   working-directory: ClientApp
