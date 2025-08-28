@@ -61,20 +61,25 @@ namespace ECommerceDataAccess.ProoductRepository
             throw new NotImplementedException();
         }
 
-        public IEnumerable<ProductDataDto> UpdateProductsStockQuantity(List<ProductDataDto> productDataDtos)
+        public  Task<bool> UpdateProductsStockQuantity(List<ProductDataDto> productDataDtos)
         {
-            List<ProductDataDto> productsUpdated = new List<ProductDataDto>();
-
-            List<Product> products = mapper.Map<List<Product>>(productDataDtos);
-            context.UpdateRange(products);
-
-            for (int i = 0; i < products.Count; i++)
+            try
             {
-                context.Products.Attach(products[i]);
-                context.Entry(products[i]).Property(p => p.StockQuantity).IsModified = true;
+                List<Product> products = mapper.Map<List<Product>>(productDataDtos);
+                context.UpdateRange(products);
+
+                for (int i = 0; i < products.Count; i++)
+                {
+                    context.Products.Attach(products[i]);
+                    context.Entry(products[i]).Property(p => p.StockQuantity).IsModified = true;
+                }
+                return Task.FromResult(true);
+            }
+            catch (Exception)
+            {
+                return Task.FromResult(false);
             }
 
-            return productDataDtos;
         }
     }
 }

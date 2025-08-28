@@ -5,6 +5,7 @@ using ECommerceDataAccessAbstraction;
 using ECommerceDataAccessDTO;
 using ECommerceEvents;
 using ECommerceInfrastructureAbstraction;
+using System.Threading.Tasks;
 
 namespace ECommerceBusinessLogic
 {
@@ -59,7 +60,7 @@ namespace ECommerceBusinessLogic
 
             OrderDataDto orderDataDto = mapper.Map<OrderDataDto>(orderBusinessDto);
             await unitOfWork.OrderRepository.AddOrder(orderDataDto);
-            orderBusinessDto.products = UpdateProductsStockQuantities(orderBusinessDto.products);
+            await UpdateProductsStockQuantities(orderBusinessDto.products);
 
             await unitOfWork.Complete();
 
@@ -101,23 +102,21 @@ namespace ECommerceBusinessLogic
             return totalPrice;
         }
 
-        private List<ProductBusinessDTO> UpdateProductsStockQuantities(List<ProductBusinessDTO> productsBusinessNeedToUpdateStockDto)
+        private async Task<bool> UpdateProductsStockQuantities(List<ProductBusinessDTO> productsBusinessNeedToUpdateStockDto)
         {
+
+
+            for (int i = 0; i < productsBusinessNeedToUpdateStockDto.Count; i++)
+            {
+                productsBusinessNeedToUpdateStockDto[i].StockQuantity = productsBusinessNeedToUpdateStockDto[i].StockQuantity - productsBusinessNeedToUpdateStockDto[i].Quantity;
+            }
             List<ProductDataDto> productDataDtosUpdatedStocks = new List<ProductDataDto>();
 
             mapper.Map(productsBusinessNeedToUpdateStockDto, productDataDtosUpdatedStocks);
 
-            for (int i = 0; i < productsBusinessNeedToUpdateStockDto.Count; i++)
-            {
-                productDataDtosUpdatedStocks.Where(p => p.Id == productsBusinessNeedToUpdateStockDto[i].Id).FirstOrDefault().StockQuantity = productsBusinessNeedToUpdateStockDto[i].StockQuantity - productsBusinessNeedToUpdateStockDto[i].Quantity;
-            }
+            var result = await unitOfWork.ProductRepository.UpdateProductsStockQuantity(productDataDtosUpdatedStocks);
 
-
-            List<ProductDataDto> productDataDtosResult = unitOfWork.ProductRepository.UpdateProductsStockQuantity(productDataDtosUpdatedStocks).ToList();
-
-            List<ProductBusinessDTO> productsUpdatedResult = mapper.Map<List<ProductBusinessDTO>>(productDataDtosResult);
-
-            return productsUpdatedResult;
+            return result;
         }
 
         private  long GenerateOrderNumber()
