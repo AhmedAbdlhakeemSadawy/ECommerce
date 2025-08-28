@@ -38,7 +38,9 @@ The project demonstrates clean architecture .
 +---WebAPI <br>
 &emsp;&emsp;|   +---WebApiAbstraction <br>
 &emsp;&emsp;|   +---ECommwerceWebAPI <br>
-&emsp;&emsp;|   +---ECommwerceWebAPIDto
+&emsp;&emsp;|   +---ECommwerceWebAPIDto <br>
++---ecommerce-ui <br>
+&emsp;&emsp;|   +---src <br>
 
 ---
 
