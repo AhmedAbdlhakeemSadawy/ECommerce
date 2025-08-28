@@ -162,69 +162,39 @@ namespace ECommerceBusinessTests
 
 
 
-        //[Fact]
-        //public void CreateOrder_WithValidProducts_CallAddOrderToSaveInDatabaseSuccess()
-        //{
-        //    var mockProductRepository = new Mock<IProductRepository<ProductDataDto>>();
-        //    var mockOrderRepository = new Mock<IOrderRepository<OrderDataDto>>();
+        [Fact]
+        public async Task CreateOrder_WithValidProducts_CallAddOrderToSaveInDatabaseSuccess()
+        {
+            List<ProductBusinessDTO> productsbusinessNeeedToBeUpdated = new List<ProductBusinessDTO>();
 
-        //    var mockMapper = new Mock<IMapper>();
-
-
-        //    List<ProductBusinessDTO> productsbusinessNeeedToBeUpdated = new List<ProductBusinessDTO>();
-
-        //    productsbusinessNeeedToBeUpdated.Add(new ProductBusinessDTO { Id = 1, Name = "Product One", Quantity = 1 });
-        //    productsbusinessNeeedToBeUpdated.Add(new ProductBusinessDTO { Id = 2, Name = "Product Two", Quantity = 1 });
+            productsbusinessNeeedToBeUpdated.Add(new ProductBusinessDTO { Id = 1, Name = "Product One", Quantity = 2, StockQuantity = 5 });
+            productsbusinessNeeedToBeUpdated.Add(new ProductBusinessDTO { Id = 2, Name = "Product Two", Quantity = 1, StockQuantity = 3 });
 
 
 
-        //    List<ProductDataDto> mappedProductsDatasNeeedToBeUpdated = new List<ProductDataDto>();
+            List<ProductDataDto> mappedProductsDatasNeeedToBeUpdated = new List<ProductDataDto>();
 
-        //    mappedProductsDatasNeeedToBeUpdated.Add(new ProductDataDto { Id = 1, StockQuantity = 1 });
-        //    mappedProductsDatasNeeedToBeUpdated.Add(new ProductDataDto { Id = 2, StockQuantity = 1 });
-
-
-        //    CreateOrderDto createOrderDto = new CreateOrderDto();
-
-        //    createOrderDto.products = productsbusinessNeeedToBeUpdated;
-
-        //    List<ProductDataDto> retrivedDataProducts = new List<ProductDataDto>();
-        //    retrivedDataProducts.Add(new ProductDataDto() { Id = 1, StockQuantity = 2 });
-        //    retrivedDataProducts.Add(new ProductDataDto() { Id = 2, StockQuantity = 4 });
+            mappedProductsDatasNeeedToBeUpdated.Add(new ProductDataDto { Id = 1, StockQuantity = 5 });
+            mappedProductsDatasNeeedToBeUpdated.Add(new ProductDataDto { Id = 2, StockQuantity = 3 });
 
 
-        //    mockProductRepository.Setup(repo => repo.GetListProductsById(new List<int> { 1, 2 })).Returns(retrivedDataProducts);
+            OrderBusinessDTO createOrderDto = new OrderBusinessDTO();
+
+            createOrderDto.products = productsbusinessNeeedToBeUpdated;
+
+            mockMapper.Setup(map => map.Map<OrderDataDto>(createOrderDto)).Returns(new OrderDataDto());
 
 
 
-        //    List<ProductDataDto> updatedDataProducts = new List<ProductDataDto>();
-        //    updatedDataProducts.Add(new ProductDataDto() { Id = 1, StockQuantity = 1 });
-        //    updatedDataProducts.Add(new ProductDataDto() { Id = 2, StockQuantity = 3 });
 
+            OrderManager orderManager = new OrderManager(mockUnitOfWork.Object, mockMapper.Object, mockEventBus.Object);
 
-        //    List<ProductBusinessDTO> updatedBusninessProducts = new List<ProductBusinessDTO>();
-        //    updatedBusninessProducts.Add(new ProductBusinessDTO() { Id = 1, Quantity = 1, Price = 120 });
-        //    updatedBusninessProducts.Add(new ProductBusinessDTO() { Id = 2, Quantity = 3, Price = 80 });
+            OrderBusinessDTO orderDTO = await orderManager.CreateOrder(createOrderDto);
 
-
-
-        //    mockMapper.Setup(map => map.Map<List<ProductDataDto>>(productsbusinessNeeedToBeUpdated)).Returns(mappedProductsDatasNeeedToBeUpdated);
-        //    mockMapper.Setup(map => map.Map<List<ProductBusinessDTO>>(updatedDataProducts)).Returns(updatedBusninessProducts);
-
-        //    mockProductRepository.Setup(repo => repo.UpdateProductsStockQuantity(It.IsAny<List<ProductDataDto>>(), It.IsAny<List<ProductDataDto>>())).Returns(updatedDataProducts);
-
-
-        //    mockMapper.Setup(map => map.Map<List<ProductBusinessDTO>>(updatedDataProducts)).Returns(updatedBusninessProducts);
-
-
-        //    OrderManager orderManager = new OrderManager(mockProductRepository.Object, mockOrderRepository.Object, mockMapper.Object);
-
-        //    OrderBusinessDTO orderDTO = orderManager.CreateOrder(createOrderDto);
+            mockOrderRepository.Verify(repo => repo.AddOrder(It.IsAny<OrderDataDto>()), Times.Once);
 
 
 
-        //    Assert.Equal(OrderStatus.Created, orderDTO.Status);
-
-        //}
+        }
     }
 }
