@@ -47,6 +47,7 @@ The project demonstrates clean architecture .
 - **Entity Framework Core**
 - **SQL Server**
 - **ASP.NET Core Identity**
+- **XUnit** (Unit Test)
 - **AutoMapper**
 - **Swagger** (API documentation)
 - **Azure Communication Service** (Send Notification)
