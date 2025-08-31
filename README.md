@@ -45,7 +45,7 @@ The project demonstrates clean architecture .
 ---
 
 ## ⚙️ Tech Stack
-- **.NET 8** (or your version)
+- **.NET 8** 
 - **Entity Framework Core**
 - **SQL Server**
 - **ASP.NET Core Identity**
@@ -53,4 +53,6 @@ The project demonstrates clean architecture .
 - **AutoMapper**
 - **Swagger** (API documentation)
 - **Azure Communication Service** (Send Notification)
+- **Git Hub Actions** (create pipeline)
+
 
