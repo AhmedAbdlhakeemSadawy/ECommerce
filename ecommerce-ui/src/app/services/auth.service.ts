@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export interface LoginRequest {
   email: string;
@@ -30,7 +31,7 @@ export interface RefreshTokenResponse {
   providedIn: 'root'
 })
 export class AuthService { 
-  private apiUrl = 'https://localhost:5001/api';
+  private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) { }
 
