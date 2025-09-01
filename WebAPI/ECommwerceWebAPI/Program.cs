@@ -200,6 +200,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 app.UseHttpsRedirection();
+app.UseStaticFiles(); 
+app.UseDefaultFiles();
 app.UseCors("AllowAngularApp");
 app.UseAuthentication();
 app.UseAuthorization();
