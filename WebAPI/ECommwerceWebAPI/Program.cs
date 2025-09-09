@@ -137,12 +137,12 @@ builder.Services.AddSingleton(provider => new MapperConfiguration(cfg =>
     cfg.AddProfile(new ProductDataMappingProfile()); // Add your profiles here
 }).CreateMapper());
 builder.Services.AddScoped<IDataSeeder, DataSeeder>();
-
+var UiApplicationUrl = builder.Configuration["UIUrl"];
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngularApp", builder =>
     {
-        builder.WithOrigins("http://localhost:4200") // Your Angular app's URL
+        builder.WithOrigins(UiApplicationUrl) // Your Angular app's URL
                .AllowAnyHeader()
                .AllowAnyMethod();
     });
@@ -200,8 +200,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 app.UseHttpsRedirection();
-app.UseStaticFiles(); 
-app.UseDefaultFiles();
 app.UseCors("AllowAngularApp");
 app.UseAuthentication();
 app.UseAuthorization();
