@@ -14,11 +14,13 @@ namespace ECommwerceWebAPI.Services
     {
         private readonly IMemoryCache memoryCache;
         private readonly IConfiguration configuration;
+        private readonly ILogger<TokenServiceInMemoryCache> logger;
 
-        public TokenServiceInMemoryCache(IMemoryCache memoryCache, IConfiguration configuration)
+        public TokenServiceInMemoryCache(IMemoryCache memoryCache, IConfiguration configuration, ILogger<TokenServiceInMemoryCache> logger)
         {
             this.memoryCache = memoryCache;
             this.configuration = configuration;
+            this.logger = logger;
         }
         public async Task<string> GenerateToken(IEnumerable<Claim> claims)
         {
@@ -91,6 +93,7 @@ namespace ECommwerceWebAPI.Services
         public Task<bool> ValidateAccessToken(string userId, string accessToken)
         {
             var cachedToken = memoryCache.Get(userId + "_AccessToken");
+            logger.LogInformation("Cached Token is: " + cachedToken.ToString());
             return Task.FromResult(cachedToken != null && cachedToken.ToString() == accessToken);
         }
 
