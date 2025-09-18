@@ -26,6 +26,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Serilog;
 using System;
 using System.Text;
 using WebApiAbstraction;
@@ -37,7 +38,24 @@ using WebApiAbstraction.Role_Authuntication;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Host.UseSerilog((context, services, configuration) =>
+{
+    configuration
+        .MinimumLevel.Information() // Set default log level
+        .MinimumLevel.Override("Microsoft", Serilog.Events.LogEventLevel.Warning) // Reduce noise from Microsoft logs
+        .Enrich.FromLogContext() // Add context like request IDs // Log to console for local debugging and Azure Log Stream
+        .WriteTo.File(
+            path: "logs/app-.txt",
+            rollingInterval: RollingInterval.Day, // Daily log files
+            outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level:u3}] {Message:lj} {Properties:j}{NewLine}{Exception}"); // Structured file output
 
+    // Optional: Add Application Insights for Azure (uncomment and add connection string in appsettings.json)
+    /*
+    .WriteTo.ApplicationInsights(
+        services.GetRequiredService<Microsoft.ApplicationInsights.TelemetryClient>(),
+        Serilog.Sinks.ApplicationInsights.TelemetryConverters.TelemetryConverter.Traces)
+    */
+});
 
 var connectionString = builder.Configuration.GetConnectionString("ECommerceConnection");
 builder.Services.AddECommerceDataAccess(connectionString);
@@ -149,7 +167,6 @@ builder.Services.AddCors(options =>
 
 });
 
-
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("UserPolicy", policy =>
@@ -205,6 +222,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.UseMiddleware<AccessTokenValidationMiddleware>();
 app.MapControllers();
+app.UseSerilogRequestLogging();
 
 using (var scope = app.Services.CreateScope())
 {
