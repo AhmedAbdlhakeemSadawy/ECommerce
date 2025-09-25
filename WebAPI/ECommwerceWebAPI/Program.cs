@@ -43,7 +43,8 @@ builder.Host.UseSerilog((context, services, configuration) =>
     configuration
         .MinimumLevel.Information() // Set default log level
         .MinimumLevel.Override("Microsoft", Serilog.Events.LogEventLevel.Warning) // Reduce noise from Microsoft logs
-        .Enrich.FromLogContext() // Add context like request IDs // Log to console for local debugging and Azure Log Stream
+        .Enrich.FromLogContext()
+        .WriteTo.Console()// Add context like request IDs // Log to console for local debugging and Azure Log Stream
         .WriteTo.File(
             path: "logs/app-.txt",
             rollingInterval: RollingInterval.Day, // Daily log files
@@ -61,7 +62,6 @@ var connectionString = builder.Configuration.GetConnectionString("ECommerceConne
 builder.Services.AddECommerceDataAccess(connectionString);
 builder.Services.RegisterBusinessServices();
 //builder.Services.AddScoped<ITokenService, TokenService>();
-builder.Services.AddScoped<ITokenService, TokenServiceInMemoryCache>();
 builder.Services.AddScoped<IEmailService, AzureCommunicationEmailService>();
 builder.Services.AddScoped<IUserRoleService, UserRoleService>();
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
@@ -128,12 +128,28 @@ builder.Services.AddAuthentication(options =>
     });
 #endregion
 
-//builder.Services.AddStackExchangeRedisCache(options =>
-//{
-//    options.Configuration = "localhost:6379"; // Your Redis connection string
-//});
 
-builder.Services.AddMemoryCache();
+
+if (builder.Environment.IsProduction())
+{
+    builder.Services.AddSingleton<ITokenService, TokenServiceRedis>();
+
+    // Redis caching for Production
+    builder.Services.AddStackExchangeRedisCache(options =>
+    {
+        options.Configuration = builder.Configuration.GetValue<string>("Redis:ConnectionString") ?? "localhost:6379";
+        // Optional: If you set a password on the sidecar, add it here, e.g., ",password=yourpassword"
+    });
+}
+else
+{
+    builder.Services.AddScoped<ITokenService, TokenServiceInMemoryCache>();
+
+    // In-memory caching for Development/others
+    builder.Services.AddMemoryCache();
+}
+
+
 builder.Services.AddControllers();
 builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
 builder.Services.AddValidatorsFromAssemblyContaining<OrderRequestDtoValidator>();
@@ -162,7 +178,8 @@ builder.Services.AddCors(options =>
     {
         builder.WithOrigins(UiApplicationUrl) // Your Angular app's URL
                .AllowAnyHeader()
-               .AllowAnyMethod();
+               .AllowAnyMethod()
+               .AllowCredentials();
     });
 
 });
@@ -216,6 +233,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseExceptionMiddleware();
 app.UseHttpsRedirection();
 app.UseCors("AllowAngularApp");
 app.UseAuthentication();
