@@ -8,10 +8,12 @@ namespace ECommwerceWebAPI.Middlewares
     public class AccessTokenValidationMiddleware : IMiddleware
     {
         private readonly ITokenService tokenService;
+        private readonly ILogger<AccessTokenValidationMiddleware> logger;
 
-        public AccessTokenValidationMiddleware( ITokenService tokenService)
+        public AccessTokenValidationMiddleware( ITokenService tokenService, ILogger<AccessTokenValidationMiddleware> logger)
         {
             this.tokenService = tokenService;
+            this.logger = logger;
         }
 
 
@@ -24,6 +26,11 @@ namespace ECommwerceWebAPI.Middlewares
             {
                 var userId = context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
                 var token = context.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+
+                logger.LogInformation("UserID  is: " + userId.ToString());
+
+                logger.LogInformation("Cached Token is: " + token.ToString());
+
 
                 if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(token) ||
                     !await tokenService.ValidateAccessToken(userId, token))

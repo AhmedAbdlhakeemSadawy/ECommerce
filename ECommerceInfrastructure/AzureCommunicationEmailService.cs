@@ -42,7 +42,7 @@ namespace ECommerceInfrastructure
             {
                 Html = content
             };
-            var sendResult = await emailClient.SendAsync(WaitUntil.Completed, new EmailMessage(azureEmailCommunicationSettings.EmailFrom, toEmail, emailContent));
+            //var sendResult = await emailClient.SendAsync(WaitUntil.Completed, new EmailMessage(azureEmailCommunicationSettings.EmailFrom, toEmail, emailContent));
         }
     }
 }
