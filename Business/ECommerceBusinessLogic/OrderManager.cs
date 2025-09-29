@@ -66,7 +66,7 @@ namespace ECommerceBusinessLogic
 
             OrderCreatedEvent orderCreatedEvent = new OrderCreatedEvent(orderBusinessDto.Id,orderBusinessDto.OrderNumber ,orderBusinessDto.TotalPrice,orderBusinessDto.CustomerEmail);
 
-            eventBus.Publish(orderCreatedEvent);
+           // eventBus.Publish(orderCreatedEvent);
             return orderBusinessDto;
     
         }
