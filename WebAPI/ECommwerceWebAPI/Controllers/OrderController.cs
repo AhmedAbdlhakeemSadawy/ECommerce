@@ -33,8 +33,7 @@ namespace ECommwerceWebAPI.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            try
-            {
+           
                 string? customerEmail = HttpContext.User.FindFirst(ClaimTypes.Email)?.Value;
 
                 OrderBusinessDTO orderBusinessDTO = mapper.Map<OrderBusinessDTO>(orderRequestDto);
@@ -43,11 +42,8 @@ namespace ECommwerceWebAPI.Controllers
                 var result = await orderManager.CreateOrder(orderBusinessDTO);
 
                 return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return  StatusCode(500, new { message = ex.Message });
-            }
+            
+  
         }
 
         [HttpGet("data")]
