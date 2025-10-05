@@ -26,7 +26,7 @@ namespace ECommerceBusinessLogic
             
             if (orderBusinessDto.products == null || orderBusinessDto.products.Count == 0)
             {
-                throw new Exception("Order Should contain at least one product");
+                throw new BusinessException("Order Should contain at least one product");
             }
 
 
@@ -49,7 +49,7 @@ namespace ECommerceBusinessLogic
 
             if (! CheckAvailability(orderBusinessDto.products, reterivedProdcutsData))
             {
-                throw new Exception("Some of your products are not available");
+                throw new BusinessException("Some of your products are not available");
             }
   
 
