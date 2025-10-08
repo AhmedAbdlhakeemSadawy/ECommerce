@@ -17,7 +17,7 @@ namespace ECommerceInfrastructure
         {
             this.serviceProvider = serviceProvider;
         }
-        public async void Publish<T>(T domainEvent) where T : IDomainEvent
+        public async Task Publish<T>(T domainEvent) where T : IDomainEvent
         {
             using var scope = serviceProvider.CreateScope();
             var handlers = scope.ServiceProvider.GetServices<IDomainEventHandler<T>>();
