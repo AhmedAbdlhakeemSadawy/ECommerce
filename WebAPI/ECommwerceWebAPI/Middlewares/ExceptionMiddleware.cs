@@ -1,60 +1,66 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Threading.Tasks;
+﻿using ECommerceBusinessLogic;
+using System.Text.Json;
 
-public class ExceptionMiddleware
+namespace ECommwerceWebAPI.Middlewares
 {
-    private readonly RequestDelegate _next;
-    private readonly ILogger<ExceptionMiddleware> _logger;
-
-    public ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddleware> logger)
+    public class ExceptionMiddleware
     {
-        _next = next;
-        _logger = logger;
-    }
-
-    public async Task InvokeAsync(HttpContext context)
-    {
-        try
+        private readonly RequestDelegate next;
+        private readonly ILogger<ExceptionMiddleware> logger;
+        public ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddleware> logger)
         {
-            await _next(context);
+            this.next = next;
+            this.logger = logger;
         }
-        catch (Exception ex)
+
+        public async Task InvokeAsync(HttpContext httpContext)
         {
-            // Log the exception with details
-            _logger.LogError(ex, "An unhandled exception occurred. Request: {Method} {Path}",
-                context.Request.Method, context.Request.Path);
-
-            // Handle the exception (customize as needed)
-           // await HandleExceptionAsync(context, ex);
+            try
+            {
+                await next(httpContext);
+            }
+            catch (Exception ex)
+            {
+                await HandleExceptionAsync(httpContext, ex);
+            }
         }
-    }
 
-    private Task HandleExceptionAsync(HttpContext context, Exception exception)
-    {
+        private async Task HandleExceptionAsync(HttpContext context, Exception exception)
+        {
         // Set response status code and content type
-        context.Response.ContentType = "application/json";
+            context.Response.ContentType = "application/json";
         context.Response.StatusCode = StatusCodes.Status500InternalServerError;
 
-        // Customize error response
-        var response = new
-        {
-            StatusCode = context.Response.StatusCode,
-            Message = "An unexpected error occurred. Please try again later.",
-            // Include exception details in development only
-            // DetailedError = env.IsDevelopment() ? exception.Message : null
-        };
+            var (statusCode, errorResponse) = exception switch
+            {
+                BusinessException be => (
+                    StatusCodes.Status400BadRequest,
+                    new ErrorResponse { Error = be.Message, ErrorCode = be.ErrorCode }
+                ),
+                _ => (
+                    StatusCodes.Status500InternalServerError,
+                    new ErrorResponse { Error = "An unexpected error occurred.", ErrorCode = "INTERNAL_SERVER_ERROR" }
+                )
+            };
 
-        return context.Response.WriteAsJsonAsync(response);
+            // Log all exceptions with details (safe since this is server-side)
+            if (exception is BusinessException businessEx)
+            {
+                logger.LogInformation("Business exception: {Message}, Code: {ErrorCode}", businessEx.Message, businessEx.ErrorCode);
+            }
+            else
+            {
+                logger.LogError(exception, "Unexpected error occurred.");
+            }
+
+            context.Response.StatusCode = statusCode;
+            await context.Response.WriteAsync(JsonSerializer.Serialize(errorResponse));
+        }
     }
-}
 
-// Extension method to register the middleware
-public static class ExceptionMiddlewareExtensions
-{
-    public static IApplicationBuilder UseExceptionMiddleware(this IApplicationBuilder builder)
+    public class ErrorResponse
     {
-        return builder.UseMiddleware<ExceptionMiddleware>();
+        public string Error { get; set; }
+        public string ErrorCode { get; set; }
     }
 }

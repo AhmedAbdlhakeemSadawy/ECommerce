@@ -37,7 +37,7 @@ namespace ECommerceBusinessTests
             OrderManager orderManager = new OrderManager(mockUnitOfWork.Object,mockMapper.Object, mockEventBus.Object);
 
 
-            var exception = await Assert.ThrowsAsync<Exception>(async () => await orderManager.CreateOrder(createOrderDto));
+            var exception = await Assert.ThrowsAsync<BusinessException>(async () => await orderManager.CreateOrder(createOrderDto));
             Assert.Equal("Order Should contain at least one product", exception.Message);
         }
 
@@ -63,7 +63,7 @@ namespace ECommerceBusinessTests
 
             OrderManager orderManager = new OrderManager(mockUnitOfWork.Object, mockMapper.Object, mockEventBus.Object);
 
-            var exception = await Assert.ThrowsAsync<Exception>(async () => await orderManager.CreateOrder(createOrderDto));
+            var exception = await Assert.ThrowsAsync<BusinessException>(async () => await orderManager.CreateOrder(createOrderDto));
             Assert.Equal("Some of your products are not available", exception.Message);
         }
 
