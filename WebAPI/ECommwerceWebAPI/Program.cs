@@ -11,6 +11,7 @@ using ECommerceEvents;
 using ECommerceInfrastructure;
 using ECommerceInfrastructureAbstraction;
 using ECommerceWebApiDto.Validators;
+using ECommwerceWebAPI.Filters;
 using ECommwerceWebAPI.Mapping_Profiles;
 using ECommwerceWebAPI.Middlewares;
 using ECommwerceWebAPI.Role_Requirements_Authorization;
@@ -24,6 +25,7 @@ using Microsoft.EntityFrameworkCore;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
@@ -150,7 +152,8 @@ else
 }
 
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(options =>
+    options.Filters.Add<SuccessResponseFilter>());
 builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
 builder.Services.AddValidatorsFromAssemblyContaining<OrderRequestDtoValidator>();
 builder.Services.AddScoped<AccessTokenValidationMiddleware>();
