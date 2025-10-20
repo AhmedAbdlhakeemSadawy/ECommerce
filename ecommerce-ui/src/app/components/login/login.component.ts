@@ -39,7 +39,6 @@ export class LoginComponent {
       
       this.authService.login(credentials).subscribe({
         next: (response) => {
-          console.log(response);
           this.authService.setToken(response.accessToken);
           this.authService.setRefreshToken(response.refreshToken);
          // this.message = response.message;

@@ -43,7 +43,6 @@ export class OrderService {
   }
 
   addOrder(order: OrderRequest): Observable<any> {
-    console.log(order);
     return this.http.post(`${this.apiUrl}/order`, order);
   }
 } 

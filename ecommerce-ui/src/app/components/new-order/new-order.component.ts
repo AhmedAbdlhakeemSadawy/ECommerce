@@ -96,11 +96,9 @@ export class NewOrderComponent implements OnInit {
           }, 2000);
         },
         error: (response) => {
-          console.error('Error creating order:', response);
-
           this.message = 'Error creating order: ' + (response?.error.Message || 'Unknown error');
           this.isSuccess = false;
-          console.error('Error creating order:', response);
+     
         }
       });
     }
