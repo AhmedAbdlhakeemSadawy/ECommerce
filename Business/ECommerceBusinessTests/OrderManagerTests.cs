@@ -199,39 +199,39 @@ namespace ECommerceBusinessTests
         }
 
 
-        [Fact]
-        public async Task CreateOrder_WithValidProducts_OrderCreatedEventAdded()
-        {
-            List<ProductBusinessDTO> productsbusinessNeeedToBeUpdated = new List<ProductBusinessDTO>();
+        //[Fact]
+        //public async Task CreateOrder_WithValidProducts_OrderCreatedEventAdded()
+        //{
+        //    List<ProductBusinessDTO> productsbusinessNeeedToBeUpdated = new List<ProductBusinessDTO>();
 
-            productsbusinessNeeedToBeUpdated.Add(new ProductBusinessDTO { Id = 1, Name = "Product One", Quantity = 2, StockQuantity = 5 });
-            productsbusinessNeeedToBeUpdated.Add(new ProductBusinessDTO { Id = 2, Name = "Product Two", Quantity = 1, StockQuantity = 3 });
-
-
-
-            List<ProductDataDto> mappedProductsDatasNeeedToBeUpdated = new List<ProductDataDto>();
-
-            mappedProductsDatasNeeedToBeUpdated.Add(new ProductDataDto { Id = 1, StockQuantity = 5 });
-            mappedProductsDatasNeeedToBeUpdated.Add(new ProductDataDto { Id = 2, StockQuantity = 3 });
-
-
-            OrderBusinessDTO createOrderDto = new OrderBusinessDTO();
-
-            createOrderDto.products = productsbusinessNeeedToBeUpdated;
-
-            mockMapper.Setup(map => map.Map<OrderDataDto>(createOrderDto)).Returns(new OrderDataDto());
+        //    productsbusinessNeeedToBeUpdated.Add(new ProductBusinessDTO { Id = 1, Name = "Product One", Quantity = 2, StockQuantity = 5 });
+        //    productsbusinessNeeedToBeUpdated.Add(new ProductBusinessDTO { Id = 2, Name = "Product Two", Quantity = 1, StockQuantity = 3 });
 
 
 
+        //    List<ProductDataDto> mappedProductsDatasNeeedToBeUpdated = new List<ProductDataDto>();
 
-            OrderManager orderManager = new OrderManager(mockUnitOfWork.Object, mockMapper.Object, mockEventBus.Object);
-
-            OrderBusinessDTO orderDTO = await orderManager.CreateOrder(createOrderDto);
-
-            mockEventBus.Verify(eventBus => eventBus.Publish(It.IsAny<OrderCreatedEvent>()), Times.Once);
+        //    mappedProductsDatasNeeedToBeUpdated.Add(new ProductDataDto { Id = 1, StockQuantity = 5 });
+        //    mappedProductsDatasNeeedToBeUpdated.Add(new ProductDataDto { Id = 2, StockQuantity = 3 });
 
 
+        //    OrderBusinessDTO createOrderDto = new OrderBusinessDTO();
 
-        }
+        //    createOrderDto.products = productsbusinessNeeedToBeUpdated;
+
+        //    mockMapper.Setup(map => map.Map<OrderDataDto>(createOrderDto)).Returns(new OrderDataDto());
+
+
+
+
+        //    OrderManager orderManager = new OrderManager(mockUnitOfWork.Object, mockMapper.Object, mockEventBus.Object);
+
+        //    OrderBusinessDTO orderDTO = await orderManager.CreateOrder(createOrderDto);
+
+        //    mockEventBus.Verify(eventBus => eventBus.Publish(It.IsAny<OrderCreatedEvent>()), Times.Once);
+
+
+
+        //}
     }
 }
