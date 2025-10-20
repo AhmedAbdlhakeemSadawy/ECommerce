@@ -35,11 +35,11 @@ namespace ECommwerceWebAPI.Middlewares
             {
                 BusinessException be => (
                     StatusCodes.Status400BadRequest,
-                    new ErrorResponse { Error = be.Message, ErrorCode = be.ErrorCode }
+                    new ErrorResponse { Message = be.Message, ErrorCode = be.ErrorCode }
                 ),
                 _ => (
                     StatusCodes.Status500InternalServerError,
-                    new ErrorResponse { Error = "An unexpected error occurred.", ErrorCode = "INTERNAL_SERVER_ERROR" }
+                    new ErrorResponse { Message = "An unexpected error occurred.", ErrorCode = "INTERNAL_SERVER_ERROR" }
                 )
             };
 
@@ -60,7 +60,7 @@ namespace ECommwerceWebAPI.Middlewares
 
     public class ErrorResponse
     {
-        public string Error { get; set; }
+        public string Message { get; set; }
         public string ErrorCode { get; set; }
     }
 }
