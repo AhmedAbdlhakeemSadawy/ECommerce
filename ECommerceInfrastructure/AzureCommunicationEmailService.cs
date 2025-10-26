@@ -3,6 +3,7 @@ using Azure.Communication.Email;
 using Azure.Core.Diagnostics;
 using Azure.Identity;
 using ECommerceInfrastructureAbstraction;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.VisualBasic.FileIO;
 using System.Diagnostics.Tracing;
@@ -14,6 +15,7 @@ namespace ECommerceInfrastructure
     public class AzureCommunicationEmailService : IEmailService
     {
         private readonly AzureEmailCommunicationSettings azureEmailCommunicationSettings;
+
 
         private readonly EmailClient emailClient;
         public AzureCommunicationEmailService(IOptions<AzureEmailCommunicationSettings> options)
@@ -27,14 +29,13 @@ namespace ECommerceInfrastructure
             var credential = new DefaultAzureCredential(new DefaultAzureCredentialOptions
             {
                 ExcludeEnvironmentCredential = true,
-                ExcludeManagedIdentityCredential = true,
+               // ExcludeManagedIdentityCredential = true,
                 ExcludeSharedTokenCacheCredential = true,
-                //ExcludeAzureCliCredential = true,
+                ExcludeAzureCliCredential = true,
                 ExcludeInteractiveBrowserCredential = true,
                 ExcludeAzurePowerShellCredential = true,
                 ExcludeVisualStudioCredential = true,
             });
-
 
             var emailClient = new EmailClient(new Uri(azureEmailCommunicationSettings.UrI), credential);
 
@@ -42,7 +43,7 @@ namespace ECommerceInfrastructure
             {
                 Html = content
             };
-            //var sendResult = await emailClient.SendAsync(WaitUntil.Completed, new EmailMessage(azureEmailCommunicationSettings.EmailFrom, toEmail, emailContent));
+            var sendResult = await emailClient.SendAsync(WaitUntil.Completed, new EmailMessage(azureEmailCommunicationSettings.EmailFrom, toEmail, emailContent));
         }
     }
 }
