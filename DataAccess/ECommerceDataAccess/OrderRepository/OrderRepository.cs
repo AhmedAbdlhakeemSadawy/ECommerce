@@ -3,6 +3,7 @@ using ECommerceDataAccess.DatabaseContextConfiguration;
 using ECommerceDataAccess.DataEntities;
 using ECommerceDataAccessAbstraction;
 using ECommerceDataAccessDTO;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,9 +39,13 @@ namespace ECommerceDataAccess.OrderRepository
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<OrderDataDto>> GetAllAsync()
+        public async Task<IEnumerable<OrderDataDto>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            var orders = await context.Orders.ToListAsync();
+            List<OrderDataDto> orderDataDtos = new List<OrderDataDto>();
+
+            mapper.Map(orders, orderDataDtos);
+            return orderDataDtos;
         }
 
         public Task<OrderDataDto> GetByIdAsync(int id)
