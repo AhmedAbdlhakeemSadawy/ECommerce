@@ -125,5 +125,10 @@ namespace ECommerceBusinessLogic
             long random = new Random().Next(1000); // Add small random component
             return (timestamp + random) % 100000000;
         }
+
+        public Task<List<OrderBusinessDTO>> GetAllOrders()
+        {
+            
+        }
     }
 }
