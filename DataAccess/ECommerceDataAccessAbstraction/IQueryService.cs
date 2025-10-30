@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace ECommerceDataAccessAbstraction
 {
-    public interface IQueryService
+    public interface IQueryService<T> where T : class
     {
+        Task<IEnumerable<T>> GetAllAsync();
     }
 }
