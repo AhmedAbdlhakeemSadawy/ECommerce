@@ -46,6 +46,14 @@ namespace ECommwerceWebAPI.Controllers
   
         }
 
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetOrders()
+        {
+            var result = await orderManager.GetAllOrders();
+            return Ok(result);
+        }
+
         [HttpGet("data")]
         [Authorize(Policy = "UserPolicy")]
         public IActionResult GetSecureData()
