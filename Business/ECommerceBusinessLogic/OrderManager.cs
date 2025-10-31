@@ -126,9 +126,15 @@ namespace ECommerceBusinessLogic
             return (timestamp + random) % 100000000;
         }
 
-        public Task<List<OrderBusinessDTO>> GetAllOrders()
+        public async Task<List<OrderBusinessDTO>> GetAllOrders()
         {
-            
+            var orders= await unitOfWork.OrderRepository.GetAllAsync();
+            List<OrderBusinessDTO> orderBusinessDTOs = new List<OrderBusinessDTO>();
+
+            mapper.Map(orders, orderBusinessDTOs);
+
+            return orderBusinessDTOs;
+
         }
     }
 }
