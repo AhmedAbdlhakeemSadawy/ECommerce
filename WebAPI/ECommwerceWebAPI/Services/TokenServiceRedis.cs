@@ -16,13 +16,11 @@ namespace ECommwerceWebAPI.Services
 
         private readonly IConfiguration configuration;
         private readonly IDistributedCache cache;
-        private readonly ILogger<TokenServiceRedis> logger;
 
-        public TokenServiceRedis(IConfiguration configuration, IDistributedCache cache, ILogger<TokenServiceRedis> logger)
+        public TokenServiceRedis(IConfiguration configuration, IDistributedCache cache)
         {
             this.configuration = configuration;
             this.cache = cache;
-            this.logger = logger;
         }
 
 
@@ -63,9 +61,6 @@ namespace ECommwerceWebAPI.Services
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
             var durationInMinutes = TimeZoneInfo.ConvertTime(DateTime.UtcNow, timeZoneInfo).AddMinutes(int.Parse(jwtSettings["DurationInMinutes"])).Minute;
 
-            logger.LogInformation("durationInMinutes in config is : " + int.Parse(jwtSettings["DurationInMinutes"]).ToString());
-
-            logger.LogInformation("durationInMinutes: " + durationInMinutes.ToString());
 
 
             var token = new JwtSecurityToken(
@@ -78,8 +73,6 @@ namespace ECommwerceWebAPI.Services
             var accessToken = new JwtSecurityTokenHandler().WriteToken(token);
 
             var expiryTime = TimeSpan.FromDays(1);
-
-            logger.LogInformation("expiry Time is : " + expiryTime.ToString());
 
             await cache.SetStringAsync(userId + "_AccessToken", accessToken, new DistributedCacheEntryOptions
            {
@@ -121,9 +114,6 @@ namespace ECommwerceWebAPI.Services
         {
            
             var cachedToken = await cache.GetStringAsync(userId + "_AccessToken");
-            logger.LogInformation("Try to get Cached token");
-
-            logger.LogInformation("Cached Token is: " + cachedToken.ToString());
 
             return cachedToken == accessToken;
         }
