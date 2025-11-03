@@ -1,5 +1,6 @@
 ﻿using Azure.Core;
 using ECommerceWebApiDto;
+using ECommwerceWebAPI.Attributes;
 using ECommwerceWebAPI.Models;
 using ECommwerceWebAPI.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -14,6 +15,7 @@ namespace ECommwerceWebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [SkipSuccessResponseAttribute]
     public class AccountController : ControllerBase
     {
         private readonly UserManager<IdentityUser> userManager;

@@ -90,16 +90,15 @@ export class NewOrderComponent implements OnInit {
         next: (response) => {
           this.message = response.message;
           this.isSuccess = true;
-          console.log('Order created successfully:', response);
           // Navigate to orders list after a short delay
           setTimeout(() => {
             this.router.navigate(['/orders']);
           }, 2000);
         },
-        error: (error) => {
-          this.message = 'Error creating order: ' + (error.error?.message || 'Unknown error');
+        error: (response) => {
+          this.message = 'Error creating order: ' + (response?.error.Message || 'Unknown error');
           this.isSuccess = false;
-          console.error('Error creating order:', error);
+     
         }
       });
     }

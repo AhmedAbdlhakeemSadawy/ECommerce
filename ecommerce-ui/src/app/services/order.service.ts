@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export interface Product {
   id: number;
@@ -26,7 +27,7 @@ export interface OrderRequest {
   providedIn: 'root'
 }) 
 export class OrderService {
-  private apiUrl = 'https://localhost:5001/api'; // Update this with your actual API URL
+  private apiUrl = environment.apiUrl; // Update this with your actual API URL
 
   // Static product list for demonstration
   readonly products: Product[] = [
@@ -42,7 +43,6 @@ export class OrderService {
   }
 
   addOrder(order: OrderRequest): Observable<any> {
-    console.log(order);
     return this.http.post(`${this.apiUrl}/order`, order);
   }
 } 
