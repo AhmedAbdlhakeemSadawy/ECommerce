@@ -26,19 +26,5 @@ namespace ECommerceInfrastructure
                 await handler.Handle(domainEvent);
             }
         }
-
-        public void Subscribe<T, TH>()
-            where T : IDomainEvent
-            where TH : IDomainEventHandler<T>
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Unsubscribe<T, TH>()
-            where T : IDomainEvent
-            where TH : IDomainEventHandler<T>
-        {
-            throw new NotImplementedException();
-        }
     }
 }
