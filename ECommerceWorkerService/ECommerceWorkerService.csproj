@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>dotnet-ECommerceWorkerService-09046eee-c5b7-4190-9394-bf2aadd72022</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Azure.Storage.Queues" Version="12.24.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="9.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Business\ECommerceBusinessAbstractions\ECommerceBusinessAbstractions.csproj" />
+    <ProjectReference Include="..\Business\ECommerceEvents\ECommerceEvents.csproj" />
+    <ProjectReference Include="..\ECommerceInfrastructureAbstraction\ECommerceInfrastructureAbstraction\ECommerceInfrastructureAbstraction.csproj" />
+    <ProjectReference Include="..\ECommerceInfrastructure\ECommerceInfrastructure.csproj" />
+  </ItemGroup>
+</Project>
