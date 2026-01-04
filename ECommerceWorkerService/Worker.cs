@@ -61,7 +61,7 @@ namespace ECommerceWorkerService
                             .Handle((dynamic)orderCreatedEvent);
                     }
 
-
+                    await queueClient.DeleteMessageAsync(message.MessageId, message.PopReceipt);
                 }
                 catch (Exception exception)
                 {
