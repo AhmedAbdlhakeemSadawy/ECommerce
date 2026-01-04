@@ -26,18 +26,10 @@ namespace ECommerceInfrastructure
 
         public async Task SendEmailAsync( string toEmail, string subject, string content)
         {
-            var credential = new DefaultAzureCredential(new DefaultAzureCredentialOptions
-            {
-                ExcludeEnvironmentCredential = true,
-               // ExcludeManagedIdentityCredential = true,
-                ExcludeSharedTokenCacheCredential = true,
-                ExcludeAzureCliCredential = true,
-                ExcludeInteractiveBrowserCredential = true,
-                ExcludeAzurePowerShellCredential = true,
-                ExcludeVisualStudioCredential = true,
-            });
+            var credential = new DefaultAzureCredential();
 
-            var emailClient = new EmailClient(new Uri(azureEmailCommunicationSettings.UrI), credential);
+            var emailClient = new EmailClient(new Uri(azureEmailCommunicationSettings.Uri), credential);
+
 
             var emailContent = new EmailContent(subject)
             {
