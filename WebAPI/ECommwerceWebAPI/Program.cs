@@ -18,7 +18,6 @@ using ECommwerceWebAPI.Role_Requirements_Authorization;
 using ECommwerceWebAPI.Services;
 using FluentValidation;
 using FluentValidation.AspNetCore;
-using Hangfire;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -227,12 +226,7 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-builder.Services.AddHangfire(config =>
-{
-    config.UseSqlServerStorage(
-        builder.Configuration.GetSection("BackgorundConnectionStrings")
-                                     .GetValue<string>("HangfireDb"));
-});
+
 
 var app = builder.Build();
 
@@ -247,7 +241,6 @@ app.UseCors("AllowAngularApp");
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseMiddleware<AccessTokenValidationMiddleware>();
-app.UseHangfireDashboard("/hangfire");
 app.MapControllers();
 
 using (var scope = app.Services.CreateScope())
