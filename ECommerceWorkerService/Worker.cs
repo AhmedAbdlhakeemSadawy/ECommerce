@@ -2,7 +2,6 @@ using Azure.Storage.Queues;
 using ECommerceBusinessAbstractions;
 using ECommerceEvents;
 using ECommerceInfrastructure;
-using Hangfire;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Text;
@@ -58,14 +57,17 @@ namespace ECommerceWorkerService
 
                     foreach (var handler in handlers)
                     {
-                        BackgroundJob.Enqueue<OrderCreatedEmailSendEventHandler> (
-                            handler => handler.Handle(orderCreatedEvent));
+                        await ((dynamic)handler)
+                            .Handle((dynamic)orderCreatedEvent);
                     }
-            }
+
+
+                }
                 catch (Exception exception)
                 {
-                logger.LogError(exception, "Unexpected error occurred.");
-            }
+                  logger.LogError(exception, "Unexpected error occurred.");
+                    throw exception;
+                }
 
 
 

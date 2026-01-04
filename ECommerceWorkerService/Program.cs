@@ -3,7 +3,6 @@ using ECommerceEvents;
 using ECommerceInfrastructure;
 using ECommerceInfrastructureAbstraction;
 using ECommerceWorkerService;
-using Hangfire;
 
 //var builder = Host.CreateApplicationBuilder(args);
 
@@ -19,15 +18,12 @@ var host = Host.CreateDefaultBuilder(args)
         services.AddScoped<IEmailService, AzureCommunicationEmailService>();
         services.AddScoped<IDomainEventHandler<OrderCreatedEvent>, OrderCreatedEmailSendEventHandler>();
 
-        services.AddHangfire(config =>
-        {
-            config.UseSqlServerStorage(
-                context.Configuration.GetSection("BackgorundConnectionStrings")
-                                     .GetValue<string>("HangfireDb"));
-        });
+
+        services.Configure<AzureEmailCommunicationSettings>(context.Configuration.GetSection("AzureEmailCommunicationSettings"));
+
         // Background service
         services.AddHostedService<Worker>();
-        services.AddHangfireServer();
+
         //services.Configure<HostOptions>(options =>
         //{
         //    options.BackgroundServiceExceptionBehavior = BackgroundServiceExceptionBehavior.Ignore;
