@@ -158,7 +158,8 @@ builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsi
 builder.Services.AddValidatorsFromAssemblyContaining<OrderRequestDtoValidator>();
 builder.Services.AddScoped<AccessTokenValidationMiddleware>();
 builder.Services.Configure<AzureEmailCommunicationSettings>(builder.Configuration.GetSection("AzureEmailCommunicationSettings"));
-builder.Services.AddSingleton<IEventBus, InMemoryEventBus>();
+//builder.Services.AddSingleton<IEventBus, InMemoryEventBus>();
+builder.Services.AddSingleton<IEventBus, AzureQueueService>();
 
 builder.Services.AddScoped<IDomainEventHandler<OrderCreatedEvent>, OrderCreatedEmailSendEventHandler>();
 
@@ -224,6 +225,8 @@ builder.Services.AddSwaggerGen(options =>
         }
     });
 });
+
+
 
 var app = builder.Build();
 

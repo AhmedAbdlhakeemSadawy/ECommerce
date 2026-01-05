@@ -10,13 +10,5 @@ namespace ECommerceInfrastructureAbstraction
     public interface IEventBus
     {
         Task Publish<T>(T domainEvent) where T : IDomainEvent;
-
-        void Subscribe<T, TH>()
-        where T : IDomainEvent
-        where TH : IDomainEventHandler<T>;
-
-        void Unsubscribe<T, TH>()
-        where TH : IDomainEventHandler<T>
-        where T : IDomainEvent;
     }
 }

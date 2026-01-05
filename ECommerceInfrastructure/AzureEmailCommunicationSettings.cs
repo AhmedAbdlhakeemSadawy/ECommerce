@@ -8,7 +8,7 @@ namespace ECommerceInfrastructure
 {
     public class AzureEmailCommunicationSettings
     {
-        public string UrI { get; set; }
+        public string Uri { get; set; }
         public string EmailFrom { get; set; }
     }
 }
