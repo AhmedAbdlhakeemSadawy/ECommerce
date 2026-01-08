@@ -51,7 +51,8 @@ namespace ECommerceOrderAzureFunction
             }
             catch (Exception exception)
             {
-                logger.LogError(exception, "Unexpected error occurred.");
+                logger.LogError(exception.Message, "Unexpected error occurred.");
+                throw ;
             }
 
             
