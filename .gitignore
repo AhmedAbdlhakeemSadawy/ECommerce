@@ -6,6 +6,7 @@
 # Visual Studio Azure ARM profiles
 *.arm.json
 *Settings.job
+serviceDependencies.*.json
 .vscode/
 # User-specific files
 *.rsuser
