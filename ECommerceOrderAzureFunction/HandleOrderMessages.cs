@@ -29,8 +29,6 @@ namespace ECommerceOrderAzureFunction
 
             try
             {
-               // var json = Encoding.UTF8.GetString(Convert.FromBase64String(message.MessageText));
-
                 var orderCreatedEvent = JsonSerializer.Deserialize<OrderCreatedEvent>(message.MessageText)!;
 
                 var eventType = orderCreatedEvent.GetType();
