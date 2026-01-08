@@ -54,5 +54,7 @@ The project demonstrates clean architecture .
 - **Swagger** (API documentation)
 - **Azure Communication Service** (Send Notification)
 - **Git Hub Actions** (create pipeline)
+- **Azure Storage Queue** (Store event messages)
+- **Azure Function** (Queue trigger to handle messages stored in storage Queue)
 
 
