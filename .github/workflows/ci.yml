@@ -1,5 +1,8 @@
 name: CI - Build and Test (.NET + Angular)
 
+permissions:
+  contents: read
+
 # Triggers: Run on pushes to any branch and any pull request
 on:
   push:
