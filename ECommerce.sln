@@ -38,6 +38,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECommerceWorkerService", "E
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECommerceOrderAzureFunction", "ECommerceOrderAzureFunction\ECommerceOrderAzureFunction.csproj", "{7A8337C8-8606-4C04-9BAA-15197249728B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECommerceSonarRedabilityFixUsingOllama", "ECommerceSonarRedabilityFixUsingOllama\ECommerceSonarRedabilityFixUsingOllama.csproj", "{AA2F56A7-269F-4110-9500-CE320B06777B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -104,6 +106,10 @@ Global
 		{7A8337C8-8606-4C04-9BAA-15197249728B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7A8337C8-8606-4C04-9BAA-15197249728B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7A8337C8-8606-4C04-9BAA-15197249728B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA2F56A7-269F-4110-9500-CE320B06777B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA2F56A7-269F-4110-9500-CE320B06777B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA2F56A7-269F-4110-9500-CE320B06777B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA2F56A7-269F-4110-9500-CE320B06777B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
