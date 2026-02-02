@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
+    <PackageReference Include="AutoMapper.Collection" Version="10.0.0" />
+    <PackageReference Include="BenchmarkDotNet" Version="0.15.8" />
+    <PackageReference Include="Moq" Version="4.20.72" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Business\ECommerceBuinessDTO\ECommerceBuinessDTO.csproj" />
+    <ProjectReference Include="..\Business\ECommerceBusinessAbstractions\ECommerceBusinessAbstractions.csproj" />
+    <ProjectReference Include="..\Business\ECommerceBusinessLogic\ECommerceBusinessLogic.csproj" />
+    <ProjectReference Include="..\Business\ECommerceEvents\ECommerceEvents.csproj" />
+    <ProjectReference Include="..\DataAccess\ECommerceDataAccessAbstraction\ECommerceDataAccessAbstraction.csproj" />
+    <ProjectReference Include="..\DataAccess\ECommerceDataAccessDTO\ECommerceDataAccessDTO.csproj" />
+    <ProjectReference Include="..\DataAccess\ECommerceDataAccess\ECommerceDataAccess.csproj" />
+    <ProjectReference Include="..\ECommerceInfrastructureAbstraction\ECommerceInfrastructureAbstraction\ECommerceInfrastructureAbstraction.csproj" />
+    <ProjectReference Include="..\WebAPI\ECommwerceWebAPI\ECommwerceWebAPI.csproj" />
+  </ItemGroup>
+
+</Project>
