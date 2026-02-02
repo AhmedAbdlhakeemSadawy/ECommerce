@@ -1,5 +1,6 @@
 
 using AutoMapper;
+using AutoMapper.EquivalencyExpression;
 using ECommerceBusinessAbstractions;
 using ECommerceBusinessLogic.ECommerceBusinessServiceRegisteration;
 using ECommerceBusinessLogic.Mapping_Profiles;
@@ -173,6 +174,7 @@ builder.Services.AddSingleton(provider => new MapperConfiguration(cfg =>
     cfg.AddProfile(new OrderDataMappingProfile()); // Add your profiles here
     cfg.AddProfile(new OrderMappingProfile()); // Add your profiles here
     cfg.AddProfile(new ProductDataMappingProfile()); // Add your profiles here
+    cfg.AddCollectionMappers();
 }).CreateMapper());
 builder.Services.AddScoped<IDataSeeder, DataSeeder>();
 var UiApplicationUrl = builder.Configuration["UIUrl"];
