@@ -17,7 +17,8 @@ using ECommerceDataAccess.OrderRepository;
 using ECommerceEvents;
 using ECommerceBusinessLogic.Mapping_Profiles;
 using ECommwerceWebAPI.Mapping_Profiles;
-using ECommerceDataAccess.Mapping_Profiles;     // IEventBus
+using ECommerceDataAccess.Mapping_Profiles;
+using AutoMapper.EquivalencyExpression;     // IEventBus
 
 // If needed:
 // using ECommerceEvents;                    // OrderCreatedEvent
@@ -123,6 +124,8 @@ public class OrderManagerBench
             c.AddProfile(new OrderDataMappingProfile()); // Add your profiles here
             c.AddProfile(new OrderMappingProfile()); // Add your profiles here
             c.AddProfile(new ProductDataMappingProfile());
+            c.AddCollectionMappers();
+
         });
 
         //cfg.AssertConfigurationIsValid();
