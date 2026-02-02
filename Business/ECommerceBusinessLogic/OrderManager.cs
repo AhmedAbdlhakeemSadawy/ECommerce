@@ -34,17 +34,8 @@ namespace ECommerceBusinessLogic
             var reterivedProdcutsData = unitOfWork.ProductRepository.GetListProductsById(ids).ToList();
             List<ProductBusinessDTO> reterivedProdcutsBusinessDto = new List<ProductBusinessDTO>();
 
-            foreach (var productDataDto in reterivedProdcutsData)
-            {
-                // Find the matching ProductBusinessDTO by ProductId
-                var targetProduct = orderBusinessDto.products
-                    .FirstOrDefault(p => p.Id == productDataDto.Id);
 
-                if (targetProduct != null)
-                {
-                    mapper.Map(productDataDto, targetProduct);
-                }
-            }
+            mapper.Map(reterivedProdcutsData, orderBusinessDto.products);
 
 
             if (! CheckAvailability(orderBusinessDto.products, reterivedProdcutsData))
