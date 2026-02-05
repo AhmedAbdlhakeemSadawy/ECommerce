@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ECommerceDataAccess.DatabaseContextConfiguration;
 using ECommerceDataAccess.DataEntities;
+using ECommerceDataAccess.Mapping;
 using ECommerceDataAccessAbstraction;
 using ECommerceDataAccessDTO;
 using Microsoft.EntityFrameworkCore;
@@ -28,10 +29,9 @@ namespace ECommerceDataAccess.OrderRepository
             throw new NotImplementedException();
         }
 
-        public async Task AddOrder(OrderDataDto entity)
+        public async Task AddOrder(OrderDataDto orderDataDto)
         {
-            Order order  = mapper.Map<Order>(entity);
-            await context.AddAsync(order);
+            await context.AddAsync(orderDataDto.ToEntity());
         }
 
         public Task DeleteAsync(OrderDataDto entity)
@@ -41,11 +41,8 @@ namespace ECommerceDataAccess.OrderRepository
 
         public async Task<IEnumerable<OrderDataDto>> GetAllAsync()
         {
-            var orders = await context.Orders.ToListAsync();
-            List<OrderDataDto> orderDataDtos = new List<OrderDataDto>();
-
-            mapper.Map(orders, orderDataDtos);
-            return orderDataDtos;
+            var orders = await context.Orders.AsNoTracking().ToListAsync();
+            return orders.ToDataDtos();
         }
 
         public Task<OrderDataDto> GetByIdAsync(int id)
