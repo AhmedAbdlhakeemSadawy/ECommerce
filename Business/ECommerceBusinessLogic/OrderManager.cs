@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ECommerceBuinessDTO;
 using ECommerceBusinessAbstractions;
+using ECommerceBusinessLogic.Mapping;
 using ECommerceDataAccessAbstraction;
 using ECommerceDataAccessDTO;
 using ECommerceEvents;
@@ -32,10 +33,7 @@ namespace ECommerceBusinessLogic
 
             List<int> ids = orderBusinessDto.products.Select(p => p.Id).ToList();
             var reterivedProdcutsData = unitOfWork.ProductRepository.GetListProductsById(ids).ToList();
-            List<ProductBusinessDTO> reterivedProdcutsBusinessDto = new List<ProductBusinessDTO>();
-
-
-            mapper.Map(reterivedProdcutsData, orderBusinessDto.products);
+            List<ProductBusinessDTO> reterivedProdcutsBusinessDto = reterivedProdcutsData.ToBusinessDtos();
 
 
             if (! CheckAvailability(orderBusinessDto.products, reterivedProdcutsData))
@@ -49,7 +47,9 @@ namespace ECommerceBusinessLogic
             orderBusinessDto.Status = OrderStatus.Created;
             orderBusinessDto.OrderNumber = GenerateOrderNumber();
 
-            OrderDataDto orderDataDto = mapper.Map<OrderDataDto>(orderBusinessDto);
+
+            OrderDataDto orderDataDto =orderBusinessDto.ToDataDto();
+
             await unitOfWork.OrderRepository.AddOrder(orderDataDto);
             await UpdateProductsStockQuantities(orderBusinessDto.products);
 
@@ -101,9 +101,8 @@ namespace ECommerceBusinessLogic
             {
                 productsBusinessNeedToUpdateStockDto[i].StockQuantity = productsBusinessNeedToUpdateStockDto[i].StockQuantity - productsBusinessNeedToUpdateStockDto[i].Quantity;
             }
-            List<ProductDataDto> productDataDtosUpdatedStocks = new List<ProductDataDto>();
+            List<ProductDataDto> productDataDtosUpdatedStocks = productsBusinessNeedToUpdateStockDto.ToDataDtos();
 
-            mapper.Map(productsBusinessNeedToUpdateStockDto, productDataDtosUpdatedStocks);
 
             var result = await unitOfWork.ProductRepository.UpdateProductsStockQuantity(productDataDtosUpdatedStocks);
 
@@ -120,12 +119,9 @@ namespace ECommerceBusinessLogic
         public async Task<List<OrderBusinessDTO>> GetAllOrders()
         {
             var orders= await unitOfWork.OrderRepository.GetAllAsync();
-            List<OrderBusinessDTO> orderBusinessDTOs = new List<OrderBusinessDTO>();
-
-            mapper.Map(orders, orderBusinessDTOs);
+            List<OrderBusinessDTO> orderBusinessDTOs = orders.ToBusinessDtos();
 
             return orderBusinessDTOs;
-
         }
     }
 }
