@@ -17,7 +17,7 @@ namespace ECommerceDataAccess.Mapping_Profiles
                 .ForMember(dest => dest.orderProducts, opt => opt.MapFrom(src => src.products));
 
 
-            CreateMap<ProductOrderDataDto, OrderProduct>()
+            CreateMap<OrderProductDataDto, OrderProduct>()
             .ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.ProductId))  // Map Id to ProductId
             .ForMember(dest => dest.ProductQuantity, opt => opt.MapFrom(src => src.Quantity));
 
@@ -25,7 +25,7 @@ namespace ECommerceDataAccess.Mapping_Profiles
                 .ForMember(dest => dest.products, opt => opt.MapFrom(src => src.orderProducts));
 
 
-            CreateMap<OrderProduct , ProductOrderDataDto>()
+            CreateMap<OrderProduct , OrderProductDataDto>()
             .ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.ProductId))  // Map Id to ProductId
              .ForMember(dest => dest.Quantity, opt => opt.MapFrom(src => src.ProductQuantity));
         }
