@@ -3,6 +3,7 @@ using ECommerceDataAccessDTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -27,6 +28,22 @@ namespace ECommerceBusinessLogic.Mapping
                 // Default = 0 (e.g., before adding to cart)
                 Quantity = 0
             };
+        }
+        public static ProductBusinessDTO MapToBusinessDto(this ProductDataDto source,ProductBusinessDTO destination
+)
+        {
+            if (source is null) return destination;
+            if (destination is null) destination = new ProductBusinessDTO();
+
+            destination.Id = source.Id;
+            destination.Name = source.name;
+            destination.Price = source.price;
+            destination.StockQuantity = source.StockQuantity;
+
+            // IMPORTANT: preserve destination.Quantity
+            // destination.Quantity stays as-is
+
+            return destination;
         }
 
         // Business -> Data
@@ -85,5 +102,35 @@ namespace ECommerceBusinessLogic.Mapping
                 list.Add(b.ToDataDto());
             return list;
         }
+
+        public static List<ProductBusinessDTO> MapToBusinessDtos(this IEnumerable<ProductDataDto> source, List<ProductBusinessDTO> destination)
+        {
+            if (source is null)
+                return destination ?? new List<ProductBusinessDTO>();
+
+            destination ??= new List<ProductBusinessDTO>();
+
+            // Index destination by Id for O(1) lookup
+            var destById = new Dictionary<int, ProductBusinessDTO>(destination.Count);
+            foreach (var d in destination)
+                destById[d.Id] = d;
+
+            foreach (var src in source)
+            {
+                if (destById.TryGetValue(src.Id, out var existing))
+                {
+                    // Update existing (keeps Quantity)
+                    src.MapToBusinessDto(existing);
+                }
+                else
+                {
+                    // New item (Quantity = 0)
+                    destination.Add(src.ToBusinessDto());
+                }
+            }
+
+            return destination;
+        }
+
     }
 }
