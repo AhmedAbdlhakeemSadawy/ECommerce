@@ -1,19 +1,14 @@
 
-using AutoMapper;
-using AutoMapper.EquivalencyExpression;
 using ECommerceBusinessAbstractions;
 using ECommerceBusinessLogic.ECommerceBusinessServiceRegisteration;
-using ECommerceBusinessLogic.Mapping_Profiles;
 using ECommerceDataAccess.DatabaseContextConfiguration;
 using ECommerceDataAccess.DataSeeder;
-using ECommerceDataAccess.Mapping_Profiles;
 using ECommerceDataAccessAbstraction;
 using ECommerceEvents;
 using ECommerceInfrastructure;
 using ECommerceInfrastructureAbstraction;
 using ECommerceWebApiDto.Validators;
 using ECommwerceWebAPI.Filters;
-using ECommwerceWebAPI.Mapping_Profiles;
 using ECommwerceWebAPI.Middlewares;
 using ECommwerceWebAPI.Role_Requirements_Authorization;
 using ECommwerceWebAPI.Services;
@@ -177,15 +172,7 @@ builder.Services.AddScoped<IDomainEventHandler<OrderCreatedEvent>, OrderCreatedE
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddSingleton(provider => new MapperConfiguration(cfg =>
-{
-    cfg.AddProfile(new ProductMappingProfile()); // Add your profiles here
-    cfg.AddProfile(new OrderAPIMappingProfile()); // Add your profiles here
-    cfg.AddProfile(new OrderDataMappingProfile()); // Add your profiles here
-    cfg.AddProfile(new OrderMappingProfile()); // Add your profiles here
-    cfg.AddProfile(new ProductDataMappingProfile()); // Add your profiles here
-    cfg.AddCollectionMappers();
-}).CreateMapper());
+
 builder.Services.AddScoped<IDataSeeder, DataSeeder>();
 var UiApplicationUrl = builder.Configuration["UIUrl"];
 builder.Services.AddCors(options =>

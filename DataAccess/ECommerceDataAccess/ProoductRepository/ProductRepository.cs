@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using ECommerceDataAccess.DatabaseContextConfiguration;
+﻿using ECommerceDataAccess.DatabaseContextConfiguration;
 using ECommerceDataAccess.DataEntities;
 using ECommerceDataAccess.Mapping;
 using ECommerceDataAccessAbstraction;
@@ -11,12 +10,10 @@ namespace ECommerceDataAccess.ProoductRepository
     public class ProductRepository : IProductRepository<ProductDataDto>
     {
         private readonly ECommerceDbContext context;
-        private IMapper mapper;
 
-        public ProductRepository(ECommerceDbContext context,IMapper mapper)
+        public ProductRepository(ECommerceDbContext context)
         {
             this.context = context;
-            this.mapper = mapper;
         }
         public Task AddAsync(ProductDataDto entity)
         {

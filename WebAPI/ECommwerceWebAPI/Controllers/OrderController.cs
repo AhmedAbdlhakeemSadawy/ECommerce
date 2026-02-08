@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using ECommerceBuinessDTO;
+﻿using ECommerceBuinessDTO;
 using ECommerceBusinessAbstractions;
 using ECommerceDataAccessDTO;
 using ECommerceInfrastructureAbstraction;
@@ -17,13 +16,11 @@ namespace ECommwerceWebAPI.Controllers
     public class OrderController : ControllerBase
     {
         private IOrderManager orderManager;
-        private IMapper mapper;
         private IEmailService emailService;
 
-        public OrderController(IOrderManager orderManager,IMapper mapper,IEmailService emailService)
+        public OrderController(IOrderManager orderManager,IEmailService emailService)
         {
             this.orderManager = orderManager;
-            this.mapper = mapper;
             this.emailService = emailService;
         }
 

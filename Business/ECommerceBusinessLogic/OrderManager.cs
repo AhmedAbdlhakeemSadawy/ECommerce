@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using ECommerceBuinessDTO;
+﻿using ECommerceBuinessDTO;
 using ECommerceBusinessAbstractions;
 using ECommerceBusinessLogic.Mapping;
 using ECommerceDataAccessAbstraction;
@@ -12,14 +11,12 @@ namespace ECommerceBusinessLogic
 {
     public class OrderManager : IOrderManager
     {
-        private IMapper mapper;
         private IUnitOfWork unitOfWork;
         private IEventBus eventBus;
  
-        public OrderManager(IUnitOfWork unitOfWork,IMapper mapper, IEventBus eventBus)
+        public OrderManager(IUnitOfWork unitOfWork, IEventBus eventBus)
         {
             this.unitOfWork = unitOfWork;
-            this.mapper = mapper;
             this.eventBus = eventBus;
         }
         public async  Task<OrderBusinessDTO> CreateOrder(OrderBusinessDTO orderBusinessDto)

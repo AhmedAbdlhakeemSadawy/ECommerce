@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using ECommerceDataAccess.DatabaseContextConfiguration;
+﻿using ECommerceDataAccess.DatabaseContextConfiguration;
 using ECommerceDataAccess.DataEntities;
 using ECommerceDataAccessAbstraction;
 using ECommerceDataAccessDTO;

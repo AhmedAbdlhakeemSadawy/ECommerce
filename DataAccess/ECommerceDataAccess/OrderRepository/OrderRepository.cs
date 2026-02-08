@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using ECommerceDataAccess.DatabaseContextConfiguration;
+﻿using ECommerceDataAccess.DatabaseContextConfiguration;
 using ECommerceDataAccess.DataEntities;
 using ECommerceDataAccess.Mapping;
 using ECommerceDataAccessAbstraction;
@@ -16,12 +15,10 @@ namespace ECommerceDataAccess.OrderRepository
     public class OrderRepository : IOrderRepository<OrderDataDto>
     {
         private readonly ECommerceDbContext context;
-        private IMapper mapper;
 
-        public OrderRepository(ECommerceDbContext context,IMapper mapper)
+        public OrderRepository(ECommerceDbContext context)
         {
             this.context = context;
-            this.mapper = mapper;
         }
 
         public Task AddAsync(OrderDataDto entity)
