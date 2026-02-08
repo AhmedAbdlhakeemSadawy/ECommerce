@@ -33,17 +33,18 @@ namespace ECommerceBusinessLogic
 
             List<int> ids = orderBusinessDto.products.Select(p => p.Id).ToList();
             var reterivedProdcutsData = unitOfWork.ProductRepository.GetListProductsById(ids).ToList();
-            List<ProductBusinessDTO> reterivedProdcutsBusinessDto = reterivedProdcutsData.ToBusinessDtos();
+            List<ProductBusinessDTO> reterivedProdcutsBusinessDto = reterivedProdcutsData.MapToBusinessDtos(orderBusinessDto.products);
+            
 
 
-            if (! CheckAvailability(orderBusinessDto.products, reterivedProdcutsData))
+            if (! CheckAvailability(reterivedProdcutsBusinessDto, reterivedProdcutsData))
             {
                 throw new BusinessException("Some of your products are not available");
             }
   
 
 
-            orderBusinessDto.TotalPrice = CalculateOrderTotalPrice(orderBusinessDto.products);
+            orderBusinessDto.TotalPrice = CalculateOrderTotalPrice(reterivedProdcutsBusinessDto);
             orderBusinessDto.Status = OrderStatus.Created;
             orderBusinessDto.OrderNumber = GenerateOrderNumber();
 
@@ -51,7 +52,7 @@ namespace ECommerceBusinessLogic
             OrderDataDto orderDataDto =orderBusinessDto.ToDataDto();
 
             await unitOfWork.OrderRepository.AddOrder(orderDataDto);
-            await UpdateProductsStockQuantities(orderBusinessDto.products);
+            await UpdateProductsStockQuantities(reterivedProdcutsBusinessDto);
 
             await unitOfWork.Complete();
 
