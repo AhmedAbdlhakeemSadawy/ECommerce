@@ -207,9 +207,6 @@ namespace ECommerceBusinessTests
 
             createOrderDto.products = productsbusinessNeeedToBeUpdated;
 
-           // mockMapper.Setup(map => map.Map<OrderDataDto>(createOrderDto)).Returns(new OrderDataDto());
-
-
             OrderManager orderManager = new OrderManager(mockUnitOfWork.Object, mockEventBus.Object);
 
             OrderBusinessDTO orderDTO = await orderManager.CreateOrder(createOrderDto);
