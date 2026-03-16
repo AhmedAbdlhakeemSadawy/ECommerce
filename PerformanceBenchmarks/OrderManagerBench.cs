@@ -24,6 +24,7 @@ public class OrderManagerBench
 {
     private OrderManager _sut = default!;
 
+
     private Mock<IUnitOfWork> _uowMock = default!;
     private Mock<IEventBus> _eventBusMock = default!;
 
