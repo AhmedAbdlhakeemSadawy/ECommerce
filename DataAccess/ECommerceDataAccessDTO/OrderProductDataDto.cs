@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ECommerceDataAccessDTO
 {
-    public class ProductOrderDataDto
+    public class OrderProductDataDto
     {
         public int ProductId { get; set; }
         public string Name { get; set; }

@@ -1,9 +1,9 @@
-﻿using AutoMapper;
-using ECommerceBuinessDTO;
+﻿using ECommerceBuinessDTO;
 using ECommerceBusinessAbstractions;
 using ECommerceDataAccessDTO;
 using ECommerceInfrastructureAbstraction;
 using ECommerceWebApiDto;
+using ECommwerceWebAPI.Mapping;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -16,13 +16,11 @@ namespace ECommwerceWebAPI.Controllers
     public class OrderController : ControllerBase
     {
         private IOrderManager orderManager;
-        private IMapper mapper;
         private IEmailService emailService;
 
-        public OrderController(IOrderManager orderManager,IMapper mapper,IEmailService emailService)
+        public OrderController(IOrderManager orderManager,IEmailService emailService)
         {
             this.orderManager = orderManager;
-            this.mapper = mapper;
             this.emailService = emailService;
         }
 
@@ -36,7 +34,7 @@ namespace ECommwerceWebAPI.Controllers
            
                 string? customerEmail = HttpContext.User.FindFirst(ClaimTypes.Email)?.Value;
 
-                OrderBusinessDTO orderBusinessDTO = mapper.Map<OrderBusinessDTO>(orderRequestDto);
+                OrderBusinessDTO orderBusinessDTO = orderRequestDto.ToBusinessDto();
                 orderBusinessDTO.CustomerEmail = customerEmail;
 
                 var result = await orderManager.CreateOrder(orderBusinessDTO);

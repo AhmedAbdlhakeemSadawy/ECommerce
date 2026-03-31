@@ -1,6 +1,6 @@
-﻿using AutoMapper;
-using ECommerceDataAccess.DatabaseContextConfiguration;
+﻿using ECommerceDataAccess.DatabaseContextConfiguration;
 using ECommerceDataAccess.DataEntities;
+using ECommerceDataAccess.Mapping;
 using ECommerceDataAccessAbstraction;
 using ECommerceDataAccessDTO;
 using Microsoft.EntityFrameworkCore;
@@ -10,12 +10,10 @@ namespace ECommerceDataAccess.ProoductRepository
     public class ProductRepository : IProductRepository<ProductDataDto>
     {
         private readonly ECommerceDbContext context;
-        private IMapper mapper;
 
-        public ProductRepository(ECommerceDbContext context,IMapper mapper)
+        public ProductRepository(ECommerceDbContext context)
         {
             this.context = context;
-            this.mapper = mapper;
         }
         public Task AddAsync(ProductDataDto entity)
         {
@@ -40,18 +38,7 @@ namespace ECommerceDataAccess.ProoductRepository
         public IEnumerable<ProductDataDto> GetListProductsById(List<int> ids)
         {
             var products = context.Products.AsNoTracking().Where(p => ids.Contains(p.Id)).ToList();
-
-            List<ProductDataDto> productDTOs = new List<ProductDataDto>();
-
-            for (var i = 0; i < products.Count; i++)
-            {
-                ProductDataDto productDataDto = new ProductDataDto();
-                productDataDto.Id = products[i].Id;
-                productDataDto.price = products[i].price;
-                productDataDto.StockQuantity = products[i].StockQuantity;
-
-                productDTOs.Add(productDataDto);
-            }
+            List<ProductDataDto> productDTOs = products.ToDataDtos();
 
             return productDTOs;
         }
@@ -65,7 +52,7 @@ namespace ECommerceDataAccess.ProoductRepository
         {
             try
             {
-                List<Product> products = mapper.Map<List<Product>>(productDataDtos);
+                List<Product> products = productDataDtos.ToEntities();
                 context.UpdateRange(products);
 
                 for (int i = 0; i < products.Count; i++)

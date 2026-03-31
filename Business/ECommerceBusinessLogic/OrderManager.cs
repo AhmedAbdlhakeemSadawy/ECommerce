@@ -1,6 +1,6 @@
-﻿using AutoMapper;
-using ECommerceBuinessDTO;
+﻿using ECommerceBuinessDTO;
 using ECommerceBusinessAbstractions;
+using ECommerceBusinessLogic.Mapping;
 using ECommerceDataAccessAbstraction;
 using ECommerceDataAccessDTO;
 using ECommerceEvents;
@@ -11,14 +11,12 @@ namespace ECommerceBusinessLogic
 {
     public class OrderManager : IOrderManager
     {
-        private IMapper mapper;
         private IUnitOfWork unitOfWork;
         private IEventBus eventBus;
  
-        public OrderManager(IUnitOfWork unitOfWork,IMapper mapper, IEventBus eventBus)
+        public OrderManager(IUnitOfWork unitOfWork, IEventBus eventBus)
         {
             this.unitOfWork = unitOfWork;
-            this.mapper = mapper;
             this.eventBus = eventBus;
         }
         public async  Task<OrderBusinessDTO> CreateOrder(OrderBusinessDTO orderBusinessDto)
@@ -32,26 +30,26 @@ namespace ECommerceBusinessLogic
 
             List<int> ids = orderBusinessDto.products.Select(p => p.Id).ToList();
             var reterivedProdcutsData = unitOfWork.ProductRepository.GetListProductsById(ids).ToList();
-            List<ProductBusinessDTO> reterivedProdcutsBusinessDto = new List<ProductBusinessDTO>();
+            List<ProductBusinessDTO> reterivedProdcutsBusinessDto = reterivedProdcutsData.MapToBusinessDtos(orderBusinessDto.products);
+            
 
 
-            mapper.Map(reterivedProdcutsData, orderBusinessDto.products);
-
-
-            if (! CheckAvailability(orderBusinessDto.products, reterivedProdcutsData))
+            if (! CheckAvailability(reterivedProdcutsBusinessDto, reterivedProdcutsData))
             {
                 throw new BusinessException("Some of your products are not available");
             }
   
 
 
-            orderBusinessDto.TotalPrice = CalculateOrderTotalPrice(orderBusinessDto.products);
+            orderBusinessDto.TotalPrice = CalculateOrderTotalPrice(reterivedProdcutsBusinessDto);
             orderBusinessDto.Status = OrderStatus.Created;
             orderBusinessDto.OrderNumber = GenerateOrderNumber();
 
-            OrderDataDto orderDataDto = mapper.Map<OrderDataDto>(orderBusinessDto);
+
+            OrderDataDto orderDataDto =orderBusinessDto.ToDataDto();
+
             await unitOfWork.OrderRepository.AddOrder(orderDataDto);
-            await UpdateProductsStockQuantities(orderBusinessDto.products);
+            await UpdateProductsStockQuantities(reterivedProdcutsBusinessDto);
 
             await unitOfWork.Complete();
 
@@ -101,9 +99,8 @@ namespace ECommerceBusinessLogic
             {
                 productsBusinessNeedToUpdateStockDto[i].StockQuantity = productsBusinessNeedToUpdateStockDto[i].StockQuantity - productsBusinessNeedToUpdateStockDto[i].Quantity;
             }
-            List<ProductDataDto> productDataDtosUpdatedStocks = new List<ProductDataDto>();
+            List<ProductDataDto> productDataDtosUpdatedStocks = productsBusinessNeedToUpdateStockDto.ToDataDtos();
 
-            mapper.Map(productsBusinessNeedToUpdateStockDto, productDataDtosUpdatedStocks);
 
             var result = await unitOfWork.ProductRepository.UpdateProductsStockQuantity(productDataDtosUpdatedStocks);
 
@@ -120,12 +117,9 @@ namespace ECommerceBusinessLogic
         public async Task<List<OrderBusinessDTO>> GetAllOrders()
         {
             var orders= await unitOfWork.OrderRepository.GetAllAsync();
-            List<OrderBusinessDTO> orderBusinessDTOs = new List<OrderBusinessDTO>();
-
-            mapper.Map(orders, orderBusinessDTOs);
+            List<OrderBusinessDTO> orderBusinessDTOs = orders.ToBusinessDtos();
 
             return orderBusinessDTOs;
-
         }
     }
 }

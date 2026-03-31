@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
 using BenchmarkDotNet.Attributes;
 using Moq;
 
@@ -15,10 +14,7 @@ using ECommerceInfrastructureAbstraction;
 using ECommerceDataAccess.ProoductRepository;
 using ECommerceDataAccess.OrderRepository;
 using ECommerceEvents;
-using ECommerceBusinessLogic.Mapping_Profiles;
-using ECommwerceWebAPI.Mapping_Profiles;
-using ECommerceDataAccess.Mapping_Profiles;
-using AutoMapper.EquivalencyExpression;     // IEventBus
+    // IEventBus
 
 // If needed:
 // using ECommerceEvents;                    // OrderCreatedEvent
@@ -27,7 +23,7 @@ using AutoMapper.EquivalencyExpression;     // IEventBus
 public class OrderManagerBench
 {
     private OrderManager _sut = default!;
-    private IMapper _mapper = default!;
+
 
     private Mock<IUnitOfWork> _uowMock = default!;
     private Mock<IEventBus> _eventBusMock = default!;
@@ -50,7 +46,7 @@ public class OrderManagerBench
     public void Setup()
     {
         // 1) Build AutoMapper (real mapping)
-        _mapper = CreateMapper();
+        
 
         // 2) Build in-memory product data
         _retrievedProducts = BuildRetrievedProducts(ProductsCount);
@@ -93,7 +89,7 @@ public class OrderManagerBench
          .Returns(Task.CompletedTask);
 
         // 5) Instantiate SUT
-        _sut = new OrderManager(_uowMock.Object, _mapper, _eventBusMock.Object);
+        _sut = new OrderManager(_uowMock.Object, _eventBusMock.Object);
     }
 
     [IterationSetup]
@@ -113,24 +109,7 @@ public class OrderManagerBench
     // Helpers
     // -------------------------
 
-    private static IMapper CreateMapper()
-    {
-        var cfg = new MapperConfiguration(c =>
-        {
-            // You are mapping ProductDataDto into existing ProductBusinessDTO in your loop:
-            // mapper.Map(productDataDto, targetProduct);
-            c.AddProfile(new ProductMappingProfile()); // Add your profiles here
-            c.AddProfile(new OrderAPIMappingProfile()); // Add your profiles here
-            c.AddProfile(new OrderDataMappingProfile()); // Add your profiles here
-            c.AddProfile(new OrderMappingProfile()); // Add your profiles here
-            c.AddProfile(new ProductDataMappingProfile());
-            c.AddCollectionMappers();
 
-        });
-
-        //cfg.AssertConfigurationIsValid();
-        return cfg.CreateMapper();
-    }
 
     private static OrderBusinessDTO BuildOrderDto(int count)
     {

@@ -12,7 +12,7 @@ namespace ECommerceDataAccessDTO
         public long OrderNumber { get; set; }
         public decimal TotalPrice { get; set; }
         public int Status { get; set; }
-        public List<ProductOrderDataDto> products { get; set; } = new List<ProductOrderDataDto>();
+        public List<OrderProductDataDto> products { get; set; } = new List<OrderProductDataDto>();
         public int CustomerId { get; set; }
     }
 }
