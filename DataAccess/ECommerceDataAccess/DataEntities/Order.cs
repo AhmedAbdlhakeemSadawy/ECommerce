@@ -18,7 +18,7 @@ namespace ECommerceDataAccess.DataEntities
         public long OrderNumber { get; set; }
         public int Status { get; set; }
         public decimal TotalPrice { get; set; }
-        public DateTime CreatedDate { get; set; } = DateTime.Now;
+        public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
 
          public ICollection<OrderProduct> orderProducts { get; set; }
 
