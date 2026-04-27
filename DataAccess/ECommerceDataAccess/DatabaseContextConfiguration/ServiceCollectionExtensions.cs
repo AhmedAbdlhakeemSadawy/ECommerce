@@ -18,7 +18,7 @@ namespace ECommerceDataAccess.DatabaseContextConfiguration
         public static IServiceCollection AddECommerceDataAccess(this IServiceCollection services, string connectionString)
         {
             services.AddDbContext<ECommerceDbContext>(options =>
-                options.UseSqlServer(connectionString));
+                options.UseNpgsql(connectionString));
             services.AddScoped(typeof(IProductRepository<ProductDataDto>), typeof(ProductRepository));
             services.AddScoped(typeof(IOrderRepository<OrderDataDto>), typeof(OrderRepository.OrderRepository));
             services.AddScoped<IUnitOfWork, UnitOfWork.UnitOfWork>();
